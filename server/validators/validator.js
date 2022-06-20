@@ -40,10 +40,48 @@ function checkValidId(id) {
     }
 }
 
+//Check if both garden_id and plot_number are provided
+function checkGardenAndPlotsProvided(garden_id, plot_number) {
+    if (garden_id != null && plot_number == null) {
+        return false;
+    }
+
+    if (garden_id == null && plot_number != null) {
+        return false;
+    }
+}
+
+//Check if garden name already in use for given user
+async function checkExistingGardenName(name, user_id) {
+    const existingGarden = await Garden.findOne({ 'name': name, 'user._id': user_id });
+    if (existingGarden) {
+        return true;
+    }
+}
+
+//Check plot_number is valid
+// ***** NEED TO ADD IF PLOT NUMBER>GARDEN.PLOT.LENGTH WHEN GET GARDEN IS WRITTEN *****
+function checkValidPlotNumber(garden_id, plot_number) {
+    if (plot_number < 0) {
+        return false;
+    }
+}
+
+//Check string has valid length
+function checkValidLength(string, min, max) {
+    if (string.length >= min && string.length <= max) {
+        return true;
+    }
+}
+
 module.exports = {
     checkMatchingPasswords,
     checkExistingUser,
     checkExistingGarden,
     checkDateInFuture,
-    checkValidId
+    checkValidId,
+    checkGardenAndPlotsProvided,
+    checkExistingGardenName,
+    checkValidPlotNumber,
+    checkValidLength
 }

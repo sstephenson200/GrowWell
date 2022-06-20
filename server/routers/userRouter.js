@@ -2,12 +2,13 @@ const router = require("express").Router();
 const { check, validationResult } = require('express-validator');
 const userController = require("../controllers/userController");
 
-//Create user endpoint
 router.post("/createUser", [
     check('email')
         .not().isEmpty().withMessage("Email required.")
         .isEmail().withMessage("Invalid email.")
-        .normalizeEmail(),
+        .normalizeEmail()
+        .trim()
+        .escape(),
     check('username')
         .not().isEmpty().withMessage("Username required.")
         .isLength({ min: 4, max: 30 }).withMessage("Username must be between 4 and 30 characters.")

@@ -10,7 +10,7 @@ const createAlarm = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array() });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(user_id)) {
@@ -30,20 +30,12 @@ const createAlarm = async (request, response) => {
         return response.status(400).json({ errorMessage: "Date must be in the future." });
     }
 
-    //Check plot_number is provided with garden_id
-    if (garden_id != null && plot_number == null) {
+    if (validator.checkGardenAndPlotsProvided) {
         return response.status(400).json({ errorMessage: "plot_number must be provided with garden_id." });
     }
 
-    //Check garden_id is provided with plot_number
-    if (plot_number != null && garden_id == null) {
-        return response.status(400).json({ errorMessage: "garden_id must be provided with plot_number." });
-    }
-
-    //Check plot_number is valid
-    // ***** NEED TO ADD IF PLOT NUMBER>GARDEN.PLOT.LENGTH WHEN GET GARDEN IS WRITTEN *****
     if (plot_number != null) {
-        if (plot_number < 0) {
+        if (!validator.checkValidPlotNumber) {
             return response.status(400).json({ errorMessage: "Invalid plot number." });
         }
     }

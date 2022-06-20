@@ -11,7 +11,7 @@ const createUser = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array() });
+        return response.status(400).json({ errors: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkMatchingPasswords(password, passwordVerify)) {
