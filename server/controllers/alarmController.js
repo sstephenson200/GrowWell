@@ -1,0 +1,69 @@
+const validator = require("../validators/validator");
+const { check, validationResult } = require('express-validator');
+
+const Alarm = require("../models/alarmModel");
+
+//Create Alarm Endpoint
+const createAlarm = async (request, response) => {
+
+    const { user_id, title, due_date, schedule, garden_id, plot_number } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errors: validationErrors.array() });
+    }
+
+    if (!validator.checkValidId(user_id)) {
+        return response.status(400).json({ errorMessage: "Invalid user_id." });
+    }
+
+    if (garden_id != null) {
+        if (!validator.checkValidId(garden_id)) {
+            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        }
+        if (await validator.checkExistingGarden(garden_id, user_id)) {
+            return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
+        }
+    }
+
+    if (!validator.checkDateInFuture(due_date)) {
+        return response.status(400).json({ errorMessage: "Date must be in the future." });
+    }
+
+    //Check plot_number is provided with garden_id
+    if (garden_id != null && plot_number == null) {
+        return response.status(400).json({ errorMessage: "plot_number must be provided with garden_id." });
+    }
+
+    //Check garden_id is provided with plot_number
+    if (plot_number != null && garden_id == null) {
+        return response.status(400).json({ errorMessage: "garden_id must be provided with plot_number." });
+    }
+
+    //Check plot_number is valid
+    // ***** NEED TO ADD IF PLOT NUMBER>GARDEN.PLOT.LENGTH WHEN GET GARDEN IS WRITTEN *****
+    if (plot_number != null) {
+        if (plot_number < 0) {
+            return response.status(400).json({ errorMessage: "Invalid plot number." });
+        }
+    }
+
+    try {
+
+        const newAlarm = new Alarm({
+            user_id, title, due_date, schedule, garden_id, plot_number
+        });
+        const savedAlarm = await newAlarm.save();
+
+        return response.status(200).json({ message: "Alarm created successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+
+}
+
+module.exports = {
+    createAlarm
+}
