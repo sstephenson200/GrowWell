@@ -53,15 +53,28 @@ const createPlant = async (request, response) => {
         }
     }
 
-    //Check all enum values are valid
+    let editedEnumsEntry = [];
+    let editedEnums = [];
+
+    //Check all enum values are valid and remove duplicates
     for (let i = 0; i < enums.length; i++) {
         if (enums[i].name !== "plant_type") {
-            enums[i].type = [...new Set(enums[i].type)];
+            editedEnumsEntry = [...new Set(enums[i].type)];
+        } else {
+            editedEnumsEntry = enums[i].type;
         }
+        editedEnums.push(editedEnumsEntry);
         if (!validator.checkValidPlantEnum(enums[i])) {
             return response.status(400).json({ errorMessage: "Invalid " + enums[i].name + "." });
         }
     }
+
+    //Reset enum values
+    enums = editedEnums;
+    plant_type = enums[0];
+    sun_condition = enums[1];
+    soil_type = enums[2];
+    soil_ph = enums[3];
 
     //Check monthly schedules have 2 values between 1 and 12 
     for (let i = 0; i < monthlySchedules.length; i++) {
@@ -104,19 +117,31 @@ const createPlant = async (request, response) => {
         }
     }
 
+    let editedString = "";
+    let editedStringArraysEntry = [];
+    let editedStringArrays = [];
+
     //Check entries are strings
     for (let i = 0; i < stringArrays.length; i++) {
         const listName = stringArrays[i].name;
         if (stringArrays[i].type != null) {
-            stringArrays[i].type = [...new Set(stringArrays[i].type)];
-            for (let j = 0; j < stringArrays[i].type.length; j++) {
-                if (typeof stringArrays[i].type[j] !== 'string') {
+            editedStringArraysEntry = [...new Set(stringArrays[i].type)];
+            for (let j = 0; j < editedStringArraysEntry.length; j++) {
+                if (typeof editedStringArraysEntry[j] !== 'string') {
                     return response.status(400).json({ errorMessage: listName + " values must be entered as strings." });
                 }
-                stringArrays[i].type[j] = stringArrays[i].type[j].trim();
+                editedString = editedStringArraysEntry[j].trim();
+                editedStringArraysEntry[j] = editedString;
             }
         }
+        editedStringArrays.push(editedStringArraysEntry);
     }
+
+    //Reset array strings
+    stringArrays = editedStringArrays;
+    plant_problem = stringArrays[0];
+    companion_plant = stringArrays[1];
+    incompatible_plant = stringArrays[2];
 
     //Get image_id array
     const image_id = [];
