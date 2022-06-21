@@ -31,7 +31,7 @@ const createAlarm = async (request, response) => {
     }
 
     if (validator.checkGardenAndPlotsProvided) {
-        return response.status(400).json({ errorMessage: "plot_number must be provided with garden_id." });
+        return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
     if (plot_number != null) {

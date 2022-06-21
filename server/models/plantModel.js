@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 //Create Plant Schema
 const plantSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: { type: String, default: null },
+    name: { type: String, required: true, trim: true },
+    description: { type: String, default: null, trim: true },
     plant_type: { type: String, enum: ['Vegetable', 'Fruit', 'Herb'], required: true },
     sow_date: { type: [Number], default: null },
     plant_date: { type: [Number], default: null },
@@ -13,7 +13,7 @@ const plantSchema = new mongoose.Schema({
     soil_type: { type: [String], enum: ['Chalk', 'Clay', 'Loam', 'Sand'], required: true },
     soil_ph: { type: [String], enum: ['Acid', 'Neutral', 'Alkaline'], required: true },
     water_schedule: { type: [Number], required: true },
-    compost_schedule: { type: String, default: null },
+    compost_schedule: { type: String, default: null, trim: true },
     prune_schedule: { type: [String], default: null },
     feed_schedule: { type: [String], default: null },
     indoor_schedule: { type: [String], required: true },

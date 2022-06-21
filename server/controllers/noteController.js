@@ -1,20 +1,16 @@
 const validator = require("../validators/validator");
-const { check, validationResult } = require('express-validator');
 
 const Note = require("../models/noteModel");
 
 //Create Note Endpoint
 const createNote = async (request, response) => {
 
-    const { user_id, title, description, garden_id, plot_number } = request.body.note;
+    const parsedReq = JSON.parse(request.body.note);
+
+    let { user_id, title, description, garden_id, plot_number } = parsedReq;
     const date = Date.now();
 
-    const validationErrors = validationResult(request.body);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array() });
-    }
-
-    //check if params are given
+    //Check if required params are given
     if (!user_id) {
         return response.status(400).json({ errorMessage: "User_id required." });
     } else if (!title) {
@@ -25,13 +21,13 @@ const createNote = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
-    if (!checkValidLength(title, 1, 30)) {
+    if (!validator.checkValidLength(title, 1, 30)) {
         return response.status(400).json({ errorMessage: "Title must be between 1 and 30 characters." });
 
     }
 
     if (description != null) {
-        if (!checkValidLength(description, 1, 250)) {
+        if (!validator.checkValidLength(description, 1, 250)) {
             return response.status(400).json({ errorMessage: "Description must be between 1 and 250 characters." });
 
         }
@@ -50,12 +46,12 @@ const createNote = async (request, response) => {
         }
     }
 
-    if (validator.checkGardenAndPlotsProvided) {
-        return response.status(400).json({ errorMessage: "plot_number must be provided with garden_id." });
+    if (!validator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
+        return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
     if (plot_number != null) {
-        if (!validator.checkValidPlotNumber) {
+        if (!validator.checkValidPlotNumber(garden_id, plot_number)) {
             return response.status(400).json({ errorMessage: "Invalid plot number." });
         }
     }
