@@ -18,4 +18,23 @@ router.post("/createAlarm", [
         .isInt({ min: 1 }).withMessage("Repeat schedule must be greater than 0 days."),
 ], alarmController.createAlarm);
 
+router.get("/getAllAlarms", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+], alarmController.getAllAlarms);
+
+router.get("/getAlarmByID", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+    check('alarm_id')
+        .not().isEmpty().withMessage("Alarm_id required."),
+], alarmController.getAlarmByID);
+
+router.delete("/deleteAlarm", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+    check('alarm_id')
+        .not().isEmpty().withMessage("Alarm_id required."),
+], alarmController.deleteAlarm);
+
 module.exports = router;

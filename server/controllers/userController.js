@@ -115,6 +115,8 @@ const deleteUser = async (request, response) => {
 
     try {
 
+        //need to delete gardens, alarms, notes before deleting user
+
         await User.deleteOne(existingUser);
 
         return response.status(200).json({ message: "User deleted successfully." });
