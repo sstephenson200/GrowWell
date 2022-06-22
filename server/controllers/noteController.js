@@ -21,6 +21,10 @@ const createNote = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
+    if (!existingUser) {
+        return response.status(401).json({ errorMessage: "Invalid user_id." });
+    }
+
     if (!validator.checkValidLength(title, 1, 30)) {
         return response.status(400).json({ errorMessage: "Title must be between 1 and 30 characters." });
 

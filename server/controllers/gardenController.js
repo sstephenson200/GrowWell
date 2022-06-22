@@ -17,6 +17,12 @@ const createGarden = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
+    const existingUser = await User.findOne({ _id: user_id });
+
+    if (!existingUser) {
+        return response.status(401).json({ errorMessage: "Invalid user_id." });
+    }
+
     if (await validator.checkExistingGardenName(name, user_id)) {
         return response.status(400).json({ errorMessage: "Garden name already in use." });
     }

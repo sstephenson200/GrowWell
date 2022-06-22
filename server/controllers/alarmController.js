@@ -17,6 +17,12 @@ const createAlarm = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
+    const existingUser = await User.findOne({ _id: user_id });
+
+    if (!existingUser) {
+        return response.status(401).json({ errorMessage: "Invalid user_id." });
+    }
+
     if (garden_id != null) {
         if (!validator.checkValidId(garden_id)) {
             return response.status(400).json({ errorMessage: "Invalid garden_id." });
@@ -30,12 +36,12 @@ const createAlarm = async (request, response) => {
         return response.status(400).json({ errorMessage: "Date must be in the future." });
     }
 
-    if (validator.checkGardenAndPlotsProvided) {
+    if (validator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
         return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
     if (plot_number != null) {
-        if (!validator.checkValidPlotNumber) {
+        if (!validator.checkValidPlotNumber(garden_id, plot_number)) {
             return response.status(400).json({ errorMessage: "Invalid plot number." });
         }
     }
