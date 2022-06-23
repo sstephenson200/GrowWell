@@ -20,14 +20,6 @@ async function checkExistingAccount(email) {
     }
 }
 
-//Check if garden exists for given user
-async function checkExistingGarden(garden_id, user_id) {
-    const existingGarden = await Garden.findOne({ _id: garden_id, 'user._id': user_id });
-    if (existingGarden) {
-        return true;
-    }
-}
-
 //Check if entered date is in future
 function checkDateInFuture(date) {
     if (Date.parse(date) >= Date.now()) {
@@ -62,9 +54,9 @@ async function checkExistingGardenName(name, user_id) {
 }
 
 //Check plot_number is valid
-// ***** NEED TO ADD IF PLOT NUMBER>GARDEN.PLOT.LENGTH WHEN GET GARDEN IS WRITTEN *****
-function checkValidPlotNumber(garden_id, plot_number) {
-    if (plot_number > 0) {
+function checkValidPlotNumber(gardenSize, plot_number) {
+
+    if (plot_number > 0 && plot_number < gardenSize) {
         return true;
     }
 }
@@ -134,7 +126,6 @@ async function checkPasswordCorrect(password, storedPasswordHash) {
 module.exports = {
     checkMatchingPasswords,
     checkExistingAccount,
-    checkExistingGarden,
     checkDateInFuture,
     checkValidId,
     checkGardenAndPlotsProvided,

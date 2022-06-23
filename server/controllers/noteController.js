@@ -41,11 +41,15 @@ const createNote = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
+    const existingGarden = null;
+
     if (garden_id != null) {
         if (!validator.checkValidId(garden_id)) {
             return response.status(400).json({ errorMessage: "Invalid garden_id." });
         }
-        if (await validator.checkExistingGarden(garden_id, user_id)) {
+
+        existingGarden = await Garden.findOne({ _id: garden_id, 'user._id': user_id });
+        if (!existingGarden) {
             return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
         }
     }
@@ -54,8 +58,10 @@ const createNote = async (request, response) => {
         return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
+    const gardenSize = existingGarden.plot.length;
+
     if (plot_number != null) {
-        if (!validator.checkValidPlotNumber(garden_id, plot_number)) {
+        if (!validator.checkValidPlotNumber(gardenSize, plot_number)) {
             return response.status(400).json({ errorMessage: "Invalid plot number." });
         }
     }

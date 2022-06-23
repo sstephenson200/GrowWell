@@ -6,6 +6,7 @@ const gardenSchema = new mongoose.Schema({
     size: { type: [Number], required: true },
     name: { type: String, required: true, trim: true },
     plot: [{
+        plot_number: { type: Number },
         plant_id: { type: mongoose.Schema.Types.ObjectId, ref: "plant", default: null },
         date_planted: { type: Date, default: null },
         plot_history: [{

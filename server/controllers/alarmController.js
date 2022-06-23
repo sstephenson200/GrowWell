@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator');
 
 const Alarm = require("../models/alarmModel");
 const User = require("../models/userModel");
+const Garden = require("../models/gardenModel");
 
 //Request to create new alarm record
 const createAlarm = async (request, response) => {
@@ -24,11 +25,15 @@ const createAlarm = async (request, response) => {
         return response.status(401).json({ errorMessage: "Invalid user_id." });
     }
 
+    let existingGarden = null;
+
     if (garden_id != null) {
         if (!validator.checkValidId(garden_id)) {
             return response.status(400).json({ errorMessage: "Invalid garden_id." });
         }
-        if (await validator.checkExistingGarden(garden_id, user_id)) {
+
+        existingGarden = await Garden.findOne({ _id: garden_id, 'user._id': user_id });
+        if (!existingGarden) {
             return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
         }
     }
@@ -42,7 +47,8 @@ const createAlarm = async (request, response) => {
     }
 
     if (plot_number != null) {
-        if (!validator.checkValidPlotNumber(garden_id, plot_number)) {
+        const gardenSize = existingGarden.plot.length;
+        if (!validator.checkValidPlotNumber(gardenSize, plot_number)) {
             return response.status(400).json({ errorMessage: "Invalid plot_number." });
         }
     }
@@ -160,6 +166,26 @@ const deleteAlarm = async (request, response) => {
         console.error(error);
         response.status(500).send();
     }
+}
+
+//Function to delete an alarm by garden_id
+async function deleteAlarmsByGarden(user_id, garden_id) {
+
+    const existingAlarm = await Alarm.findOne({ 'user._id': user_id, 'garden_id': garden_id });
+    if (!existingAlarm) {
+        return false;
+    }
+
+    try {
+
+        await Alarm.deleteMany({ garden_id: garden_id });
+        return true;
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+
 }
 
 //Request to delete all alarms for a given user_id
@@ -366,7 +392,8 @@ const updateGardenPlot = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid garden_id." });
     }
 
-    if (await !validator.checkExistingGarden(garden_id, user_id)) {
+    const existingGarden = await Garden.findOne({ _id: garden_id, 'user._id': user_id });
+    if (!existingGarden) {
         return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
     }
 
@@ -376,7 +403,9 @@ const updateGardenPlot = async (request, response) => {
         }
     }
 
-    if (!validator.checkValidPlotNumber(garden_id, plot_number)) {
+    const gardenSize = existingGarden.plot.length;
+
+    if (!validator.checkValidPlotNumber(gardenSize, plot_number)) {
         return response.status(400).json({ errorMessage: "Invalid plot_number." });
     }
 
@@ -487,6 +516,7 @@ module.exports = {
     getAllAlarms,
     getAlarmByID,
     deleteAlarm,
+    deleteAlarmsByGarden,
     deleteAllAlarms,
     updateTitle,
     updateDueDate,
