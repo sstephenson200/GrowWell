@@ -36,13 +36,11 @@ function checkValidId(id) {
 
 //Check if both garden_id and plot_number are provided
 function checkGardenAndPlotsProvided(garden_id, plot_number) {
-    if (garden_id != null && plot_number == null) {
-        return false;
-    }
 
-    if (garden_id == null && plot_number != null) {
+    if ((garden_id != null && plot_number == null) || (garden_id == null && plot_number != null)) {
         return false;
     }
+    return true;
 }
 
 //Check if garden name already in use for given user

@@ -122,7 +122,7 @@ const getAlarmByID = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
     }
 
-    const alarm = await Alarm.findOne({ _id: alarm_id });
+    const alarm = existingAlarm;
 
     return response.status(200).json({ alarm: alarm });
 }
