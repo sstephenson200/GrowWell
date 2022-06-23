@@ -11,7 +11,7 @@ const createUser = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkMatchingPasswords(password, passwordVerify)) {
@@ -48,7 +48,7 @@ const getUsername = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(user_id)) {
@@ -73,7 +73,7 @@ const login = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const existingUser = await User.findOne({ email });
@@ -96,7 +96,7 @@ const deleteUser = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(user_id)) {
@@ -106,7 +106,7 @@ const deleteUser = async (request, response) => {
     const existingUser = await User.findOne({ _id: user_id });
 
     if (!existingUser) {
-        return response.status(401).json({ errorMessage: "Invalid user_id." });
+        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
@@ -134,7 +134,7 @@ const updateUsername = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(user_id)) {
@@ -144,11 +144,11 @@ const updateUsername = async (request, response) => {
     const existingUser = await User.findOne({ _id: user_id });
 
     if (!existingUser) {
-        return response.status(401).json({ errorMessage: "Invalid user_id." });
+        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     if (username == existingUser.username) {
-        return response.status(401).json({ errorMessage: "No username change detected." });
+        return response.status(400).json({ errorMessage: "No username change detected." });
     }
 
     if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
@@ -174,7 +174,7 @@ const updateEmail = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(user_id)) {
@@ -184,11 +184,11 @@ const updateEmail = async (request, response) => {
     const existingUser = await User.findOne({ _id: user_id });
 
     if (!existingUser) {
-        return response.status(401).json({ errorMessage: "Invalid user_id." });
+        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     if (email == existingUser.email) {
-        return response.status(401).json({ errorMessage: "No email change detected." });
+        return response.status(400).json({ errorMessage: "No email change detected." });
     }
 
     if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
@@ -214,7 +214,7 @@ const updatePassword = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(user_id)) {
@@ -224,7 +224,7 @@ const updatePassword = async (request, response) => {
     const existingUser = await User.findOne({ _id: user_id });
 
     if (!existingUser) {
-        return response.status(401).json({ errorMessage: "Invalid user_id." });
+        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     if (!validator.checkMatchingPasswords(newPassword, newPasswordVerify)) {
@@ -236,7 +236,7 @@ const updatePassword = async (request, response) => {
     }
 
     if (oldPassword == newPassword) {
-        return response.status(401).json({ errorMessage: "No password change detected." });
+        return response.status(400).json({ errorMessage: "No password change detected." });
     }
 
     //Encrypt Password
