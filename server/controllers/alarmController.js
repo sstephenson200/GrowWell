@@ -79,7 +79,7 @@ const getAllAlarms = async (request, response) => {
     const existingUser = await User.findOne({ _id: user_id });
 
     if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id for given user_id.." });
+        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     const alarms = await Alarm.find({ user_id: user_id });

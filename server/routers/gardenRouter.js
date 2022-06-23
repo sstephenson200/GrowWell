@@ -15,4 +15,16 @@ router.post("/createGarden", [
         .isInt({ min: 1, max: 6 }).withMessage("Width must be between 1 and 6m."),
 ], gardenController.createGarden);
 
+router.get("/getAllGardens", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+], gardenController.getAllGardens);
+
+router.get("/getGardenByID", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+    check('garden_id')
+        .not().isEmpty().withMessage("Garden_id required."),
+], gardenController.getGardenByID);
+
 module.exports = router;
