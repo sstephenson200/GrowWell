@@ -1,7 +1,9 @@
-const validator = require("../validators/validator");
-const { check, validationResult } = require('express-validator');
 const moment = require("moment");
 const { bucket } = require("../middleware/imageUpload");
+
+const { check, validationResult } = require('express-validator');
+const validator = require("../validators/validator");
+const gardenValidator = require("../validators/gardenValidator");
 
 const Note = require("../models/noteModel");
 const User = require("../models/userModel");
@@ -60,7 +62,7 @@ const createNote = async (request, response) => {
         gardenSize = existingGarden.plot.length;
     }
 
-    if (!validator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
+    if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
         return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 

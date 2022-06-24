@@ -1,5 +1,7 @@
 const router = require("express").Router();
+
 const { check, validationResult } = require('express-validator');
+
 const gardenController = require("../controllers/gardenController");
 
 router.post("/createGarden", [
@@ -21,21 +23,9 @@ router.get("/getAllGardens", [
 ], gardenController.getAllGardens);
 
 router.get("/getGardenByID", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('garden_id')
         .not().isEmpty().withMessage("Garden_id required."),
 ], gardenController.getGardenByID);
-
-router.get("/getPlotByNumber", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-    check('garden_id')
-        .not().isEmpty().withMessage("Garden_id required."),
-    check('plot_number')
-        .not().isEmpty().withMessage("Plot_number required.")
-        .isInt().withMessage("Plot_number must be an integer value."),
-], gardenController.getPlotByNumber);
 
 router.delete("/deleteGarden", [
     check('user_id')
@@ -59,8 +49,6 @@ router.put("/updateName", [
 ], gardenController.updateName);
 
 router.put("/updatePlotPlantedDate", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('garden_id')
         .not().isEmpty().withMessage("Garden_id required."),
     check('plot_number')
@@ -72,8 +60,6 @@ router.put("/updatePlotPlantedDate", [
 ], gardenController.updatePlotPlantedDate);
 
 router.put("/updatePlotPlant", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('garden_id')
         .not().isEmpty().withMessage("Garden_id required."),
     check('plot_number')

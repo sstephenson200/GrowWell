@@ -1,5 +1,6 @@
-const validator = require("../validators/validator");
 const { check, validationResult } = require('express-validator');
+const validator = require("../validators/validator");
+const gardenValidator = require("../validators/gardenValidator");
 
 const Alarm = require("../models/alarmModel");
 const User = require("../models/userModel");
@@ -42,7 +43,7 @@ const createAlarm = async (request, response) => {
         return response.status(400).json({ errorMessage: "Date must be in the future." });
     }
 
-    if (validator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
+    if (gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
         return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
