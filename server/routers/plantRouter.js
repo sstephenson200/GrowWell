@@ -93,4 +93,71 @@ router.put("/updateSoilPh", [
         .not().isEmpty().withMessage("Soil_ph required."),
 ], plantController.updateSoilPh);
 
+router.put("/updateWaterSchedule", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('water_schedule')
+        .not().isEmpty().withMessage("Water_schedule required."),
+], plantController.updateWaterSchedule);
+
+router.put("/updateCompostSchedule", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('compost_schedule')
+        .not().isEmpty().withMessage("Compost_schedule required.")
+        .isLength({ min: 1, max: 30 }).withMessage("Compost_schedule must be between 1 and 30 characters.")
+        .trim(),
+], plantController.updateCompostSchedule);
+
+router.put("/updatePruneSchedule", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('prune_schedule')
+        .not().isEmpty().withMessage("Prune_schedule required."),
+], plantController.updatePruneSchedule);
+
+router.put("/updateFeedSchedule", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('feed_schedule')
+        .not().isEmpty().withMessage("Feed_schedule required."),
+], plantController.updatePruneSchedule);
+
+router.put("/updateIndoorSchedule", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('indoor_schedule')
+        .not().isEmpty().withMessage("Indoor_schedule required."),
+], plantController.updateIndoorSchedule);
+
+router.put("/updateSpacing", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('spacing')
+        .not().isEmpty().withMessage("Spacing required."),
+], plantController.updateSpacing);
+
+router.put("/updatePlantProblems", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('plant_problem')
+        .not().isEmpty().withMessage("Plant_problem required."),
+], plantController.updatePlantProblems);
+
+router.put("/updateCompanionPlants", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('companion_plant')
+        .not().isEmpty().withMessage("Companion_plant required."),
+], plantController.updateCompanionPlants);
+
+router.put("/updateIncompatiblePlants", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('incompatible_plant')
+        .not().isEmpty().withMessage("Incompatible_plant required."),
+], plantController.updateIncompatiblePlants);
+
+router.put("/updateImages", upload.array("file", 3), plantController.updateImages);
+
 module.exports = router;
