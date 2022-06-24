@@ -1,36 +1,40 @@
 const router = require("express").Router();
-const { check, validationResult } = require('express-validator');
-const userController = require("../controllers/userController");
 
-//List of endpoints
+const { check, validationResult } = require('express-validator');
+
+const userController = require("../controllers/userController");
 
 router.post("/createUser", [
     check('email')
         .not().isEmpty().withMessage("Email required.")
         .isEmail().withMessage("Invalid email.")
-        .normalizeEmail(),
+        .normalizeEmail()
+        .trim(),
     check('username')
         .not().isEmpty().withMessage("Username required.")
-        .isLength({ min: 4, max: 30 }).withMessage("Username must be between 4 and 30 characters."),
+        .isLength({ min: 4, max: 30 }).withMessage("Username must be between 4 and 30 characters.")
+        .trim(),
     check('password')
         .not().isEmpty().withMessage("Password required.")
-        .isLength({ min: 8, max: 30 }).withMessage("Password must be between 8 and 30 characters."),
+        .isLength({ min: 8, max: 30 }).withMessage("Password must be between 8 and 30 characters.")
+        .trim(),
     check('passwordVerify')
         .not().isEmpty().withMessage("Password_verify required.")
-        .isLength({ min: 8, max: 30 }).withMessage("Password Verify must be between 8 and 30 characters."),
+        .isLength({ min: 8, max: 30 }).withMessage("Password Verify must be between 8 and 30 characters.")
+        .trim(),
 ], userController.createUser);
 
 router.get("/getUsername", [
     check('user_id')
-        .not().isEmpty().withMessage("User_id required.")
-        .trim(),
+        .not().isEmpty().withMessage("User_id required."),
 ], userController.getUsername);
 
 router.get("/login", [
     check('email')
         .not().isEmpty().withMessage("Email required.")
         .isEmail().withMessage("Invalid email.")
-        .normalizeEmail(),
+        .normalizeEmail()
+        .trim(),
     check('password')
         .not().isEmpty().withMessage("Password required.")
         .trim()

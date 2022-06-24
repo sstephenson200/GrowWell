@@ -1,5 +1,6 @@
-const validator = require("../validators/validator");
 const { check, validationResult } = require('express-validator');
+const validator = require("../validators/validator");
+const userValidator = require("../validators/userValidator");
 
 const alarmController = require("./alarmController");
 const noteController = require("./noteController");
@@ -187,7 +188,7 @@ const deleteGarden = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
     }
 
-    if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
+    if (! await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
     }
 
@@ -205,37 +206,18 @@ const deleteGarden = async (request, response) => {
     }
 }
 
-//Request to delete all gardens for a given user_id
-const deleteAllGardens = async (request, response) => {
-
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
+//Function to delete all gardens for a given user_id
+async function deleteAllGardens(user_id) {
 
     try {
-
         await Note.deleteMany({ user_id: user_id, garden_id: { $ne: null } })
         await Alarm.deleteMany({ user_id: user_id, garden_id: { $ne: null } })
         await Garden.deleteMany({ user_id: user_id });
 
-        return response.status(200).json({ message: "Gardens deleted successfully." });
+        return true;
 
     } catch (error) {
-        console.error(error);
-        response.status(500).send();
+        return false;
     }
 }
 

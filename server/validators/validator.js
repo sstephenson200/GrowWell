@@ -1,24 +1,7 @@
 const ObjectId = require("mongoose").Types.ObjectId;
-const bcrypt = require("bcrypt");
 
-const User = require("../models/userModel");
 const Garden = require("../models/gardenModel");
 const Plant = require("../models/plantModel");
-
-//Check passwords match
-function checkMatchingPasswords(password1, password2) {
-    if (password1 === password2) {
-        return true;
-    }
-}
-
-//Check if an account already exists for given email
-async function checkExistingAccount(email) {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-        return true;
-    }
-}
 
 //Check if entered date is in future
 function checkDateInFuture(date) {
@@ -115,15 +98,9 @@ function checkValidWeeklySchedule(schedule) {
     return true;
 }
 
-//Check entered password is correct
-async function checkPasswordCorrect(password, storedPasswordHash) {
-    const match = await bcrypt.compare(password, storedPasswordHash);
-    return match;
-}
+
 
 module.exports = {
-    checkMatchingPasswords,
-    checkExistingAccount,
     checkDateInFuture,
     checkValidId,
     checkGardenAndPlotsProvided,
@@ -133,6 +110,5 @@ module.exports = {
     checkArrayLength,
     checkValidMonthSchedule,
     checkValidPlantEnum,
-    checkValidWeeklySchedule,
-    checkPasswordCorrect
+    checkValidWeeklySchedule
 }

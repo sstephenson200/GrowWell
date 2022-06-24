@@ -47,11 +47,6 @@ router.delete("/deleteGarden", [
         .trim()
 ], gardenController.deleteGarden);
 
-router.delete("/deleteAllGardens", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-], gardenController.deleteAllGardens);
-
 router.put("/updateName", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),

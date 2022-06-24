@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
-const validator = require("../validators/validator");
+
 const { check, validationResult } = require('express-validator');
+const validator = require("../validators/validator");
+const userValidator = require("../validators/userValidator");
 
 const gardenController = require("./gardenController");
 
@@ -16,20 +18,19 @@ const createUser = async (request, response) => {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkMatchingPasswords(password, passwordVerify)) {
+    if (!userValidator.checkMatchingPasswords(password, passwordVerify)) {
         return response.status(400).json({ errorMessage: "Entered passwords must match." });
     }
 
-    if (await validator.checkExistingAccount(email)) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
         return response.status(400).json({ errorMessage: "An account already exists for this email." });
     }
 
-    //Encrypt Password
     const salt = await bcrypt.genSalt();
     const password_hash = await bcrypt.hash(password, salt);
 
     try {
-
         const newUser = new User({
             email, username, password_hash
         });
@@ -57,8 +58,7 @@ const getUsername = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
-    const username = await User.findOne({ user_id }).select("username");
-
+    const username = await User.findOne({ _id: user_id }).select("username");
     if (!username) {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
@@ -79,12 +79,7 @@ const login = async (request, response) => {
     }
 
     const existingUser = await User.findOne({ email });
-
-    if (!existingUser) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
-    }
-
-    if (!await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
+    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
     }
 
@@ -106,21 +101,20 @@ const deleteUser = async (request, response) => {
     }
 
     const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
+    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
     }
 
     try {
+        const deletedGardens = await gardenController.deleteAllGardens(user_id);
+        if (!deletedGardens) {
+            return response.status(500).json({ message: "An error has occured." });
+        }
 
-        await gardenController.deleteAllGardens(user_id);
-        await User.deleteOne(existingUser);
-
-        return response.status(200).json({ message: "User deleted successfully." });
+        const deletedUser = await User.deleteOne({ _id: user_id });
+        if (deletedUser) {
+            return response.status(200).json({ message: "User deleted successfully." });
+        }
 
     } catch (error) {
         console.error(error);
@@ -143,22 +137,16 @@ const updateUsername = async (request, response) => {
     }
 
     const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    if (username == existingUser.username) {
-        return response.status(400).json({ errorMessage: "No username change detected." });
-    }
-
-    if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
+    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
     }
 
-    try {
+    if (username == existingUser.username) {
+        return response.status(400).json({ errorMessage: "No change detected." });
+    }
 
-        await User.updateOne(existingUser, { username: username });
+    try {
+        await User.updateOne(existingUser, { "username": username });
 
         return response.status(200).json({ message: "Username updated successfully." });
 
@@ -183,22 +171,16 @@ const updateEmail = async (request, response) => {
     }
 
     const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    if (email == existingUser.email) {
-        return response.status(400).json({ errorMessage: "No email change detected." });
-    }
-
-    if (! await validator.checkPasswordCorrect(password, existingUser.password_hash)) {
+    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
     }
 
-    try {
+    if (email == existingUser.email) {
+        return response.status(400).json({ errorMessage: "No change detected." });
+    }
 
-        await User.updateOne(existingUser, { email: email });
+    try {
+        await User.updateOne(existingUser, { "email": email });
 
         return response.status(200).json({ message: "Email updated successfully." });
 
@@ -223,21 +205,16 @@ const updatePassword = async (request, response) => {
     }
 
     const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    if (!validator.checkMatchingPasswords(newPassword, newPasswordVerify)) {
-        return response.status(400).json({ errorMessage: "Entered passwords must match." });
-    }
-
-    if (! await validator.checkPasswordCorrect(oldPassword, existingUser.password_hash)) {
+    if (!existingUser || !await userValidator.checkPasswordCorrect(oldPassword, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
     }
 
-    if (oldPassword == newPassword) {
-        return response.status(400).json({ errorMessage: "No password change detected." });
+    if (!userValidator.checkMatchingPasswords(newPassword, newPasswordVerify)) {
+        return response.status(400).json({ errorMessage: "Entered passwords must match." });
+    }
+
+    if (userValidator.checkMatchingPasswords(oldPassword, newPassword)) {
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
     //Encrypt Password
@@ -245,8 +222,7 @@ const updatePassword = async (request, response) => {
     const password_hash = await bcrypt.hash(newPassword, salt);
 
     try {
-
-        await User.updateOne(existingUser, { password_hash: password_hash });
+        await User.updateOne(existingUser, { "password_hash": password_hash });
 
         return response.status(200).json({ message: "Password updated successfully." });
 
