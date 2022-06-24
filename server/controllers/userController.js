@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const validator = require("../validators/validator");
 const { check, validationResult } = require('express-validator');
 
+const gardenController = require("./gardenController");
+
 const User = require("../models/userModel");
 
 //Request to create a new user record
@@ -115,8 +117,7 @@ const deleteUser = async (request, response) => {
 
     try {
 
-        //need to delete gardens, alarms, notes before deleting user
-
+        await gardenController.deleteAllGardens(user_id);
         await User.deleteOne(existingUser);
 
         return response.status(200).json({ message: "User deleted successfully." });

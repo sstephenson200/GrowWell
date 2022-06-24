@@ -2,11 +2,14 @@ const validator = require("../validators/validator");
 const { check, validationResult } = require('express-validator');
 
 const alarmController = require("./alarmController");
+const noteController = require("./noteController");
 
 const Garden = require("../models/gardenModel");
 const User = require("../models/userModel");
 const Alarm = require("../models/alarmModel");
 const Plant = require("../models/plantModel");
+const Note = require("../models/noteModel");
+
 
 //Create Garden Endpoint
 const createGarden = async (request, response) => {
@@ -158,8 +161,6 @@ const getPlotByNumber = async (request, response) => {
 //Request to delete a garden
 const deleteGarden = async (request, response) => {
 
-    //DELETE RELATED NOTES
-
     const { user_id, garden_id, password } = request.body;
 
     const validationErrors = validationResult(request);
@@ -192,6 +193,7 @@ const deleteGarden = async (request, response) => {
 
     try {
 
+        await noteController.deleteNotesByGarden(user_id, garden_id);
         await alarmController.deleteAlarmsByGarden(user_id, garden_id);
         await Garden.deleteOne({ _id: garden_id });
 
@@ -205,8 +207,6 @@ const deleteGarden = async (request, response) => {
 
 //Request to delete all gardens for a given user_id
 const deleteAllGardens = async (request, response) => {
-
-    //DELETE RELATED NOTES
 
     const { user_id } = request.body;
 
@@ -227,6 +227,7 @@ const deleteAllGardens = async (request, response) => {
 
     try {
 
+        await Note.deleteMany({ user_id: user_id, garden_id: { $ne: null } })
         await Alarm.deleteMany({ user_id: user_id, garden_id: { $ne: null } })
         await Garden.deleteMany({ user_id: user_id });
 
