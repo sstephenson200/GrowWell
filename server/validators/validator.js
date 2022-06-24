@@ -78,7 +78,7 @@ function checkArrayLength(array, length) {
 //Check monthly schedule is valid
 function checkValidMonthSchedule(schedule) {
     for (let i = 0; i < schedule.length; i++) {
-        if (schedule[i] < 1 || schedule[i] > 12) {
+        if (typeof schedule[i] !== 'number' || schedule[i] < 1 || schedule[i] > 12) {
             return false;
         }
     }

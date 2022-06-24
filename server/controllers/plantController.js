@@ -1,4 +1,5 @@
 const validator = require("../validators/validator");
+const { check, validationResult } = require('express-validator');
 
 const Plant = require("../models/plantModel");
 
@@ -165,9 +166,413 @@ const createPlant = async (request, response) => {
         console.error(error);
         response.status(500).send();
     }
-
 }
 
+//Request to get all plants
+const getAllPlants = async (request, response) => {
+
+    const plants = await Plant.find().select(["name", "image", "sow_date", "plant_date", "transplant_date", "harvest_date", "plant_type"]);
+
+    return response.status(200).json({ plants: plants });
+}
+
+//Request to get a plant for a given plant_id
+const getPlantByID = async (request, response) => {
+
+    const { plant_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    return response.status(200).json({ plant: existingPlant });
+}
+
+//Function to delete all image files and chunks from an array of objects
+function deleteImagesFromArray(array) {
+    for (let i = 0; i < array.length; i++) {
+        deleteImages(array[i]);
+    }
+}
+
+//Function to delete all iamges from a single object
+function deleteImages(images) {
+    images.forEach((image) => {
+        bucket.delete(image);
+    });
+}
+
+//Request to delete a plant for a given plant_id
+const deletePlant = async (request, response) => {
+
+    const { plant_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    try {
+
+        let plant = await Plant.findOneAndDelete({ _id: plant_id });
+        deleteImagesFromArray(plant);
+
+        return response.status(200).json({ message: "Plant deleted successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's name
+const updateName = async (request, response) => {
+
+    const { plant_id, name } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    if (name == existingPlant.name) {
+        return response.status(400).json({ errorMessage: "No name change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { name: name });
+
+        return response.status(200).json({ message: "Plant name updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's description
+const updateDescription = async (request, response) => {
+
+    const { plant_id, description } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    if (description == existingPlant.description) {
+        return response.status(400).json({ errorMessage: "No description change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { description: description });
+
+        return response.status(200).json({ message: "Plant description updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's plant_type
+const updatePlantType = async (request, response) => {
+
+    const { plant_id, plant_type } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    let enumCheck = [];
+    enumCheck.push({ type: plant_type, name: "plant_type" });
+
+    if (!validator.checkValidPlantEnum(enumCheck[0])) {
+        return response.status(400).json({ errorMessage: "Invalid plant_type." });
+    }
+
+    if (plant_type == existingPlant.plant_type) {
+        return response.status(400).json({ errorMessage: "No plant_type change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { plant_type: plant_type });
+
+        return response.status(200).json({ message: "Plant_type updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's sow_date
+const updateSowDate = async (request, response) => {
+
+    const { plant_id, sow_date } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    if (!validator.checkArrayLength(sow_date, 2)) {
+        return response.status(400).json({ errorMessage: "Sow_date must have start and end month." });
+    }
+
+    if (!validator.checkValidMonthSchedule(sow_date)) {
+        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
+    }
+
+    let currentSow = Array.from(existingPlant.sow_date);
+
+    if (sow_date[0] == currentSow[0] && sow_date[1] == currentSow[1]) {
+        return response.status(400).json({ errorMessage: "No sow_date change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { sow_date: sow_date });
+
+        return response.status(200).json({ message: "Sow_date updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's plant_date
+const updatePlantDate = async (request, response) => {
+
+    const { plant_id, plant_date } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    if (!validator.checkArrayLength(plant_date, 2)) {
+        return response.status(400).json({ errorMessage: "Plant_date must have start and end month." });
+    }
+
+    if (!validator.checkValidMonthSchedule(plant_date)) {
+        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
+    }
+
+    let currentPlantDate = Array.from(existingPlant.plant_date);
+
+    if (plant_date[0] == currentPlantDate[0] && plant_date[1] == currentPlantDate[1]) {
+        return response.status(400).json({ errorMessage: "No plant_date change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { plant_date: plant_date });
+
+        return response.status(200).json({ message: "Plant_date updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's transplant_date
+const updateTransplantDate = async (request, response) => {
+
+    const { plant_id, transplant_date } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    if (!validator.checkArrayLength(transplant_date, 2)) {
+        return response.status(400).json({ errorMessage: "Transplant_date must have start and end month." });
+    }
+
+    if (!validator.checkValidMonthSchedule(transplant_date)) {
+        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
+    }
+
+    let currentTransplantDate = Array.from(existingPlant.transplant_date);
+
+    if (transplant_date[0] == currentTransplantDate[0] && transplant_date[1] == currentTransplantDate[1]) {
+        return response.status(400).json({ errorMessage: "No transplant_date change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { transplant_date: transplant_date });
+
+        return response.status(200).json({ message: "Transplant_date updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's harvest_date
+const updateHarvestDate = async (request, response) => {
+
+    const { plant_id, harvest_date } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    if (!validator.checkArrayLength(harvest_date, 2)) {
+        return response.status(400).json({ errorMessage: "Harvest_date must have start and end month." });
+    }
+
+    if (!validator.checkValidMonthSchedule(harvest_date)) {
+        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
+    }
+
+    let currentHarvestDate = Array.from(existingPlant.harvest_date);
+
+    if (harvest_date[0] == currentHarvestDate[0] && harvest_date[1] == currentHarvestDate[1]) {
+        return response.status(400).json({ errorMessage: "No harvest_date change detected." });
+    }
+
+    try {
+
+        await Plant.updateOne(existingPlant, { harvest_date: harvest_date });
+
+        return response.status(200).json({ message: "harvest_date updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//edit sun_condition
+
+//edit soil_type
+
+//edit soil_ph
+
+//edit water_schedule
+
+//edit compost_schedule
+
+//edit feed_schedule
+
+//edit indoor_schedule
+
+//edit spacing
+
+//edit plant_problem
+
+//edit companion_plant
+
+//edit incompatible_plant
+
+//edit images
+
 module.exports = {
-    createPlant
+    createPlant,
+    getAllPlants,
+    getPlantByID,
+    deletePlant,
+    updateName,
+    updateDescription,
+    updatePlantType,
+    updateSowDate,
+    updatePlantDate,
+    updateTransplantDate,
+    updateHarvestDate
 }
