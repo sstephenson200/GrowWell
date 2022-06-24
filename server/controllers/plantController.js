@@ -531,7 +531,7 @@ const updateHarvestDate = async (request, response) => {
 
         await Plant.updateOne(existingPlant, { harvest_date: harvest_date });
 
-        return response.status(200).json({ message: "harvest_date updated successfully." });
+        return response.status(200).json({ message: "Harvest_date updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -539,11 +539,134 @@ const updateHarvestDate = async (request, response) => {
     }
 }
 
-//edit sun_condition
+//Request to update a plant's sun_condition
+const updateSunCondition = async (request, response) => {
 
-//edit soil_type
+    let { plant_id, sun_condition } = request.body;
 
-//edit soil_ph
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    let enums = [{ type: sun_condition, name: "sun_condition" }];
+
+    let editedEnums = [...new Set(enums[0].type)];
+
+    if (!validator.checkValidPlantEnum(enums[0])) {
+        return response.status(400).json({ errorMessage: "Invalid sun_condition." });
+    }
+
+    enums = editedEnums;
+    sun_condition = enums;
+
+    try {
+
+        await Plant.updateOne(existingPlant, { sun_condition: sun_condition });
+
+        return response.status(200).json({ message: "Sun_condition updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's soil_type
+const updateSoilType = async (request, response) => {
+
+    let { plant_id, soil_type } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    let enums = [{ type: soil_type, name: "soil_type" }];
+
+    let editedEnums = [...new Set(enums[0].type)];
+
+    if (!validator.checkValidPlantEnum(enums[0])) {
+        return response.status(400).json({ errorMessage: "Invalid soil_type." });
+    }
+
+    enums = editedEnums;
+    soil_type = enums;
+
+    try {
+
+        await Plant.updateOne(existingPlant, { soil_type: soil_type });
+
+        return response.status(200).json({ message: "Soil_type updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plant's soil_ph
+const updateSoilPh = async (request, response) => {
+
+    let { plant_id, soil_ph } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+
+    if (!existingPlant) {
+        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    let enums = [{ type: soil_ph, name: "soil_ph" }];
+
+    let editedEnums = [...new Set(enums[0].type)];
+
+    if (!validator.checkValidPlantEnum(enums[0])) {
+        return response.status(400).json({ errorMessage: "Invalid soil_ph." });
+    }
+
+    enums = editedEnums;
+    soil_ph = enums;
+
+    try {
+
+        await Plant.updateOne(existingPlant, { soil_ph: soil_ph });
+
+        return response.status(200).json({ message: "Soil_ph updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
 
 //edit water_schedule
 
@@ -574,5 +697,8 @@ module.exports = {
     updateSowDate,
     updatePlantDate,
     updateTransplantDate,
-    updateHarvestDate
+    updateHarvestDate,
+    updateSunCondition,
+    updateSoilType,
+    updateSoilPh
 }

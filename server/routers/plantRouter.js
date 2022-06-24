@@ -72,4 +72,25 @@ router.put("/updateHarvestDate", [
         .not().isEmpty().withMessage("Harvest_date required."),
 ], plantController.updateHarvestDate);
 
+router.put("/updateSunCondition", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('sun_condition')
+        .not().isEmpty().withMessage("Sun_condition required."),
+], plantController.updateSunCondition);
+
+router.put("/updateSoilType", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('soil_type')
+        .not().isEmpty().withMessage("Soil_type required."),
+], plantController.updateSoilType);
+
+router.put("/updateSoilPh", [
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('soil_ph')
+        .not().isEmpty().withMessage("Soil_ph required."),
+], plantController.updateSoilPh);
+
 module.exports = router;
