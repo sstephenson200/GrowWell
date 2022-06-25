@@ -305,6 +305,7 @@ const updateDescription = async (request, response) => {
     }
 }
 
+//Request to update any enum value for a given plant_id: plant_type, sun_condition, soil_type or soil_ph
 const updateEnums = async (request, response) => {
 
     let { plant_id, enumType, enumValue } = request.body;
@@ -350,19 +351,18 @@ const updateEnums = async (request, response) => {
         query[enumType] = enumValue;
         await Plant.updateOne(existingPlant, query);
 
-        return response.status(200).json({ message: "Plant_type updated successfully." });
+        return response.status(200).json({ message: enumType + " updated successfully." });
 
     } catch (error) {
         console.error(error);
         response.status(500).send();
     }
-
 }
 
-//Request to update a plant's sow_date
-const updateSowDate = async (request, response) => {
+//Request to update any monthly schedule value for a given plant_id: sow_date, plant_date, transplant_date or harvest_date
+const updateMonthlySchedules = async (request, response) => {
 
-    const { plant_id, sow_date } = request.body;
+    let { plant_id, scheduleType, scheduleValue } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -374,30 +374,28 @@ const updateSowDate = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
-    if (!validator.checkArrayLength(sow_date, 2)) {
-        return response.status(400).json({ errorMessage: "Sow_date must have start and end month." });
+    if (!Object.values(plantValidator.monthlyScheduleTypes).includes(scheduleType)) {
+        return response.status(400).json({ errorMessage: "Invalid ScheduleType." });
     }
 
-    if (!validator.checkValidMonthSchedule(sow_date)) {
+    if (!plantValidator.checkArrayLength(scheduleValue, 2)) {
+        return response.status(400).json({ errorMessage: "Monthly schedules must have start and end month." });
+    }
+
+    if (!plantValidator.checkValidMonthSchedule(scheduleValue)) {
         return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
     }
 
-    let currentSow = Array.from(existingPlant.sow_date);
-
-    if (sow_date[0] == currentSow[0] && sow_date[1] == currentSow[1]) {
-        return response.status(400).json({ errorMessage: "No sow_date change detected." });
-    }
-
     try {
+        let query = {};
+        query[scheduleType] = scheduleValue;
+        await Plant.updateOne(existingPlant, query);
 
-        await Plant.updateOne(existingPlant, { sow_date: sow_date });
-
-        return response.status(200).json({ message: "Sow_date updated successfully." });
+        return response.status(200).json({ message: scheduleType + " updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -405,10 +403,10 @@ const updateSowDate = async (request, response) => {
     }
 }
 
-//Request to update a plant's plant_date
-const updatePlantDate = async (request, response) => {
+//Request to update any required weekly schedule value for a given plant_id: water_schedule, spacing
+const updateRequiredWeeklySchedules = async (request, response) => {
 
-    const { plant_id, plant_date } = request.body;
+    let { plant_id, scheduleType, scheduleValue } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -420,30 +418,28 @@ const updatePlantDate = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
-    if (!validator.checkArrayLength(plant_date, 2)) {
-        return response.status(400).json({ errorMessage: "Plant_date must have start and end month." });
+    if (!Object.values(plantValidator.requiredWeeklyScheduleTypes).includes(scheduleType)) {
+        return response.status(400).json({ errorMessage: "Invalid ScheduleType." });
     }
 
-    if (!validator.checkValidMonthSchedule(plant_date)) {
-        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
+    if (!plantValidator.checkArrayLength(scheduleValue, 2)) {
+        return response.status(400).json({ errorMessage: "Schedules must have 2 values." });
     }
 
-    let currentPlantDate = Array.from(existingPlant.plant_date);
-
-    if (plant_date[0] == currentPlantDate[0] && plant_date[1] == currentPlantDate[1]) {
-        return response.status(400).json({ errorMessage: "No plant_date change detected." });
+    if (!plantValidator.checkValidWeeklySchedule(scheduleValue)) {
+        return response.status(400).json({ errorMessage: scheduleType + " values must be greater than 0." });
     }
 
     try {
+        let query = {};
+        query[scheduleType] = scheduleValue;
+        await Plant.updateOne(existingPlant, query);
 
-        await Plant.updateOne(existingPlant, { plant_date: plant_date });
-
-        return response.status(200).json({ message: "Plant_date updated successfully." });
+        return response.status(200).json({ message: scheduleType + " updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -451,10 +447,10 @@ const updatePlantDate = async (request, response) => {
     }
 }
 
-//Request to update a plant's transplant_date
-const updateTransplantDate = async (request, response) => {
+//Request to update any optional weekly schedule value for a given plant_id: prune_schedule, feed_schedule, indoor_schedule
+const updateOptionalWeeklySchedules = async (request, response) => {
 
-    const { plant_id, transplant_date } = request.body;
+    let { plant_id, scheduleType, scheduleValue } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -466,122 +462,39 @@ const updateTransplantDate = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
-    if (!validator.checkArrayLength(transplant_date, 2)) {
-        return response.status(400).json({ errorMessage: "Transplant_date must have start and end month." });
+    if (!Object.values(plantValidator.optionalWeeklyScheduleTypes).includes(scheduleType)) {
+        return response.status(400).json({ errorMessage: "Invalid ScheduleType." });
     }
 
-    if (!validator.checkValidMonthSchedule(transplant_date)) {
-        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
+    let editedString = "";
+
+    if (plantValidator.checkArrayLength(scheduleValue, 1)) {
+        if (typeof scheduleValue[0] !== 'string') {
+            return response.status(400).json({ errorMessage: "Single values for optional schedules must be entered as strings." });
+        }
+        editedString = scheduleValue[0].trim();
     }
 
-    let currentTransplantDate = Array.from(existingPlant.transplant_date);
-
-    if (transplant_date[0] == currentTransplantDate[0] && transplant_date[1] == currentTransplantDate[1]) {
-        return response.status(400).json({ errorMessage: "No transplant_date change detected." });
+    if (editedString != "") {
+        scheduleValue[0] = editedString;
     }
 
-    try {
-
-        await Plant.updateOne(existingPlant, { transplant_date: transplant_date });
-
-        return response.status(200).json({ message: "Transplant_date updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's harvest_date
-const updateHarvestDate = async (request, response) => {
-
-    const { plant_id, harvest_date } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    if (!validator.checkArrayLength(harvest_date, 2)) {
-        return response.status(400).json({ errorMessage: "Harvest_date must have start and end month." });
-    }
-
-    if (!validator.checkValidMonthSchedule(harvest_date)) {
-        return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
-    }
-
-    let currentHarvestDate = Array.from(existingPlant.harvest_date);
-
-    if (harvest_date[0] == currentHarvestDate[0] && harvest_date[1] == currentHarvestDate[1]) {
-        return response.status(400).json({ errorMessage: "No harvest_date change detected." });
+    if (plantValidator.checkArrayLength(scheduleValue, 2)) {
+        if (!plantValidator.checkValidWeeklySchedule(scheduleValue)) {
+            return response.status(400).json({ errorMessage: "Schedule values must be greater than 0." });
+        }
     }
 
     try {
+        let query = {};
+        query[scheduleType] = scheduleValue;
+        await Plant.updateOne(existingPlant, query);
 
-        await Plant.updateOne(existingPlant, { harvest_date: harvest_date });
-
-        return response.status(200).json({ message: "Harvest_date updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's water_schedule
-const updateWaterSchedule = async (request, response) => {
-
-    const { plant_id, water_schedule } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    if (!validator.checkArrayLength(water_schedule, 2)) {
-        return response.status(400).json({ errorMessage: "Water_schedule must have start and end month." });
-    }
-
-    if (!validator.checkValidWeeklySchedule(water_schedule)) {
-        return response.status(400).json({ errorMessage: "Water_schedule values must be greater than 0." });
-    }
-
-    let currentWaterDate = Array.from(existingPlant.water_schedule);
-
-    if (water_schedule[0] == currentWaterDate[0] && water_schedule[1] == currentWaterDate[1]) {
-        return response.status(400).json({ errorMessage: "No water_schedule change detected." });
-    }
-
-    try {
-
-        await Plant.updateOne(existingPlant, { water_schedule: water_schedule });
-
-        return response.status(200).json({ message: "Water_schedule updated successfully." });
+        return response.status(200).json({ message: scheduleType + " updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -599,7 +512,7 @@ const updateCompostSchedule = async (request, response) => {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(plant_id)) {
+    if (!plantValidator.checkValidId(plant_id)) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
@@ -623,71 +536,10 @@ const updateCompostSchedule = async (request, response) => {
     }
 }
 
-//Request to update a plant's prune_schedule
-const updatePruneSchedule = async (request, response) => {
+//Request to update any list value for a given plant_id: plant_problem, companion_plant, incompatible_plant
+const updateLists = async (request, response) => {
 
-    const { plant_id, prune_schedule } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let editedString = "";
-
-    if (validator.checkArrayLength(prune_schedule, 1)) {
-        if (typeof prune_schedule[0] !== 'string') {
-            return response.status(400).json({ errorMessage: "Single values for prune_schedule must be entered as strings." });
-        }
-        editedString = prune_schedule[0].trim();
-    }
-
-    let currentPruneDate = Array.from(existingPlant.prune_schedule);
-
-    if (editedString != "") {
-        prune_schedule[0] = editedString;
-
-        if (prune_schedule[0] == currentPruneDate[0]) {
-            return response.status(400).json({ errorMessage: "No prune_schedule change detected." });
-        }
-    }
-
-    if (validator.checkArrayLength(prune_schedule, 2)) {
-        if (!validator.checkValidWeeklySchedule(prune_schedule)) {
-            return response.status(400).json({ errorMessage: "Prune_schedule values must be greater than 0." });
-        }
-
-        if (prune_schedule[0] == currentPruneDate[0] && prune_schedule[1] == currentPruneDate[1]) {
-            return response.status(400).json({ errorMessage: "No prune_schedule change detected." });
-        }
-    }
-
-    try {
-
-        await Plant.updateOne(existingPlant, { prune_schedule: prune_schedule });
-
-        return response.status(200).json({ message: "Prune_schedule updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's feed_schedule
-const updateFeedSchedule = async (request, response) => {
-
-    const { plant_id, feed_schedule } = request.body;
+    let { plant_id, listType, listValue } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -699,302 +551,37 @@ const updateFeedSchedule = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
-    let editedString = "";
-
-    if (validator.checkArrayLength(feed_schedule, 1)) {
-        if (typeof feed_schedule[0] !== 'string') {
-            return response.status(400).json({ errorMessage: "Single values for feed_schedule must be entered as strings." });
-        }
-        editedString = feed_schedule[0].trim();
+    if (!Object.values(plantValidator.listTypes).includes(listType)) {
+        return response.status(400).json({ errorMessage: "Invalid listType." });
     }
 
-    let currentFeedDate = Array.from(existingPlant.feed_schedule);
-
-    if (editedString != "") {
-        feed_schedule[0] = editedString;
-
-        if (feed_schedule[0] == currentFeedDate[0]) {
-            return response.status(400).json({ errorMessage: "No feed_schedule change detected." });
-        }
+    if (!Array.isArray(listValue)) {
+        return response.status(400).json({ errorMessage: "Plant_problem, companion_plant and incompatible_plant must be entered as arrays." });
     }
 
-    if (validator.checkArrayLength(feed_schedule, 2)) {
-        if (!validator.checkValidWeeklySchedule(feed_schedule)) {
-            return response.status(400).json({ errorMessage: "Feed_schedule values must be greater than 0." });
-        }
+    let editedList = [];
 
-        if (feed_schedule[0] == currentFeedDate[0] && feed_schedule[1] == currentFeedDate[1]) {
-            return response.status(400).json({ errorMessage: "No feed_schedule change detected." });
+    for (let i = 0; i < listValue.length; i++) {
+        if (typeof listValue[i] !== 'string') {
+            return response.status(400).json({ errorMessage: listType + " values must be entered as strings." });
         }
+        let editedString = listValue[i].trim();
+        editedList.push(editedString);
     }
+
+    listValue = editedList;
+    listValue = [...new Set(listValue)];
 
     try {
-
-        await Plant.updateOne(existingPlant, { feed_schedule: feed_schedule });
-
-        return response.status(200).json({ message: "Feed_schedule updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's indoor_schedule
-const updateIndoorSchedule = async (request, response) => {
-
-    const { plant_id, indoor_schedule } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let editedString = "";
-
-    if (validator.checkArrayLength(indoor_schedule, 1)) {
-        if (typeof indoor_schedule[0] !== 'string') {
-            return response.status(400).json({ errorMessage: "Single values for indoor_schedule must be entered as strings." });
-        }
-        editedString = indoor_schedule[0].trim();
-    }
-
-    let currentIndoorDate = Array.from(existingPlant.indoor_schedule);
-
-    if (editedString != "") {
-        indoor_schedule[0] = editedString;
-
-        if (indoor_schedule[0] == currentIndoorDate[0]) {
-            return response.status(400).json({ errorMessage: "No indoor_schedule change detected." });
-        }
-    }
-
-    if (validator.checkArrayLength(indoor_schedule, 2)) {
-        if (!validator.checkValidWeeklySchedule(indoor_schedule)) {
-            return response.status(400).json({ errorMessage: "Indoor_schedule values must be greater than 0." });
-        }
-
-        if (indoor_schedule[0] == currentIndoorDate[0] && indoor_schedule[1] == currentIndoorDate[1]) {
-            return response.status(400).json({ errorMessage: "No indoor_schedule change detected." });
-        }
-    }
-
-    try {
-
-        await Plant.updateOne(existingPlant, { indoor_schedule: indoor_schedule });
-
-        return response.status(200).json({ message: "Indoor_schedule updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's spacing
-const updateSpacing = async (request, response) => {
-
-    const { plant_id, spacing } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    if (!validator.checkArrayLength(spacing, 2)) {
-        return response.status(400).json({ errorMessage: "Spacing must have min and max value." });
-    }
-
-    if (!validator.checkValidWeeklySchedule(spacing)) {
-        return response.status(400).json({ errorMessage: "Spacing values must be greater than 0." });
-    }
-
-    let currentSpacing = Array.from(existingPlant.spacing);
-
-    if (spacing[0] == currentSpacing[0] && spacing[1] == currentSpacing[1]) {
-        return response.status(400).json({ errorMessage: "No spacing change detected." });
-    }
-
-    try {
-
-        await Plant.updateOne(existingPlant, { spacing: spacing });
-
-        return response.status(200).json({ message: "Spacing updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's plant_problem
-const updatePlantProblems = async (request, response) => {
-
-    let { plant_id, plant_problem } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let stringArrays = [{ type: plant_problem, name: "plant_problem" }];
-
-    let editedStringArrays = [];
-    let editedStringArraysEntry = [...new Set(stringArrays[0].type)];
-
-    for (let i = 0; i < editedStringArraysEntry.length; i++) {
-        if (typeof editedStringArraysEntry[i] !== 'string') {
-            return response.status(400).json({ errorMessage: "Plant_problem values must be entered as strings." });
-        }
-        let editedString = editedStringArraysEntry[i].trim();
-        editedStringArraysEntry[i] = editedString;
-    }
-
-    editedStringArrays.push(editedStringArraysEntry);
-
-    stringArrays = editedStringArrays;
-    plant_problem = stringArrays[0];
-
-    try {
-
-        await Plant.updateOne(existingPlant, { plant_problem: plant_problem });
-
-        return response.status(200).json({ message: "Plant_problem updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's companion_plant
-const updateCompanionPlants = async (request, response) => {
-
-    let { plant_id, companion_plant } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let stringArrays = [{ type: companion_plant, name: "companion_plant" }];
-
-    let editedStringArrays = [];
-    let editedStringArraysEntry = [...new Set(stringArrays[0].type)];
-
-    for (let i = 0; i < editedStringArraysEntry.length; i++) {
-        if (typeof editedStringArraysEntry[i] !== 'string') {
-            return response.status(400).json({ errorMessage: "Companion_plant values must be entered as strings." });
-        }
-        let editedString = editedStringArraysEntry[i].trim();
-        editedStringArraysEntry[i] = editedString;
-    }
-
-    editedStringArrays.push(editedStringArraysEntry);
-
-    stringArrays = editedStringArrays;
-    companion_plant = stringArrays[0];
-
-    try {
-
-        await Plant.updateOne(existingPlant, { companion_plant: companion_plant });
-
-        return response.status(200).json({ message: "Companion_plant updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's incompatible_plant
-const updateIncompatiblePlants = async (request, response) => {
-
-    let { plant_id, incompatible_plant } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let stringArrays = [{ type: incompatible_plant, name: "incompatible_plant" }];
-
-    let editedStringArrays = [];
-    let editedStringArraysEntry = [...new Set(stringArrays[0].type)];
-
-    for (let i = 0; i < editedStringArraysEntry.length; i++) {
-        if (typeof editedStringArraysEntry[i] !== 'string') {
-            return response.status(400).json({ errorMessage: "Companion_plant values must be entered as strings." });
-        }
-        let editedString = editedStringArraysEntry[i].trim();
-        editedStringArraysEntry[i] = editedString;
-    }
-
-    editedStringArrays.push(editedStringArraysEntry);
-
-    stringArrays = editedStringArrays;
-    incompatible_plant = stringArrays[0];
-
-    try {
-
-        await Plant.updateOne(existingPlant, { incompatible_plant: incompatible_plant });
-
-        return response.status(200).json({ message: "Incompatible_plant updated successfully." });
+        let query = {};
+        query[listType] = listValue;
+        await Plant.updateOne(existingPlant, query);
+
+        return response.status(200).json({ message: listType + " updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -1025,31 +612,30 @@ const updateImages = async (request, response) => {
 
     //Get image_id array
     const image_id = [];
-    for (let i = 0; i < request.files.length; i++) {
-        const id = request.files[i].id;
+    request.files.forEach((file) => {
+        const id = file.id;
         image_id.push(id);
-    }
+    });
 
+    //Get current note images
     let savedImages = [];
-
     for (let i = 0; i < existingPlant.image.length; i++) {
         savedImages.push(existingPlant.image[i]);
     }
 
+    //Get images to be removed
     let removedImages = [];
-
     if (image_id.length == 0) {
         removedImages = savedImages;
     } else {
-        for (let i = 0; i < savedImages.length; i++) {
-            if (!image_id.includes(savedImages[i])) {
-                removedImages.push(savedImages[i]);
+        savedImages.forEach((image) => {
+            if (!image_id.includes(image)) {
+                removedImages.push(image);
             }
-        }
+        });
     }
 
     try {
-
         if (removedImages != null) {
             deleteImages(removedImages);
         }
@@ -1072,18 +658,10 @@ module.exports = {
     updateName,
     updateDescription,
     updateEnums,
-    updateSowDate,
-    updatePlantDate,
-    updateTransplantDate,
-    updateHarvestDate,
-    updateWaterSchedule,
+    updateMonthlySchedules,
+    updateRequiredWeeklySchedules,
+    updateOptionalWeeklySchedules,
     updateCompostSchedule,
-    updatePruneSchedule,
-    updateFeedSchedule,
-    updateIndoorSchedule,
-    updateSpacing,
-    updatePlantProblems,
-    updateCompanionPlants,
-    updateIncompatiblePlants,
+    updateLists,
     updateImages
 }

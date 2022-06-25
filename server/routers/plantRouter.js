@@ -46,40 +46,35 @@ router.put("/updateEnums", [
         .not().isEmpty().withMessage("EnumValue required."),
 ], plantController.updateEnums);
 
-router.put("/updateSowDate", [
+router.put("/updateMonthlySchedules", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
-    check('sow_date')
-        .not().isEmpty().withMessage("Sow_date required."),
-], plantController.updateSowDate);
+    check('scheduleType')
+        .not().isEmpty().withMessage("ScheduleType required.")
+        .trim(),
+    check('scheduleValue')
+        .not().isEmpty().withMessage("scheduleValue required."),
+], plantController.updateMonthlySchedules);
 
-router.put("/updatePlantDate", [
+router.put("/updateRequiredWeeklySchedules", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
-    check('plant_date')
-        .not().isEmpty().withMessage("Plant_date required."),
-], plantController.updatePlantDate);
+    check('scheduleType')
+        .not().isEmpty().withMessage("ScheduleType required.")
+        .trim(),
+    check('scheduleValue')
+        .not().isEmpty().withMessage("scheduleValue required."),
+], plantController.updateRequiredWeeklySchedules);
 
-router.put("/updateTransplantDate", [
+router.put("/updateOptionalWeeklySchedules", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
-    check('transplant_date')
-        .not().isEmpty().withMessage("Transplant_date required."),
-], plantController.updateTransplantDate);
-
-router.put("/updateHarvestDate", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('harvest_date')
-        .not().isEmpty().withMessage("Harvest_date required."),
-], plantController.updateHarvestDate);
-
-router.put("/updateWaterSchedule", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('water_schedule')
-        .not().isEmpty().withMessage("Water_schedule required."),
-], plantController.updateWaterSchedule);
+    check('scheduleType')
+        .not().isEmpty().withMessage("ScheduleType required.")
+        .trim(),
+    check('scheduleValue')
+        .not().isEmpty().withMessage("scheduleValue required."),
+], plantController.updateOptionalWeeklySchedules);
 
 router.put("/updateCompostSchedule", [
     check('plant_id')
@@ -90,54 +85,15 @@ router.put("/updateCompostSchedule", [
         .trim(),
 ], plantController.updateCompostSchedule);
 
-router.put("/updatePruneSchedule", [
+router.put("/updateLists", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
-    check('prune_schedule')
-        .not().isEmpty().withMessage("Prune_schedule required."),
-], plantController.updatePruneSchedule);
-
-router.put("/updateFeedSchedule", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('feed_schedule')
-        .not().isEmpty().withMessage("Feed_schedule required."),
-], plantController.updatePruneSchedule);
-
-router.put("/updateIndoorSchedule", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('indoor_schedule')
-        .not().isEmpty().withMessage("Indoor_schedule required."),
-], plantController.updateIndoorSchedule);
-
-router.put("/updateSpacing", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('spacing')
-        .not().isEmpty().withMessage("Spacing required."),
-], plantController.updateSpacing);
-
-router.put("/updatePlantProblems", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('plant_problem')
-        .not().isEmpty().withMessage("Plant_problem required."),
-], plantController.updatePlantProblems);
-
-router.put("/updateCompanionPlants", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('companion_plant')
-        .not().isEmpty().withMessage("Companion_plant required."),
-], plantController.updateCompanionPlants);
-
-router.put("/updateIncompatiblePlants", [
-    check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
-    check('incompatible_plant')
-        .not().isEmpty().withMessage("Incompatible_plant required."),
-], plantController.updateIncompatiblePlants);
+    check('listType')
+        .not().isEmpty().withMessage("ListType required.")
+        .trim(),
+    check('listValue')
+        .not().isEmpty().withMessage("ListValue required."),
+], plantController.updateLists);
 
 router.put("/updateImages", upload.array("file", 3), plantController.updateImages);
 
