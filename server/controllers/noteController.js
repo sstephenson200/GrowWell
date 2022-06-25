@@ -1,15 +1,13 @@
 const moment = require("moment");
-const { bucket, deleteImages } = require("../middleware/imageUpload");
+const { deleteImages } = require("../middleware/imageUpload");
 
 const { check, validationResult } = require('express-validator');
 const validator = require("../validators/validator");
 const gardenValidator = require("../validators/gardenValidator");
 
 const Note = require("../models/noteModel");
-const User = require("../models/userModel");
 const Plant = require("../models/plantModel");
 const Garden = require("../models/gardenModel");
-const { listeners } = require("../models/plantModel");
 
 //Function to delete a note by garden_id
 async function deleteNotesByGarden(garden_id) {

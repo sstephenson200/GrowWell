@@ -1,5 +1,8 @@
-const validator = require("../validators/validator");
+const { deleteImages } = require("../middleware/imageUpload");
+
 const { check, validationResult } = require('express-validator');
+const validator = require("../validators/validator");
+const plantValidator = require("../validators/plantValidator");
 
 const Plant = require("../models/plantModel");
 
@@ -12,12 +15,6 @@ const createPlant = async (request, response) => {
     let { name, description, plant_type, sow_date, plant_date, transplant_date, harvest_date, sun_condition, soil_type,
         soil_ph, water_schedule, compost_schedule, prune_schedule, feed_schedule, indoor_schedule, spacing, plant_problem,
         companion_plant, incompatible_plant } = parsedReq;
-
-    let enums = [{ type: plant_type, name: "plant_type" }, { type: sun_condition, name: "sun_condition" }, { type: soil_type, name: "soil_type" }, { type: soil_ph, name: "soil_ph" }];
-    const monthlySchedules = [{ type: sow_date, name: "sow_date" }, { type: plant_date, name: "plant_date" }, { type: transplant_date, name: "transplant_date" }, { type: harvest_date, name: "harvest_date" }];
-    const requiredWeeklySchedules = [{ type: water_schedule, name: "water_schedule" }, { type: spacing, name: "spacing" }];
-    const optionalWeeklySchedules = [{ type: prune_schedule, name: "prune_schedule" }, { type: feed_schedule, name: "feed_schedule" }, { type: indoor_schedule, name: "indoor_schedule" }];
-    let stringArrays = [{ type: plant_problem, name: "plant_problem" }, { type: companion_plant, name: "companion_plant" }, { type: incompatible_plant, name: "incompatible_plant" }];
 
     //Check if required params are given
     if (!name) {
@@ -54,6 +51,11 @@ const createPlant = async (request, response) => {
         }
     }
 
+    if (!Array.isArray(sun_condition) || !Array.isArray(soil_type) || !Array.isArray(soil_ph)) {
+        return response.status(400).json({ errorMessage: "Sun_condition, soil_type and soil_ph must be entered as arrays." });
+    }
+
+    let enums = [{ type: plant_type, name: "plant_type" }, { type: sun_condition, name: "sun_condition" }, { type: soil_type, name: "soil_type" }, { type: soil_ph, name: "soil_ph" }];
     let editedEnumsEntry = [];
     let editedEnums = [];
 
@@ -65,7 +67,7 @@ const createPlant = async (request, response) => {
             editedEnumsEntry = enums[i].type;
         }
         editedEnums.push(editedEnumsEntry);
-        if (!validator.checkValidPlantEnum(enums[i])) {
+        if (!plantValidator.checkValidPlantEnum(enums[i])) {
             return response.status(400).json({ errorMessage: "Invalid " + enums[i].name + "." });
         }
     }
@@ -77,47 +79,55 @@ const createPlant = async (request, response) => {
     soil_type = enums[2];
     soil_ph = enums[3];
 
+    const monthlySchedules = [{ type: sow_date, name: "sow_date" }, { type: plant_date, name: "plant_date" }, { type: transplant_date, name: "transplant_date" }, { type: harvest_date, name: "harvest_date" }];
+
     //Check monthly schedules have 2 values between 1 and 12 
     for (let i = 0; i < monthlySchedules.length; i++) {
         if (monthlySchedules[i].type != null) {
-            if (!validator.checkArrayLength(monthlySchedules[i].type, 2)) {
+            if (!plantValidator.checkArrayLength(monthlySchedules[i].type, 2)) {
                 const listName = monthlySchedules[i].name;
                 return response.status(400).json({ errorMessage: listName + " must have start and end month." });
             }
-            if (!validator.checkValidMonthSchedule(monthlySchedules[i].type)) {
+            if (!plantValidator.checkValidMonthSchedule(monthlySchedules[i].type)) {
                 return response.status(400).json({ errorMessage: "Month values must be between 1 and 12." });
             }
         }
     }
 
+    const requiredWeeklySchedules = [{ type: water_schedule, name: "water_schedule" }, { type: spacing, name: "spacing" }];
+
     //Check required weekly values have 2 values greater than 1
     for (let i = 0; i < requiredWeeklySchedules.length; i++) {
         const listName = requiredWeeklySchedules[i].name;
-        if (!validator.checkArrayLength(requiredWeeklySchedules[i].type, 2)) {
+        if (!plantValidator.checkArrayLength(requiredWeeklySchedules[i].type, 2)) {
             return response.status(400).json({ errorMessage: listName + " array must have max and min value." });
         }
-        if (!validator.checkValidWeeklySchedule(requiredWeeklySchedules[i].type)) {
+        if (!plantValidator.checkValidWeeklySchedule(requiredWeeklySchedules[i].type)) {
             return response.status(400).json({ errorMessage: "Schedule values for " + listName + " must be greater than 0." });
         }
     }
+
+    const optionalWeeklySchedules = [{ type: prune_schedule, name: "prune_schedule" }, { type: feed_schedule, name: "feed_schedule" }, { type: indoor_schedule, name: "indoor_schedule" }];
 
     //Check optional weekly values have one string or two number values
     for (let i = 0; i < optionalWeeklySchedules.length; i++) {
         const listName = optionalWeeklySchedules[i].name;
         if (optionalWeeklySchedules[i].type != null) {
-            if (validator.checkArrayLength(optionalWeeklySchedules[i].type, 1)) {
-                optionalWeeklySchedules[i].type[0] = optionalWeeklySchedules[i].type[0].trim();
+            if (plantValidator.checkArrayLength(optionalWeeklySchedules[i].type, 1)) {
                 if (typeof optionalWeeklySchedules[i].type[0] !== 'string') {
-                    return response.status(400).json({ errorMessage: "Single values for" + listName + " must be entered as strings." });
+                    return response.status(400).json({ errorMessage: "Single values for " + listName + " must be entered as strings." });
+                } else {
+                    optionalWeeklySchedules[i].type[0] = optionalWeeklySchedules[i].type[0].trim();
                 }
-            } else if (validator.checkArrayLength(optionalWeeklySchedules[i].type, 2)) {
-                if (!validator.checkValidWeeklySchedule(optionalWeeklySchedules[i].type)) {
+            } else if (plantValidator.checkArrayLength(optionalWeeklySchedules[i].type, 2)) {
+                if (!plantValidator.checkValidWeeklySchedule(optionalWeeklySchedules[i].type)) {
                     return response.status(400).json({ errorMessage: "Schedule values for " + listName + " must be greater than 0." });
                 }
             }
         }
     }
 
+    let stringArrays = [{ type: plant_problem, name: "plant_problem" }, { type: companion_plant, name: "companion_plant" }, { type: incompatible_plant, name: "incompatible_plant" }];
     let editedString = "";
     let editedStringArraysEntry = [];
     let editedStringArrays = [];
@@ -125,14 +135,18 @@ const createPlant = async (request, response) => {
     //Check entries are strings
     for (let i = 0; i < stringArrays.length; i++) {
         const listName = stringArrays[i].name;
-        if (stringArrays[i].type != null) {
-            editedStringArraysEntry = [...new Set(stringArrays[i].type)];
-            for (let j = 0; j < editedStringArraysEntry.length; j++) {
-                if (typeof editedStringArraysEntry[j] !== 'string') {
-                    return response.status(400).json({ errorMessage: listName + " values must be entered as strings." });
+        if (stringArrays[i].type !== null) {
+            if (typeof stringArrays[i].type !== 'string') {
+                editedStringArraysEntry = [...new Set(stringArrays[i].type)];
+                for (let j = 0; j < editedStringArraysEntry.length; j++) {
+                    if (typeof editedStringArraysEntry[j] !== 'string') {
+                        return response.status(400).json({ errorMessage: listName + " values must be entered as strings." });
+                    }
+                    editedString = editedStringArraysEntry[j].trim();
+                    editedStringArraysEntry[j] = editedString;
                 }
-                editedString = editedStringArraysEntry[j].trim();
-                editedStringArraysEntry[j] = editedString;
+            } else {
+                return response.status(400).json({ errorMessage: "Plant_problem, companion_plant and incompatible_plant must be entered as arrays." });
             }
         }
         editedStringArrays.push(editedStringArraysEntry);
@@ -152,7 +166,6 @@ const createPlant = async (request, response) => {
     }
 
     try {
-
         const newPlant = new Plant({
             name, description, plant_type, sow_date, plant_date, transplant_date, harvest_date, sun_condition, soil_type, soil_ph,
             water_schedule, compost_schedule, prune_schedule, feed_schedule, indoor_schedule, spacing, plant_problem, companion_plant,
@@ -191,26 +204,11 @@ const getPlantByID = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
     return response.status(200).json({ plant: existingPlant });
-}
-
-//Function to delete all image files and chunks from an array of objects
-function deleteImagesFromArray(array) {
-    for (let i = 0; i < array.length; i++) {
-        deleteImages(array[i]);
-    }
-}
-
-//Function to delete all iamges from a single object
-function deleteImages(images) {
-    images.forEach((image) => {
-        bucket.delete(image);
-    });
 }
 
 //Request to delete a plant for a given plant_id
@@ -228,9 +226,8 @@ const deletePlant = async (request, response) => {
     }
 
     try {
-
         let plant = await Plant.findOneAndDelete({ _id: plant_id });
-        deleteImagesFromArray(plant);
+        deleteImages(plant.image);
 
         return response.status(200).json({ message: "Plant deleted successfully." });
 
@@ -255,18 +252,16 @@ const updateName = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
     if (name == existingPlant.name) {
-        return response.status(400).json({ errorMessage: "No name change detected." });
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
     try {
-
-        await Plant.updateOne(existingPlant, { name: name });
+        await Plant.updateOne(existingPlant, { 'name': name });
 
         return response.status(200).json({ message: "Plant name updated successfully." });
 
@@ -291,18 +286,16 @@ const updateDescription = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
     if (description == existingPlant.description) {
-        return response.status(400).json({ errorMessage: "No description change detected." });
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
     try {
-
-        await Plant.updateOne(existingPlant, { description: description });
+        await Plant.updateOne(existingPlant, { 'description': description });
 
         return response.status(200).json({ message: "Plant description updated successfully." });
 
@@ -312,10 +305,9 @@ const updateDescription = async (request, response) => {
     }
 }
 
-//Request to update a plant's plant_type
-const updatePlantType = async (request, response) => {
+const updateEnums = async (request, response) => {
 
-    const { plant_id, plant_type } = request.body;
+    let { plant_id, enumType, enumValue } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -327,25 +319,36 @@ const updatePlantType = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
-    let enumCheck = [];
-    enumCheck.push({ type: plant_type, name: "plant_type" });
-
-    if (!validator.checkValidPlantEnum(enumCheck[0])) {
-        return response.status(400).json({ errorMessage: "Invalid plant_type." });
+    if (!Object.values(plantValidator.enumTypes).includes(enumType)) {
+        return response.status(400).json({ errorMessage: "Invalid enumType." });
     }
 
-    if (plant_type == existingPlant.plant_type) {
-        return response.status(400).json({ errorMessage: "No plant_type change detected." });
+    if (enumType == "plant_type") {
+        if (typeof enumValue !== 'string') {
+            return response.status(400).json({ errorMessage: "Plant_type must be entered as a string." });
+        }
+    } else {
+        if (!Array.isArray(enumValue)) {
+            return response.status(400).json({ errorMessage: "Sun_condition, soil_type and soil_ph must be entered as arrays." });
+        }
+        enumValue = [...new Set(enumValue)];
+    }
+
+    let enumCheck = [];
+    enumCheck.push({ type: enumValue, name: enumType });
+
+    if (!plantValidator.checkValidPlantEnum(enumCheck[0])) {
+        return response.status(400).json({ errorMessage: "Invalid " + enumType + "." });
     }
 
     try {
-
-        await Plant.updateOne(existingPlant, { plant_type: plant_type });
+        let query = {};
+        query[enumType] = enumValue;
+        await Plant.updateOne(existingPlant, query);
 
         return response.status(200).json({ message: "Plant_type updated successfully." });
 
@@ -353,6 +356,7 @@ const updatePlantType = async (request, response) => {
         console.error(error);
         response.status(500).send();
     }
+
 }
 
 //Request to update a plant's sow_date
@@ -539,135 +543,6 @@ const updateHarvestDate = async (request, response) => {
     }
 }
 
-//Request to update a plant's sun_condition
-const updateSunCondition = async (request, response) => {
-
-    let { plant_id, sun_condition } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let enums = [{ type: sun_condition, name: "sun_condition" }];
-
-    let editedEnums = [...new Set(enums[0].type)];
-
-    if (!validator.checkValidPlantEnum(enums[0])) {
-        return response.status(400).json({ errorMessage: "Invalid sun_condition." });
-    }
-
-    enums = editedEnums;
-    sun_condition = enums;
-
-    try {
-
-        await Plant.updateOne(existingPlant, { sun_condition: sun_condition });
-
-        return response.status(200).json({ message: "Sun_condition updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's soil_type
-const updateSoilType = async (request, response) => {
-
-    let { plant_id, soil_type } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let enums = [{ type: soil_type, name: "soil_type" }];
-
-    let editedEnums = [...new Set(enums[0].type)];
-
-    if (!validator.checkValidPlantEnum(enums[0])) {
-        return response.status(400).json({ errorMessage: "Invalid soil_type." });
-    }
-
-    enums = editedEnums;
-    soil_type = enums;
-
-    try {
-
-        await Plant.updateOne(existingPlant, { soil_type: soil_type });
-
-        return response.status(200).json({ message: "Soil_type updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a plant's soil_ph
-const updateSoilPh = async (request, response) => {
-
-    let { plant_id, soil_ph } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-
-    if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let enums = [{ type: soil_ph, name: "soil_ph" }];
-
-    let editedEnums = [...new Set(enums[0].type)];
-
-    if (!validator.checkValidPlantEnum(enums[0])) {
-        return response.status(400).json({ errorMessage: "Invalid soil_ph." });
-    }
-
-    enums = editedEnums;
-    soil_ph = enums;
-
-    try {
-
-        await Plant.updateOne(existingPlant, { soil_ph: soil_ph });
-
-        return response.status(200).json({ message: "Soil_ph updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
 //Request to update a plant's water_schedule
 const updateWaterSchedule = async (request, response) => {
 
@@ -729,18 +604,16 @@ const updateCompostSchedule = async (request, response) => {
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
-
     if (!existingPlant) {
         return response.status(400).json({ errorMessage: "Invalid plant_id." });
     }
 
     if (compost_schedule == existingPlant.compost_schedule) {
-        return response.status(400).json({ errorMessage: "No compost_schedule change detected." });
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
     try {
-
-        await Plant.updateOne(existingPlant, { compost_schedule: compost_schedule });
+        await Plant.updateOne(existingPlant, { 'compost_schedule': compost_schedule });
 
         return response.status(200).json({ message: "Plant compost_schedule updated successfully." });
 
@@ -1198,14 +1071,11 @@ module.exports = {
     deletePlant,
     updateName,
     updateDescription,
-    updatePlantType,
+    updateEnums,
     updateSowDate,
     updatePlantDate,
     updateTransplantDate,
     updateHarvestDate,
-    updateSunCondition,
-    updateSoilType,
-    updateSoilPh,
     updateWaterSchedule,
     updateCompostSchedule,
     updatePruneSchedule,
