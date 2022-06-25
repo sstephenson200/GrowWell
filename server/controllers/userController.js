@@ -5,6 +5,7 @@ const validator = require("../validators/validator");
 const userValidator = require("../validators/userValidator");
 
 const gardenController = require("./gardenController");
+const alarmController = require("./alarmController");
 
 const User = require("../models/userModel");
 
@@ -107,13 +108,10 @@ const deleteUser = async (request, response) => {
 
     try {
         const deletedGardens = await gardenController.deleteAllGardens(user_id);
-
+        const deletedAlarms = await alarmController.deleteAllAlarms(user_id);
         const deletedUser = await User.deleteOne({ _id: user_id });
-        if (deletedUser) {
-            return response.status(200).json({ message: "User deleted successfully." });
-        } else {
-            return response.status(500).json({ message: "An error has occured." });
-        }
+
+        return response.status(200).json({ message: "User deleted successfully." });
 
     } catch (error) {
         console.error(error);

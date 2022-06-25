@@ -24,27 +24,16 @@ router.get("/getAllAlarms", [
 ], alarmController.getAllAlarms);
 
 router.get("/getAlarmByID", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
 ], alarmController.getAlarmByID);
 
 router.delete("/deleteAlarm", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
 ], alarmController.deleteAlarm);
 
-router.delete("/deleteAllAlarms", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-], alarmController.deleteAllAlarms);
-
 router.put("/updateTitle", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
     check('title')
@@ -54,8 +43,6 @@ router.put("/updateTitle", [
 ], alarmController.updateTitle);
 
 router.put("/updateDueDate", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
     check('due_date')
@@ -64,39 +51,23 @@ router.put("/updateDueDate", [
 ], alarmController.updateDueDate);
 
 router.put("/updateSchedule", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
     check('schedule')
-        .not().isEmpty().withMessage("Schedule required.")
+        .optional()
         .isInt({ min: 1 }).withMessage("Repeat schedule must be greater than 0 days."),
 ], alarmController.updateSchedule);
 
 router.put("/updateGardenPlot", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
     check('garden_id')
-        .not().isEmpty().withMessage("Garden_id required."),
+        .optional(),
+    //.not().isEmpty().withMessage("Garden_id required."),
     check('plot_number')
-        .not().isEmpty().withMessage("Plot_number required.")
+        .optional()
+        //.not().isEmpty().withMessage("Plot_number required.")
         .isInt().withMessage("Plot_number must be an integer value."),
 ], alarmController.updateGardenPlot);
-
-router.put("/removeSchedule", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-    check('alarm_id')
-        .not().isEmpty().withMessage("Alarm_id required."),
-], alarmController.removeSchedule);
-
-router.put("/removeGardenPlot", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-    check('alarm_id')
-        .not().isEmpty().withMessage("Alarm_id required."),
-], alarmController.removeGardenPlot);
 
 module.exports = router;

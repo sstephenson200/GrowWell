@@ -1,10 +1,37 @@
-const { check, validationResult } = require('express-validator');
 const validator = require("../validators/validator");
+const { check, validationResult } = require('express-validator');
+const alarmValidator = require("../validators/alarmValidator");
 const gardenValidator = require("../validators/gardenValidator");
 
 const Alarm = require("../models/alarmModel");
 const User = require("../models/userModel");
 const Garden = require("../models/gardenModel");
+
+//Function to delete an alarm by garden_id
+async function deleteAlarmsByGarden(garden_id) {
+
+    try {
+        await Alarm.deleteMany({ 'garden_id': garden_id });
+        return true;
+
+    } catch (error) {
+        return false;
+    }
+
+}
+
+//Function to delete all alarms for a given user_id
+async function deleteAllAlarms(user_id) {
+
+    try {
+        await Alarm.deleteMany({ 'user_id': user_id });
+        return true;
+
+    } catch (error) {
+        return false;
+    }
+
+}
 
 //Request to create new alarm record
 const createAlarm = async (request, response) => {
@@ -21,7 +48,6 @@ const createAlarm = async (request, response) => {
     }
 
     const existingUser = await User.findOne({ _id: user_id });
-
     if (!existingUser) {
         return response.status(401).json({ errorMessage: "Invalid user_id." });
     }
@@ -35,27 +61,26 @@ const createAlarm = async (request, response) => {
 
         existingGarden = await Garden.findOne({ _id: garden_id, 'user._id': user_id });
         if (!existingGarden) {
-            return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
+            return response.status(400).json({ errorMessage: "Invalid garden_id." });
         }
     }
 
-    if (!validator.checkDateInFuture(due_date)) {
+    if (!alarmValidator.checkDateInFuture(due_date)) {
         return response.status(400).json({ errorMessage: "Date must be in the future." });
     }
 
-    if (gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
+    if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
         return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
     if (plot_number != null) {
         const gardenSize = existingGarden.plot.length;
-        if (!validator.checkValidPlotNumber(gardenSize, plot_number)) {
+        if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
             return response.status(400).json({ errorMessage: "Invalid plot_number." });
         }
     }
 
     try {
-
         const newAlarm = new Alarm({
             user_id, title, due_date, schedule, garden_id, plot_number
         });
@@ -83,13 +108,7 @@ const getAllAlarms = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const alarms = await Alarm.find({ user_id: user_id });
+    const alarms = await Alarm.find({ 'user_id': user_id });
 
     return response.status(200).json({ alarms: alarms });
 }
@@ -97,123 +116,43 @@ const getAllAlarms = async (request, response) => {
 //Request to get an alarm for a given alarm_id
 const getAlarmByID = async (request, response) => {
 
-    const { user_id, alarm_id } = request.body;
+    const { alarm_id } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     if (!validator.checkValidId(alarm_id)) {
         return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
     if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
+        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const alarm = existingAlarm;
-
-    return response.status(200).json({ alarm: alarm });
+    return response.status(200).json({ alarm: existingAlarm });
 }
 
 //Request to delete an alarm
 const deleteAlarm = async (request, response) => {
 
-    const { user_id, alarm_id } = request.body;
+    const { alarm_id } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     if (!validator.checkValidId(alarm_id)) {
         return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
-    if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
-    }
-
     try {
-
-        await Alarm.deleteOne(existingAlarm);
+        await Alarm.findOneAndDelete({ _id: alarm_id });
 
         return response.status(200).json({ message: "Alarm deleted successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Function to delete an alarm by garden_id
-async function deleteAlarmsByGarden(user_id, garden_id) {
-
-    const existingAlarm = await Alarm.findOne({ 'user._id': user_id, 'garden_id': garden_id });
-    if (!existingAlarm) {
-        return false;
-    }
-
-    try {
-
-        await Alarm.deleteMany({ garden_id: garden_id });
-        return true;
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-
-}
-
-//Request to delete all alarms for a given user_id
-const deleteAllAlarms = async (request, response) => {
-
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    try {
-
-        await Alarm.deleteMany({ user_id: user_id });
-
-        return response.status(200).json({ message: "Alarms deleted successfully." });
 
     } catch (error) {
         console.error(error);
@@ -224,39 +163,28 @@ const deleteAllAlarms = async (request, response) => {
 //Request to update an alarm's title
 const updateTitle = async (request, response) => {
 
-    const { user_id, alarm_id, title } = request.body;
+    const { alarm_id, title } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     if (!validator.checkValidId(alarm_id)) {
         return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
     if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
+        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
     if (title == existingAlarm.title) {
-        return response.status(400).json({ errorMessage: "No title change detected." });
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
     try {
-
-        await Alarm.updateOne(existingAlarm, { title: title });
+        await Alarm.updateOne(existingAlarm, { 'title': title });
 
         return response.status(200).json({ message: "Alarm title updated successfully." });
 
@@ -269,43 +197,32 @@ const updateTitle = async (request, response) => {
 //Request to update an alarm's due date
 const updateDueDate = async (request, response) => {
 
-    const { user_id, alarm_id, due_date } = request.body;
+    const { alarm_id, due_date } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     if (!validator.checkValidId(alarm_id)) {
         return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
     if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
+        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
     if (Date.parse(due_date) == Date.parse(existingAlarm.due_date)) {
-        return response.status(400).json({ errorMessage: "No due_date change detected." });
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
-    if (!validator.checkDateInFuture(due_date)) {
+    if (!alarmValidator.checkDateInFuture(due_date)) {
         return response.status(400).json({ errorMessage: "Date must be in the future." });
     }
 
     try {
-
-        await Alarm.updateOne(existingAlarm, { due_date: due_date });
+        await Alarm.updateOne(existingAlarm, { 'due_date': due_date });
 
         return response.status(200).json({ message: "Alarm due_date updated successfully." });
 
@@ -318,39 +235,32 @@ const updateDueDate = async (request, response) => {
 //Request to update an alarm's repeat schedule
 const updateSchedule = async (request, response) => {
 
-    const { user_id, alarm_id, schedule } = request.body;
+    let { alarm_id, schedule } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     if (!validator.checkValidId(alarm_id)) {
         return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
+    if (!existingAlarm) {
+        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
-    if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
+    if (!schedule) {
+        schedule = null;
     }
 
     if (schedule == existingAlarm.schedule) {
-        return response.status(400).json({ errorMessage: "No schedule change detected." });
+        return response.status(400).json({ errorMessage: "No change detected." });
     }
 
     try {
-
-        await Alarm.updateOne(existingAlarm, { schedule: schedule });
+        await Alarm.updateOne(existingAlarm, { 'schedule': schedule });
 
         return response.status(200).json({ message: "Alarm schedule updated successfully." });
 
@@ -363,56 +273,54 @@ const updateSchedule = async (request, response) => {
 //Request to update an alarm's related garden plot
 const updateGardenPlot = async (request, response) => {
 
-    const { user_id, alarm_id, garden_id, plot_number } = request.body;
+    let { alarm_id, garden_id, plot_number } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     if (!validator.checkValidId(alarm_id)) {
         return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
     if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
+        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
     }
 
-    if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+    if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
+        return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
-    const existingGarden = await Garden.findOne({ _id: garden_id, 'user._id': user_id });
-    if (!existingGarden) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id for given user_id." });
+    if (garden_id && plot_number) {
+        if (!validator.checkValidId(garden_id)) {
+            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        }
+
+        const existingGarden = await Garden.findOne({ _id: garden_id });
+        if (!existingGarden) {
+            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        }
+
+        const gardenSize = existingGarden.plot.length;
+
+        if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
+            return response.status(400).json({ errorMessage: "Invalid plot_number." });
+        }
+    } else {
+        garden_id = null;
+        plot_number = null;
     }
 
     if (garden_id == existingAlarm.garden_id) {
         if (plot_number == existingAlarm.plot_number) {
-            return response.status(400).json({ errorMessage: "No plot_number change detected." });
+            return response.status(400).json({ errorMessage: "No change detected." });
         }
     }
 
-    const gardenSize = existingGarden.plot.length;
-
-    if (!validator.checkValidPlotNumber(gardenSize, plot_number)) {
-        return response.status(400).json({ errorMessage: "Invalid plot_number." });
-    }
-
     try {
-
-        await Alarm.updateOne(existingAlarm, { garden_id: garden_id, plot_number: plot_number });
+        await Alarm.updateOne(existingAlarm, { 'garden_id': garden_id, 'plot_number': plot_number });
 
         return response.status(200).json({ message: "Alarm garden plot updated successfully." });
 
@@ -422,107 +330,15 @@ const updateGardenPlot = async (request, response) => {
     }
 }
 
-//Request to remove an alarm's repeat schedule
-const removeSchedule = async (request, response) => {
-
-    const { user_id, alarm_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    if (!validator.checkValidId(alarm_id)) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
-    if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
-    }
-
-    if (existingAlarm.schedule == null) {
-        return response.status(400).json({ errorMessage: "No existing schedule." });
-    }
-
-    try {
-
-        await Alarm.updateOne(existingAlarm, { schedule: null });
-
-        return response.status(200).json({ message: "Alarm schedule removed successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to remove an alarm's related garden plot
-const removeGardenPlot = async (request, response) => {
-
-    const { user_id, alarm_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    if (!validator.checkValidId(alarm_id)) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id." });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id, 'user._id': user_id });
-    if (!existingAlarm) {
-        return response.status(400).json({ errorMessage: "Invalid alarm_id for given user_id." });
-    }
-
-    if (existingAlarm.garden_id == null || existingAlarm.plot_number == null) {
-        return response.status(400).json({ errorMessage: "No existing garden plot." });
-    }
-
-    try {
-
-        await Alarm.updateOne(existingAlarm, { garden_id: null, plot_number: null });
-
-        return response.status(200).json({ message: "Alarm garden plot removed successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
 module.exports = {
+    deleteAlarmsByGarden,
+    deleteAllAlarms,
     createAlarm,
     getAllAlarms,
     getAlarmByID,
     deleteAlarm,
-    deleteAlarmsByGarden,
-    deleteAllAlarms,
     updateTitle,
     updateDueDate,
     updateSchedule,
-    updateGardenPlot,
-    removeSchedule,
-    removeGardenPlot
+    updateGardenPlot
 }

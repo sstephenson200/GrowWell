@@ -145,14 +145,10 @@ const deleteGarden = async (request, response) => {
 
     try {
         const deletedNotes = await noteController.deleteNotesByGarden(user_id, garden_id);
-        const deletedAlarms = await alarmController.deleteAlarmsByGarden(user_id, garden_id);
-
+        const deletedAlarms = await alarmController.deleteAlarmsByGarden(garden_id);
         const deletedGarden = await Garden.deleteOne({ _id: garden_id });
-        if (deletedGarden) {
-            return response.status(200).json({ message: "Garden deleted successfully." });
-        } else {
-            return response.status(500).json({ message: "An error has occured." });
-        }
+
+        return response.status(200).json({ message: "Garden deleted successfully." });
 
     } catch (error) {
         console.error(error);

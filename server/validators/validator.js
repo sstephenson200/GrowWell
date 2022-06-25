@@ -2,13 +2,6 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const Plant = require("../models/plantModel");
 
-//Check if entered date is in future
-function checkDateInFuture(date) {
-    if (Date.parse(date) >= Date.now()) {
-        return true;
-    }
-}
-
 //Check if mongoose ID is valid
 function checkValidId(id) {
     if (ObjectId.isValid(id)) {
@@ -73,7 +66,6 @@ function checkValidWeeklySchedule(schedule) {
 }
 
 module.exports = {
-    checkDateInFuture,
     checkValidId,
     checkValidLength,
     checkArrayLength,
