@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const moment = require("moment");
+
 const { check, validationResult } = require('express-validator');
+
 const alarmController = require("../controllers/alarmController");
 
 router.post("/createAlarm", [

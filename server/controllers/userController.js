@@ -6,6 +6,7 @@ const userValidator = require("../validators/userValidator");
 
 const gardenController = require("./gardenController");
 const alarmController = require("./alarmController");
+const noteController = require("./noteController");
 
 const User = require("../models/userModel");
 
@@ -55,10 +56,6 @@ const getUsername = async (request, response) => {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     const username = await User.findOne({ _id: user_id }).select("username");
     if (!username) {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
@@ -97,10 +94,6 @@ const deleteUser = async (request, response) => {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
@@ -109,6 +102,7 @@ const deleteUser = async (request, response) => {
     try {
         const deletedGardens = await gardenController.deleteAllGardens(user_id);
         const deletedAlarms = await alarmController.deleteAllAlarms(user_id);
+        const deletedNotes = await noteController.deleteAllNotes(user_id);
         const deletedUser = await User.deleteOne({ _id: user_id });
 
         return response.status(200).json({ message: "User deleted successfully." });
@@ -127,10 +121,6 @@ const updateUsername = async (request, response) => {
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     const existingUser = await User.findOne({ _id: user_id });
@@ -163,10 +153,6 @@ const updateEmail = async (request, response) => {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(401).json({ errorMessage: "Invalid credentials." });
@@ -195,10 +181,6 @@ const updatePassword = async (request, response) => {
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     const existingUser = await User.findOne({ _id: user_id });

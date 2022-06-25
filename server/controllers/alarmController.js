@@ -47,11 +47,6 @@ const createAlarm = async (request, response) => {
         return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
-    if (!existingUser) {
-        return response.status(401).json({ errorMessage: "Invalid user_id." });
-    }
-
     let existingGarden = null;
 
     if (garden_id != null) {
@@ -102,10 +97,6 @@ const getAllAlarms = async (request, response) => {
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     const alarms = await Alarm.find({ 'user_id': user_id });

@@ -21,4 +21,11 @@ const bucket = new mongoose.mongo.GridFSBucket(connection, {
   chunkSizeBytes: 1048576
 });
 
-module.exports = { upload, bucket };
+//Function to delete images from image.files and image.chunks
+function deleteImages(images) {
+  images.forEach((image) => {
+    bucket.delete(image);
+  });
+}
+
+module.exports = { upload, bucket, deleteImages };

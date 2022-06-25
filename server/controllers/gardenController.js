@@ -16,10 +16,7 @@ const Note = require("../models/noteModel");
 async function deleteAllGardens(user_id) {
 
     try {
-        await Note.deleteMany({ user_id: user_id, garden_id: { $ne: null } })
-        await Alarm.deleteMany({ user_id: user_id, garden_id: { $ne: null } })
-        await Garden.deleteMany({ user_id: user_id });
-
+        await Garden.deleteMany({ 'user_id': user_id });
         return true;
 
     } catch (error) {
@@ -35,15 +32,6 @@ const createGarden = async (request, response) => {
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errors: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     if (await gardenValidator.checkExistingGardenName(name, user_id)) {
@@ -80,15 +68,6 @@ const getAllGardens = async (request, response) => {
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-    if (!existingUser) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
     }
 
     const gardens = await Garden.find({ "user_id": user_id }).select("name");
@@ -130,10 +109,6 @@ const deleteGarden = async (request, response) => {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(user_id)) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
-    }
-
     if (!validator.checkValidId(garden_id)) {
         return response.status(400).json({ errorMessage: "Invalid garden_id." });
     }
@@ -144,7 +119,7 @@ const deleteGarden = async (request, response) => {
     }
 
     try {
-        const deletedNotes = await noteController.deleteNotesByGarden(user_id, garden_id);
+        const deletedNotes = await noteController.deleteNotesByGarden(garden_id);
         const deletedAlarms = await alarmController.deleteAlarmsByGarden(garden_id);
         const deletedGarden = await Garden.deleteOne({ _id: garden_id });
 
