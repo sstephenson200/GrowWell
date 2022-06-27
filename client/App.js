@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import Header from './components/Header';
-import PlantListItem from "./components/PlantListItem";
+import Footer from './components/Footer';
 
 const styles = StyleSheet.create({
   screen: {
@@ -24,14 +24,9 @@ class App extends Component {
       <View>
         <Header></Header>
         <View style={styles.screen}>
-          <View style={styles.screenList}>
-            <FlatList>
-              <PlantListItem title="Cabbage" />
-              <PlantListItem title="Tomato" />
-              <PlantListItem title="Parsnip" />
-            </FlatList>
-          </View>
+
         </View>
+        <Footer></Footer>
       </View>
     )
   }
