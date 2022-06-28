@@ -4,17 +4,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08cc89a7-8a79-4b95-88f1-e397ff8423de" name="Changes" comment="" />
+    <list default="true" id="45ec4dc8-370a-4ef5-a943-a75b5fb45684" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-  </component>
-  <component name="ProjectId" id="2B9e6NnDQNYZdWiuzINJa3f9ZrQ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2BCT1sDx5pta1ep9dXgeZ3qskqT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -25,15 +21,16 @@
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="08cc89a7-8a79-4b95-88f1-e397ff8423de" name="Changes" comment="" />
-      <created>1656322554244</created>
+      <changelist id="45ec4dc8-370a-4ef5-a943-a75b5fb45684" name="Changes" comment="" />
+      <created>1656408854557</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1656322554244</updated>
+      <updated>1656408854557</updated>
     </task>
     <servers />
   </component>

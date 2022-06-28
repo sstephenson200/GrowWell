@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 const Header = () => {
     return (
         <View style={styles.header}>
-            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <Image style={styles.logo} source={require("../assets/images/logo.png")} />
             <Ionicons name="settings-sharp" size={40} color="white" />
         </View>
     )

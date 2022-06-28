@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './src/app/containers/Header';
+import Footer from './src/app/containers/Footer';
+import PlantList from './src/app/screens/PlantList';
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingTop: 70,
-    paddingHorizontal: 70
+  container: {
+    justifyContent: "space-between"
   },
-  screenList: {
-    marginLeft: 20,
-    marginRight: 20
+  screen: {
+    backgroundColor: "#EFF5E4",
+    paddingTop: 20,
+    paddingHorizontal: 20
   }
 })
 
 class App extends Component {
 
-  //get plant data
-
   render() {
     return (
-      <View>
+      <View stlye={styles.container}>
         <Header></Header>
         <View style={styles.screen}>
-
+          <Text>Plants</Text>
+          <PlantList></PlantList>
         </View>
         <Footer></Footer>
       </View>
