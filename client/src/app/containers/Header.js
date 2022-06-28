@@ -5,13 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 const styles = StyleSheet.create({
     header: {
         width: "100%",
-        height: 85,
+        height: 100,
         paddingHorizontal: 10,
         backgroundColor: "#81BF63",
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
-        flexWrap: "nowrap"
+        flexWrap: "nowrap",
+        paddingTop: 20,
+        paddingBottom: 5
     },
     logo: {
         width: 65,

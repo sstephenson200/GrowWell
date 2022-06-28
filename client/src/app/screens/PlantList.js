@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ActivityIndicator, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList } from 'react-native';
+
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 10,
+        flex: 1
+    }
+})
+
 
 const PlantList = () => {
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
+    const [plants, setPlants] = useState([]);
 
     const getPlants = async () => {
         try {
             const response = await fetch("http://192.168.1.110:8080/plant/getAllPlants");
             const json = await response.json();
-            setData(json.plants);
+            setPlants(json.plants);
         } catch (error) {
             console.error(error);
-        } finally {
-            setLoading(false);
         }
     }
 
@@ -22,13 +27,15 @@ const PlantList = () => {
     }, []);
 
     return (
-        <View>
-            {isLoading ? <ActivityIndicator /> : (
-                <FlatList
-                    data={data}
-                    renderItem={({ item }) => <Text>{item.name}</Text>}
-                />
-            )}
+
+        <View style={styles.container}>
+            <FlatList
+                data={plants}
+                contentContainerStyle={{
+                    flexGrow: 1,
+                }}
+                renderItem={({ item }) => <Text>{item.name}</Text>}
+            />
         </View>
     )
 }

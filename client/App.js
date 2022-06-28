@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
 
 import Header from './src/app/containers/Header';
 import Footer from './src/app/containers/Footer';
@@ -7,12 +7,12 @@ import PlantList from './src/app/screens/PlantList';
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "space-between"
   },
   screen: {
-    backgroundColor: "#EFF5E4",
-    paddingTop: 20,
-    paddingHorizontal: 20
+    height: "100%",
+    backgroundColor: "#EFF5E4"
   }
 })
 
@@ -20,14 +20,22 @@ class App extends Component {
 
   render() {
     return (
-      <View stlye={styles.container}>
-        <Header></Header>
+
+      <SafeAreaView stlye={styles.container}>
+
         <View style={styles.screen}>
+
+          <Header></Header>
+
           <Text>Plants</Text>
           <PlantList></PlantList>
+
+          <Footer></Footer>
+
         </View>
-        <Footer></Footer>
-      </View>
+
+      </SafeAreaView>
+
     )
   }
 }
