@@ -1,12 +1,26 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 const Header = () => {
+
+    const navigation = useNavigation();
+
     return (
         <View style={styles.header}>
-            <Image style={styles.logo} source={require("../assets/images/logo.png")} />
-            <Ionicons name="settings-sharp" size={40} color="white" />
+
+            <TouchableOpacity onPress={() => { navigation.navigate("GardenScreen") }}>
+                <Image
+                    style={styles.logo}
+                    source={require("../assets/images/logo.png")}
+                />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => { navigation.navigate("SettingsScreen") }}>
+                <Ionicons name="settings-sharp" size={40} color="white" />
+            </TouchableOpacity>
+
         </View>
     );
 }

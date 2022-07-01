@@ -3,17 +3,18 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 import CalendarScreen from "../screens/CalendarScreen";
 import NewNoteScreen from "../screens/NewNoteScreen";
-import GardenScreen from "../screens/GardenScreen";
+// import GardenScreen from "../screens/GardenScreen";
 import AlarmScreen from "../screens/AlarmScreen";
 import PlantListScreen from "../screens/PlantListScreen";
 
+import StackNavigator from './stackNavigator';
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Calendar"
+            initialRouteName="Garden"
             screenOptions={{
                 tabBarShowLabel: false,
                 tabBarStyle: {
@@ -30,7 +31,9 @@ const Tabs = () => {
                 component={CalendarScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <FontAwesome name="calendar" size={40} color="white" />
+                        return (
+                            <FontAwesome name="calendar" size={40} color="white" />
+                        )
                     },
                     headerShown: false
                 }}
@@ -47,7 +50,7 @@ const Tabs = () => {
             />
             <Tab.Screen
                 name="Garden"
-                component={GardenScreen}
+                component={StackNavigator}
                 options={{
                     tabBarIcon: () => {
                         return <FontAwesome name="home" size={40} color="white" />
