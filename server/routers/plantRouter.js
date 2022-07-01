@@ -8,6 +8,12 @@ router.post("/createPlant", upload.array("file", 3), plantController.createPlant
 
 router.get("/getAllPlants", plantController.getAllPlants);
 
+router.get("/getImageByFileName", [
+    check('file_name')
+        .not().isEmpty().withMessage("File_name required.")
+        .trim(),
+], plantController.getImageByFileName);
+
 router.get("/getPlantByID", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
