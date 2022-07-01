@@ -1,4 +1,5 @@
 const { deleteImages, bucket } = require("../middleware/imageUpload");
+const mongoose = require("mongoose");
 
 const { check, validationResult } = require('express-validator');
 const validator = require("../validators/validator");
@@ -189,29 +190,36 @@ const getAllPlants = async (request, response) => {
     return response.status(200).json({ plants: plants });
 }
 
-//Request to get a single image by plant name
-const getImageByFileName = (request, response) => {
+//Request to get a single image by image_id
+const getImageByID = (request, response) => {
 
-    const { file_name } = request.body;
+    let { image_id } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    bucket.find({ 'filename': file_name }).toArray((error, files) => {
+    if (!validator.checkValidId(image_id)) {
+        return response.status(400).json({ errorMessage: "Invalid image_id." });
+    }
+
+    image_id = new mongoose.Types.ObjectId(image_id);
+
+    bucket.find({ _id: image_id }).toArray((error, files) => {
 
         if (!files[0] || files.length == 0) {
             return response.status(400).json({ errorMessage: "No image found." });
         }
 
         const contentType = files[0].contentType;
+        const fileName = files[0].filename;
 
         if (contentType !== "image/jpeg" && contentType !== "image/jpg") {
             return response.status(400).json({ errorMessage: "Invalid image type." });
         }
 
-        bucket.openDownloadStreamByName(file_name).pipe(response);
+        bucket.openDownloadStreamByName(fileName).pipe(response);
     });
 
 }
@@ -680,7 +688,7 @@ const updateImages = async (request, response) => {
 module.exports = {
     createPlant,
     getAllPlants,
-    getImageByFileName,
+    getImageByID,
     getPlantByID,
     deletePlant,
     updateName,

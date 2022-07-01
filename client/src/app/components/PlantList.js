@@ -46,6 +46,7 @@ const PlantList = () => {
                                 <View>
                                     <Image
                                         style={styles.image}
+                                        source={{ uri: "" }}
                                     />
                                 </View>
                             </Card>
@@ -99,7 +100,8 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     image: {
-
+        width: 60,
+        height: 60
     }
 });
 
