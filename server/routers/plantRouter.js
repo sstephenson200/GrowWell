@@ -8,7 +8,7 @@ router.post("/createPlant", upload.array("file", 3), plantController.createPlant
 
 router.get("/getAllPlants", plantController.getAllPlants);
 
-router.get("/getImageByID", [
+router.post("/getImageByID", [
     check('image_id')
         .not().isEmpty().withMessage("Image_id required."),
 ], plantController.getImageByID);
