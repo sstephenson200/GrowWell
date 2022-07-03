@@ -15,6 +15,18 @@ import Infographic from './MonthlyPlantData';
 //     }
 // }
 
+//Method to sort plants array by name
+function sortPlants(prop) {
+    return function (a, b) {
+        if (a[prop] > b[prop]) {
+            return 1;
+        } else if (a[prop] < b[prop]) {
+            return -1;
+        }
+        return 0;
+    }
+}
+
 const PlantList = () => {
 
     const [plants, setPlants] = useState([]);
@@ -23,7 +35,8 @@ const PlantList = () => {
         try {
             const response = await fetch("http://192.168.1.110:8080/plant/getAllPlants");
             const json = await response.json();
-            setPlants(json.plants);
+            let sortedPlants = json.plants.sort(sortPlants("name"));
+            setPlants(sortedPlants);
         } catch (error) {
             console.error(error);
         }
@@ -114,7 +127,7 @@ const PlantList = () => {
                 renderItem={({ item }) => {
 
                     let name = item.name;
-                    let image_id = item.image[0];
+                    //let image_id = item.image[0];
                     let plant_type = item.plant_type.toUpperCase();
                     if (plant_type == "VEGETABLE") {
                         plant_type = "VEG";
@@ -183,10 +196,10 @@ const styles = StyleSheet.create({
     card: {
         alignSelf: "stretch",
         borderRadius: 15,
-        elevation: 1,
+        elevation: 5,
         marginHorizontal: 15,
         marginVertical: 8,
-        backgroundColor: "#F2F8D0"
+        backgroundColor: "white"
     },
     cardContent: {
         marginHorizontal: 18,
@@ -203,16 +216,17 @@ const styles = StyleSheet.create({
         flex: 2
     },
     graphics: {
-        flexDirection: "row",
-        flex: 2
+        justifyContent: "center",
+        alignItems: "center"
     },
     icon: {
         width: 40,
         height: 40
     },
     plantName: {
-        fontSize: 20,
-        paddingLeft: 10
+        fontSize: 25,
+        paddingLeft: 10,
+        fontWeight: "bold"
     },
     image: {
         width: 135,
@@ -236,12 +250,13 @@ const styles = StyleSheet.create({
     HERB: {
         backgroundColor: "#81BF63",
         height: 25,
-        width: 50,
+        width: 60,
         borderRadius: 5,
         alignItems: "center"
     },
     plantType: {
-        color: "white"
+        color: "white",
+        fontSize: 15
     }
 });
 
