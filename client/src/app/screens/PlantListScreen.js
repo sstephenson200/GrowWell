@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 
-// import Header from '../components/Header';
 import Filter from '../components/Filter';
 import PlantList from "../components/PlantList";
 
@@ -22,7 +21,6 @@ const PlantListScreen = () => {
 
     return (
         <View style={styles.screen}>
-            {/* <Header /> */}
             <Text style={styles.title}>Plants</Text>
             <SearchBar />
             <Filter />
@@ -35,7 +33,7 @@ const styles = StyleSheet.create({
     screen: {
         height: "100%",
         backgroundColor: "#EFF5E4",
-        paddingTop: 30,
+        paddingTop: 5,
         paddingBottom: 85
     },
     title: {

@@ -3,11 +3,9 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 import CalendarScreen from "../screens/CalendarScreen";
 import NewNoteScreen from "../screens/NewNoteScreen";
-// import GardenScreen from "../screens/GardenScreen";
+import GardenScreen from "../screens/GardenScreen";
 import AlarmScreen from "../screens/AlarmScreen";
 import PlantListScreen from "../screens/PlantListScreen";
-
-import StackNavigator from './stackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,7 +48,7 @@ const Tabs = () => {
             />
             <Tab.Screen
                 name="Garden"
-                component={StackNavigator}
+                component={GardenScreen}
                 options={{
                     tabBarIcon: () => {
                         return <FontAwesome name="home" size={40} color="white" />

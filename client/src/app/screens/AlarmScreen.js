@@ -1,12 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-// import Header from '../components/Header';
-
 const AlarmScreen = () => {
     return (
         <View style={styles.container}>
-            {/* <Header /> */}
             <View style={styles.screen}>
                 <Text>Alarm Screen</Text>
             </View>

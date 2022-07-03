@@ -1,12 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-import Header from '../components/Header';
-
 const CalendarScreen = () => {
     return (
         <View style={styles.container}>
-            <Header />
             <View style={styles.screen}>
                 <Text>Calendar Screen</Text>
             </View>

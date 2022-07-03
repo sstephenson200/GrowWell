@@ -139,7 +139,7 @@ const PlantList = () => {
                     // });
 
                     return (
-                        <TouchableOpacity onPress={() => navigation.navigate("Plant", item)}>
+                        <TouchableOpacity onPress={() => { alert("Ready to navigate to plant page") }}>
                             <Card>
 
                                 <View style={styles.plantData}>
