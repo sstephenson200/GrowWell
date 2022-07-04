@@ -1,10 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { circle } from 'react-native/Libraries/Animated/Easing';
-import { render } from 'react-dom';
-import { TextInput } from 'react-native-gesture-handler';
-
 
 //Function to get an array of in season months
 function getMonthArray(month1, month2) {

@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-//import RNFetchBlob from 'react-native-fetch-blob';
+import axios from 'axios';
 
 import ImageSelect from "./SearchableImages";
 import Infographic from './MonthlyPlantData';
-
-// async function getImage(image_id) {
-//     return {
-//         uri: "http://192.168.1.110:8080/plant/getImageByID",
-//         method: "POST",
-//         body: {
-//             "image_id": image_id
-//         }
-//     }
-// }
 
 //Method to sort plants array by name
 function sortPlants(prop) {
@@ -31,90 +21,57 @@ const PlantList = () => {
 
     const [plants, setPlants] = useState([]);
 
+    const getAllPlantData = async () => {
+        let plantData = await getPlants();
+        await getImages(plantData);
+    }
+
+    //Get all plant data
     const getPlants = async () => {
         try {
             const response = await fetch("http://192.168.1.110:8080/plant/getAllPlants");
             const json = await response.json();
             let sortedPlants = json.plants.sort(sortPlants("name"));
-            setPlants(sortedPlants);
+
+            return sortedPlants;
         } catch (error) {
             console.error(error);
         }
     }
 
-    // const getImages = () => {
+    //Get corresponding plant images
+    const getImages = async (plantData) => {
+        if (plantData.length <= 0)
+            return;
 
-    //     plants.forEach((plant) => {
-    //         RNFetchBlob.fetch(
-    //             "POST",
-    //             "http://192.168.1.110:8080/plant/getImageByID",
-    //             {
-    //                 body: { "image_id": plant.image[0] }
-    //             })
-    //             .then((response) => {
-    //                 let base64String = response.base64();
-    //                 let text = response.text();
-    //                 let json = response.json();
-    //             })
-    //             .catch(error => {
-    //                 console.log(error);
-    //             })
-    //     }
-    //     )
-    // }
+        let updatedPlantData = [];
 
-    // const getImages = () => {
+        let fileReaderInstance = new FileReader();
 
-    //     //for (let i = 0; i < plants.length; i++) {
-    //     const getData = async () => {
-    //         fetch("http://192.168.1.110:8080/plant/getImageByID", {
-    //             method: "POST",
-    //             body: {
-    //                 "image_id": plants[i].image[0]
-    //             }
-    //         })
-    //             .then((response) => response.blob())
-    //             .then((response) => {
-    //                 setPlants.pictures(URL.createObjectURL(response));
-    //             })
-    //             .catch(error => {
-    //                 console.log(error);
-    //             });
-    //     }
-    // }
+        for (let i = 0; i < plantData.length; i++) {
+            let blob = await axios.post("http://192.168.1.110:8080/plant/getImageByID", {
+                image_id: plantData[i].image[0]
+            }, { responseType: 'blob' });
+            let base64Image = null;
+            fileReaderInstance.readAsDataURL(blob.data);
+            fileReaderInstance.onload = async () => {
+                base64Image = fileReaderInstance.result;
+                plantData[i].photo = base64Image;
 
-    // .then(response => response.blob()
-    //     .then(blob => {
-    //         let objectURL = URL.createObjectURL(blob);
-    //         console.log(imageRef.current);
-    //         imageRef.current.src = objectURL;
-    //     }));
+                updatedPlantData.push(plantData[i]);
+            }
+        }
 
-    //let image = URL.createObjectURL(await response.blob());
-    //const json = await response.json();        
-    //}
-    // }
-
-    // const getImages = () => {
-    //     for (let i = 0; i < plants.length; i++) {
-
-    //         let result = fetch("http://192.168.1.110:8080/plant/getImageByID", {
-    //             method: "POST",
-    //             body: { "image_id": plants.image[0] }
-    //         })
-    //             .then((result) => result.blob())
-
-    //         console.log(result);
-    //         console.log(result.blob());
-
-    //     }
-    // }
+        fileReaderInstance.onloadend = () => {
+            if (updatedPlantData.length === plantData.length) {
+                setPlants(plantData);
+            }
+        }
+    }
 
     useEffect(() => {
-        getPlants();
+        getAllPlantData();
     }, []);
-
-    // getImages();
 
     return (
 
@@ -127,16 +84,10 @@ const PlantList = () => {
                 renderItem={({ item }) => {
 
                     let name = item.name;
-                    //let image_id = item.image[0];
                     let plant_type = item.plant_type.toUpperCase();
                     if (plant_type == "VEGETABLE") {
                         plant_type = "VEG";
                     }
-
-                    // let blob = fetch("http://192.168.1.110:8080/plant/getImageByID", {
-                    //     method: "POST",
-                    //     body: { "image_id": plants.image[0] }
-                    // });
 
                     return (
                         <TouchableOpacity onPress={() => { alert("Ready to navigate to plant page") }}>
@@ -165,9 +116,10 @@ const PlantList = () => {
                                 <View>
                                     <Image
                                         style={styles.image}
-                                        source={require("../assets/images/dog.jpg")}
+                                        source={{ uri: item.photo }}
                                     />
                                 </View>
+
                             </Card>
                         </TouchableOpacity>
 
@@ -225,12 +177,12 @@ const styles = StyleSheet.create({
     },
     plantName: {
         fontSize: 25,
-        paddingLeft: 10,
+        paddingLeft: 7,
         fontWeight: "bold"
     },
     image: {
-        width: 135,
-        height: 135,
+        width: 125,
+        height: 125,
         borderRadius: 20
     },
     VEG: {

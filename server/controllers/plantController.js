@@ -221,7 +221,6 @@ const getImageByID = (request, response) => {
 
         bucket.openDownloadStreamByName(fileName).pipe(response);
     });
-
 }
 
 //Request to get a plant for a given plant_id

@@ -16,7 +16,7 @@ function imageSelect(imageName) {
         "Coriander": Images.Coriander,
         "Cucumber": Images.Cucumber,
         "Dill": Images.Dill,
-        "Garlic": Images.Dill,
+        "Garlic": Images.Garlic,
         "Kale": Images.Kale,
         "Lettuce": Images.Lettuce,
         "Mint": Images.Mint,
