@@ -13,7 +13,7 @@ router.post("/getImageByID", [
         .not().isEmpty().withMessage("Image_id required."),
 ], plantController.getImageByID);
 
-router.get("/getPlantByID", [
+router.post("/getPlantByID", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
 ], plantController.getPlantByID);

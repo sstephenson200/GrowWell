@@ -12,7 +12,7 @@ function getMonthArray(month1, month2) {
             monthArray.push(i);
         }
 
-        for (let i = month1; i < 12; i++) {
+        for (let i = month1; i < 13; i++) {
             monthArray.push(i);
         }
 

@@ -4,7 +4,6 @@ import { useFonts } from 'expo-font';
 
 import Filter from '../components/Filter';
 import PlantList from "../components/PlantList";
-import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 const PlantListScreen = (props) => {
 
