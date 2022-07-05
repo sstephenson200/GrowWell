@@ -17,7 +17,7 @@ function sortPlants(prop) {
     }
 }
 
-const PlantList = () => {
+const PlantList = (props) => {
 
     const [plants, setPlants] = useState([]);
 
@@ -90,7 +90,7 @@ const PlantList = () => {
                     }
 
                     return (
-                        <TouchableOpacity onPress={() => { alert("Ready to navigate to plant page") }}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate("Plant", { plant_id: item._id })}>
                             <Card>
 
                                 <View style={styles.plantData}>

@@ -12,7 +12,7 @@ function imageSelect(imageName) {
         "Cauliflower": Images.Cauliflower,
         "Celery": Images.Celery,
         "Chard": Images.Chard,
-        "Chives": Images.Chard,
+        "Chives": Images.Chives,
         "Coriander": Images.Coriander,
         "Cucumber": Images.Cucumber,
         "Dill": Images.Dill,

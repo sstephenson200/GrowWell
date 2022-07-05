@@ -4,8 +4,9 @@ import { useFonts } from 'expo-font';
 
 import Filter from '../components/Filter';
 import PlantList from "../components/PlantList";
+import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
-const PlantListScreen = () => {
+const PlantListScreen = (props) => {
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
@@ -24,7 +25,7 @@ const PlantListScreen = () => {
             <Text style={styles.title}>Plants</Text>
             <SearchBar />
             <Filter />
-            <PlantList />
+            <PlantList navigation={props.navigation} />
         </View>
     )
 }

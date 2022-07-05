@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Tabs from './tabs';
 import SettingsScreen from "../screens/SettingsScreen";
+import PlantListScreen from '../screens/PlantListScreen';
+import PlantScreen from "../screens/PlantScreen";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +56,11 @@ const StackNavigator = () => {
                     },
                     headerTintColor: "white"
                 })}
+            />
+
+            <Stack.Screen
+                name="Plant"
+                component={PlantScreen}
             />
 
         </Stack.Navigator>
