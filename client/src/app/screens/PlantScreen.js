@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, ImageBackground, StyleSheet } from 'react-native';
-import axios from 'axios';
+import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
+import axios from 'axios';
 
 import ImageSelect from "../components/SearchableImages";
+import Dropdown from "../components/Dropdown";
+import CareRequirementsTable from '../components/CareRequirementsTable';
 import Infographic from '../components/MonthlyPlantData';
 
 const PlantScreen = (props) => {
@@ -14,6 +16,8 @@ const PlantScreen = (props) => {
     let photo1 = null;
     let photo2 = null;
     let photo3 = null;
+
+    const plots = [{ label: "Plot 1", value: 1 }, { label: "Plot 2", value: 2 }, { label: "Plot 1", value: 3 }];
 
     const [plant, setPlant] = useState([]);
 
@@ -96,7 +100,7 @@ const PlantScreen = (props) => {
 
     return (
 
-        <View style={styles.screen}>
+        <ScrollView style={styles.screen}>
 
             <ImageBackground
                 style={styles.backgroundImage}
@@ -132,7 +136,24 @@ const PlantScreen = (props) => {
 
             <Text style={styles.subtitle}>Add To Garden</Text>
 
-        </View >
+            <Dropdown plots={plots} placeholder="Select Plot" />
+
+            <TouchableOpacity style={styles.button} onPress={() => alert("Ready to add plant to garden.")}>
+                <Text style={styles.buttonText}>ADD PLANT</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.subtitle}>Care Requirements</Text>
+
+            <CareRequirementsTable
+                sun_condition={plant.sun_condition}
+                soil_type={plant.soil_type}
+                soil_ph={plant.soil_ph}
+                plant_problem={plant.plant_problem}
+                companion_plant={plant.companion_plant}
+                incompatible_plant={plant.incompatible_plant}
+            />
+
+        </ScrollView >
     )
 }
 
@@ -217,7 +238,21 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontFamily: "Montserrat",
         color: "black",
-        paddingLeft: 15
+        paddingLeft: 10,
+        paddingTop: 15
+    },
+    button: {
+        backgroundColor: "#9477B4",
+        height: 35,
+        width: 115,
+        borderRadius: 8,
+        alignItems: "center",
+        alignSelf: "center",
+        justifyContent: "center"
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 18
     }
 });
 
