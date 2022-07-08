@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react
 import axios from 'axios';
 
 import ImageSelect from "./SearchableImages";
-import Infographic from './MonthlyPlantData';
+import Infographic from "./MonthlyPlantData"
 
 //Method to sort plants array by name
 function sortPlants(prop) {
@@ -104,7 +104,7 @@ const PlantList = (props) => {
                                     </View>
 
                                     <View style={styles.graphics}>
-                                        <Infographic sow={item.sow_date} plant={item.plant_date} />
+                                        <Infographic.PlantListInfographic sow={item.sow_date} plant={item.plant_date} />
 
                                         <View style={styles[plant_type]}>
                                             <Text style={styles.plantType}>{plant_type}</Text>

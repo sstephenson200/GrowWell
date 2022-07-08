@@ -142,12 +142,66 @@ const PlantScreen = (props) => {
                 <Text style={styles.buttonText}>ADD PLANT</Text>
             </TouchableOpacity>
 
+            <Text style={styles.subtitle}>Seasonal Data</Text>
+
+            <Infographic.InfographicLabels plantPage={true} />
+
+            {
+                plant.sow_date !== undefined && plant.sow_date.length !== 0 ?
+
+                    <View style={styles.monthInfographic}>
+                        <Text style={styles.seasonalTitle}>Sow</Text>
+                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.sow_date} plantPage={true} />
+                    </View>
+
+                    : null
+            }
+
+            {
+                plant.plant_date !== undefined && plant.plant_date.length !== 0 ?
+
+                    <View style={styles.monthInfographic}>
+                        <Text style={styles.seasonalTitle}>Plant</Text>
+                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.plant_date} plantPage={true} />
+                    </View>
+
+                    : null
+            }
+
+            {
+                plant.transplant_date !== undefined && plant.transplant_date.length !== 0 ?
+
+                    <View style={styles.monthInfographic}>
+                        <Text style={styles.seasonalTitle}>Transplant</Text>
+                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.transplant_date} plantPage={true} />
+                    </View>
+
+                    : null
+            }
+
+            {
+                plant.harvest_date !== undefined && plant.harvest_date.length !== 0 ?
+
+                    <View style={styles.monthInfographic}>
+                        <Text style={styles.seasonalTitle}>Harvest</Text>
+                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.harvest_date} plantPage={true} />
+                    </View>
+
+                    : null
+            }
+
             <Text style={styles.subtitle}>Care Requirements</Text>
 
             <CareRequirementsTable
+                spacing={plant.spacing}
                 sun_condition={plant.sun_condition}
                 soil_type={plant.soil_type}
                 soil_ph={plant.soil_ph}
+                water_schedule={plant.water_schedule}
+                compost_schedule={plant.compost_schedule}
+                prune_schedule={plant.prune_schedule}
+                feed_schedule={plant.feed_schedule}
+                indoor_schedule={plant.indoor_schedule}
                 plant_problem={plant.plant_problem}
                 companion_plant={plant.companion_plant}
                 incompatible_plant={plant.incompatible_plant}
@@ -253,6 +307,19 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "white",
         fontSize: 18
+    },
+    monthInfographic: {
+        marginTop: 5,
+        flexDirection: "row",
+        flex: 2
+    },
+    seasonalTitle: {
+        fontSize: 15,
+        paddingHorizontal: 10,
+        width: 100
+    },
+    infographic: {
+        paddingLeft: 10
     }
 });
 

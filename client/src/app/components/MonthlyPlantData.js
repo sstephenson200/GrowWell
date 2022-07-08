@@ -25,34 +25,52 @@ function getMonthArray(month1, month2) {
     return monthArray;
 }
 
-function EmptyCircle() {
-    return (
-        <View style={styles.circle}>
-            <FontAwesome name="circle" size={10} color="#E2E2E1" />
-        </View>
-    )
+function EmptyCircle(props) {
+
+    if (props.plantPage == true) {
+        return (
+            <View style={styles.circleLarge}>
+                <FontAwesome name="circle" size={15} color="#E2E2E1" />
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.circle}>
+                <FontAwesome name="circle" size={10} color="#E2E2E1" />
+            </View>
+        );
+    }
 }
 
-function FilledCircle() {
-    return (
-        <View style={styles.circle}>
-            <FontAwesome name="circle" size={10} color="#81BF63" />
-        </View>
-    )
+function FilledCircle(props) {
+
+    if (props.plantPage == true) {
+        return (
+            <View style={styles.circleLarge}>
+                <FontAwesome name="circle" size={15} color="#81BF63" />
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.circle}>
+                <FontAwesome name="circle" size={10} color="#81BF63" />
+            </View>
+        );
+    }
 }
 
 //Function to generate and fill month circles for monthly infographics
-function generateInfographic(monthArray) {
+function generateCircles(monthArray, plantPage) {
     let monthCircles = [];
 
     for (let i = 1; i < 13; i++) {
         if (monthArray.includes(i)) {
             monthCircles.push(
-                <FilledCircle key={"circle_" + i} />
+                <FilledCircle key={"circle_" + i} plantPage={plantPage} />
             );
         } else {
             monthCircles.push(
-                <EmptyCircle key={"circle_" + i} />
+                <EmptyCircle key={"circle_" + i} plantPage={plantPage} />
             );
         }
     }
@@ -60,44 +78,81 @@ function generateInfographic(monthArray) {
     return monthCircles;
 }
 
-const InfographicLabels = () => {
+//Function to generate monthly labels
+const InfographicLabels = (props) => {
     const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
     let labels = [];
 
     for (let i = 0; i < months.length; i++) {
-        labels.push(
-            <Text key={"label_" + i} style={styles.labelText}>{months[i]}</Text>
+        if (props.plantPage == true) {
+            labels.push(
+                <Text key={"label_" + i} style={styles.labelTextLarge}>{months[i]}</Text>
+            );
+        } else {
+            labels.push(
+                <Text key={"label_" + i} style={styles.labelText}>{months[i]}</Text>
+            );
+        }
+    }
+
+    if (props.plantPage == true) {
+        return (
+            <View style={styles.monthLabelsLarge}>
+                {labels}
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.monthLabels}>
+                {labels}
+            </View>
         );
     }
-
-    return labels;
 }
 
-const Infographic = (monthlyDates) => {
+const GeneralInfographic = (props) => {
 
-    let month1 = null;
-    let month2 = null;
-
-    if (monthlyDates.sow.length !== 0) {
-        month1 = monthlyDates.sow[0];
-        month2 = monthlyDates.sow[1];
-    } else {
-        month1 = monthlyDates.plant[0];
-        month2 = monthlyDates.plant[1];
-    }
+    let month1 = props.schedule[0];
+    let month2 = props.schedule[1];
 
     let array = getMonthArray(month1, month2);
 
-    return (
-        <View style={styles.monthInfographic}>
-            <View style={styles.monthLabels}>
-                <InfographicLabels />
+    if (props.plantPage == true) {
+        return (
+            <View style={styles.monthCirclesLarge}>
+                {generateCircles(array, props.plantPage)}
             </View>
+        );
+    } else {
+        return (
             <View style={styles.monthCircles}>
-                {generateInfographic(array)}
+                {generateCircles(array, props.plantPage)}
             </View>
-        </View>
-    );
+        );
+    }
+}
+
+const PlantListInfographic = (props) => {
+
+    if (props.plantPage == undefined) {
+        props.plantPage = false;
+    }
+
+    if (props.sow.length !== 0) {
+        return (
+            <View style={styles.monthInfographic}>
+                <InfographicLabels plantPage={props.plantPage} />
+                <GeneralInfographic schedule={props.sow} plantPage={props.plantPage} />
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.monthInfographic}>
+                <InfographicLabels plantPage={props.plantPage} />
+                <GeneralInfographic schedule={props.plant} plantPage={props.plantPage} />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -111,18 +166,42 @@ const styles = StyleSheet.create({
         flex: 12,
         marginBottom: 10
     },
+    monthLabelsLarge: {
+        flexDirection: "row",
+        flex: 12,
+        marginTop: 5,
+        marginBottom: 5,
+        marginLeft: 100
+    },
     labelText: {
         marginHorizontal: 3.5,
         fontSize: 12
     },
+    labelTextLarge: {
+        marginHorizontal: 7,
+        fontSize: 14
+    },
     monthCircles: {
         flexDirection: "row",
         flex: 12,
-        marginBottom: 20
+        marginBottom: 20,
+        maringLeft: 10
+    },
+    monthCirclesLarge: {
+        flexDirection: "row",
+        flex: 12,
+        marginBottom: 4
     },
     circle: {
         marginHorizontal: 3
+    },
+    circleLarge: {
+        marginHorizontal: 5
     }
 });
 
-export default Infographic;
+module.exports = {
+    PlantListInfographic,
+    GeneralInfographic,
+    InfographicLabels
+}
