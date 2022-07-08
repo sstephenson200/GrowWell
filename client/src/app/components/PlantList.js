@@ -90,7 +90,7 @@ const PlantList = (props) => {
                     }
 
                     return (
-                        <TouchableOpacity onPress={() => props.navigation.navigate("Plant", { plant_id: item._id })}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id } })}>
                             <Card>
 
                                 <View style={styles.plantData}>

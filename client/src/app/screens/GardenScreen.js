@@ -1,9 +1,12 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const GardenScreen = () => {
+import Header from '../components/Header';
+
+const GardenScreen = (props) => {
     return (
         <View style={styles.container}>
+            <Header navigation={props.navigation} />
             <View style={styles.screen}>
                 <Text>Garden Screen</Text>
             </View>

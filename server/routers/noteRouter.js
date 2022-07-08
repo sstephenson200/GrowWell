@@ -7,7 +7,7 @@ const noteController = require("../controllers/noteController");
 
 router.post("/createNote", upload.array("file", 3), noteController.createNote);
 
-router.get("/getNotesByPlant", [
+router.post("/getNotesByPlant", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
     check('user_id')

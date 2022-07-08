@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, Image, FlatList, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
+import Header from '../components/Header';
 import ImageSelect from "../components/SearchableImages";
 import Dropdown from "../components/Dropdown";
 import CareRequirementsTable from '../components/CareRequirementsTable';
@@ -100,121 +101,135 @@ const PlantScreen = (props) => {
 
     return (
 
-        <ScrollView style={styles.screen}>
+        <View style={styles.container}>
 
-            <ImageBackground
-                style={styles.backgroundImage}
-                source={{ uri: photo1 }}
-                imageStyle={{ opacity: 0.6 }}
-            >
-                <View style={styles.title}>
+            <Header navigation={props.navigation} />
+
+            <ScrollView style={styles.screen}>
+
+                <ImageBackground
+                    style={styles.backgroundImage}
+                    source={{ uri: photo1 }}
+                    imageStyle={{ opacity: 0.6 }}
+                >
+                    <View style={styles.title}>
+                        <Image
+                            style={styles.icon}
+                            source={ImageSelect({ name })}
+                        />
+                        <Text style={styles.titleText}>{name}</Text>
+                    </View>
+
+                    <View style={styles[plant_type]}>
+                        <Text style={styles.plantType}>{plant_type}</Text>
+                    </View>
+
+                </ImageBackground>
+
+                <Text style={styles.description}>{plant.description}</Text>
+
+                <View style={styles.plantPhotos}>
                     <Image
-                        style={styles.icon}
-                        source={ImageSelect({ name })}
+                        style={styles.photo}
+                        source={{ uri: photo2 }}
                     />
-                    <Text style={styles.titleText}>{name}</Text>
+                    <Image
+                        style={styles.photo}
+                        source={{ uri: photo3 }}
+                    />
                 </View>
 
-                <View style={styles[plant_type]}>
-                    <Text style={styles.plantType}>{plant_type}</Text>
-                </View>
+                <Text style={styles.subtitle}>Add To Garden</Text>
 
-            </ImageBackground>
+                <Dropdown plots={plots} placeholder="Select Plot" />
 
-            <Text style={styles.description}>{plant.description}</Text>
+                <TouchableOpacity style={styles.button} onPress={() => alert("Ready to add plant to garden.")}>
+                    <Text style={styles.buttonText}>ADD PLANT</Text>
+                </TouchableOpacity>
 
-            <View style={styles.plantPhotos}>
-                <Image
-                    style={styles.photo}
-                    source={{ uri: photo2 }}
+                <Text style={styles.subtitle}>Seasonal Data</Text>
+
+                <Infographic.InfographicLabels plantPage={true} />
+
+                {
+                    plant.sow_date !== undefined && plant.sow_date.length !== 0 ?
+
+                        <View style={styles.monthInfographic}>
+                            <Text style={styles.seasonalTitle}>Sow</Text>
+                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.sow_date} plantPage={true} />
+                        </View>
+
+                        : null
+                }
+
+                {
+                    plant.plant_date !== undefined && plant.plant_date.length !== 0 ?
+
+                        <View style={styles.monthInfographic}>
+                            <Text style={styles.seasonalTitle}>Plant</Text>
+                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.plant_date} plantPage={true} />
+                        </View>
+
+                        : null
+                }
+
+                {
+                    plant.transplant_date !== undefined && plant.transplant_date.length !== 0 ?
+
+                        <View style={styles.monthInfographic}>
+                            <Text style={styles.seasonalTitle}>Transplant</Text>
+                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.transplant_date} plantPage={true} />
+                        </View>
+
+                        : null
+                }
+
+                {
+                    plant.harvest_date !== undefined && plant.harvest_date.length !== 0 ?
+
+                        <View style={styles.monthInfographic}>
+                            <Text style={styles.seasonalTitle}>Harvest</Text>
+                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.harvest_date} plantPage={true} />
+                        </View>
+
+                        : null
+                }
+
+                <Text style={styles.subtitle}>Care Requirements</Text>
+
+                <CareRequirementsTable
+                    spacing={plant.spacing}
+                    sun_condition={plant.sun_condition}
+                    soil_type={plant.soil_type}
+                    soil_ph={plant.soil_ph}
+                    water_schedule={plant.water_schedule}
+                    compost_schedule={plant.compost_schedule}
+                    prune_schedule={plant.prune_schedule}
+                    feed_schedule={plant.feed_schedule}
+                    indoor_schedule={plant.indoor_schedule}
+                    plant_problem={plant.plant_problem}
+                    companion_plant={plant.companion_plant}
+                    incompatible_plant={plant.incompatible_plant}
                 />
-                <Image
-                    style={styles.photo}
-                    source={{ uri: photo3 }}
-                />
-            </View>
 
-            <Text style={styles.subtitle}>Add To Garden</Text>
+                <Text style={styles.subtitle}>{plant.name} Notes</Text>
 
-            <Dropdown plots={plots} placeholder="Select Plot" />
+            </ScrollView >
 
-            <TouchableOpacity style={styles.button} onPress={() => alert("Ready to add plant to garden.")}>
-                <Text style={styles.buttonText}>ADD PLANT</Text>
-            </TouchableOpacity>
+        </View>
 
-            <Text style={styles.subtitle}>Seasonal Data</Text>
-
-            <Infographic.InfographicLabels plantPage={true} />
-
-            {
-                plant.sow_date !== undefined && plant.sow_date.length !== 0 ?
-
-                    <View style={styles.monthInfographic}>
-                        <Text style={styles.seasonalTitle}>Sow</Text>
-                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.sow_date} plantPage={true} />
-                    </View>
-
-                    : null
-            }
-
-            {
-                plant.plant_date !== undefined && plant.plant_date.length !== 0 ?
-
-                    <View style={styles.monthInfographic}>
-                        <Text style={styles.seasonalTitle}>Plant</Text>
-                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.plant_date} plantPage={true} />
-                    </View>
-
-                    : null
-            }
-
-            {
-                plant.transplant_date !== undefined && plant.transplant_date.length !== 0 ?
-
-                    <View style={styles.monthInfographic}>
-                        <Text style={styles.seasonalTitle}>Transplant</Text>
-                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.transplant_date} plantPage={true} />
-                    </View>
-
-                    : null
-            }
-
-            {
-                plant.harvest_date !== undefined && plant.harvest_date.length !== 0 ?
-
-                    <View style={styles.monthInfographic}>
-                        <Text style={styles.seasonalTitle}>Harvest</Text>
-                        <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.harvest_date} plantPage={true} />
-                    </View>
-
-                    : null
-            }
-
-            <Text style={styles.subtitle}>Care Requirements</Text>
-
-            <CareRequirementsTable
-                spacing={plant.spacing}
-                sun_condition={plant.sun_condition}
-                soil_type={plant.soil_type}
-                soil_ph={plant.soil_ph}
-                water_schedule={plant.water_schedule}
-                compost_schedule={plant.compost_schedule}
-                prune_schedule={plant.prune_schedule}
-                feed_schedule={plant.feed_schedule}
-                indoor_schedule={plant.indoor_schedule}
-                plant_problem={plant.plant_problem}
-                companion_plant={plant.companion_plant}
-                incompatible_plant={plant.incompatible_plant}
-            />
-
-        </ScrollView >
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "space-between",
+        marginBottom: 85
+    },
     screen: {
         height: "100%",
-        backgroundColor: "#EFF5E4"
+        backgroundColor: "#EFF5E4",
     },
     backgroundImage: {
         height: 150,

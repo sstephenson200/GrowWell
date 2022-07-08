@@ -1,9 +1,12 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const SettingsScreen = () => {
+import Header from '../components/Header';
+
+const SettingsScreen = (props) => {
     return (
         <View style={styles.container}>
+            <Header navigation={props.navigation} />
             <View style={styles.screen}>
                 <Text>Settings Screen</Text>
             </View>

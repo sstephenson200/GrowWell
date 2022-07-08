@@ -1,9 +1,12 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const NewNoteScreen = () => {
+import Header from '../components/Header';
+
+const NewNoteScreen = (props) => {
     return (
         <View style={styles.container}>
+            <Header navigation={props.navigation} />
             <View style={styles.screen}>
                 <Text>New Note Screen</Text>
             </View>

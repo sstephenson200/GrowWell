@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
+import StackNavigator from './stackNavigator';
 import CalendarScreen from "../screens/CalendarScreen";
 import NewNoteScreen from "../screens/NewNoteScreen";
 import GardenScreen from "../screens/GardenScreen";
@@ -24,6 +25,17 @@ const Tabs = () => {
                 }
             }}
         >
+
+            <Tab.Screen
+                name="StackNavigator"
+                component={StackNavigator}
+                options={{
+                    tabBarItemStyle: { display: "none" },
+                    // tabBarIconStyle: { display: "none" },
+                    headerShown: false
+                }}
+            />
+
             <Tab.Screen
                 name="Calendar"
                 component={CalendarScreen}
