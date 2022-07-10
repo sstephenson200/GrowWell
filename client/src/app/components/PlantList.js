@@ -6,11 +6,11 @@ import ImageSelect from "./SearchableImages";
 import Infographic from "./MonthlyPlantData"
 
 //Method to sort plants array by name
-function sortPlants(prop) {
+function sortPlants(props) {
     return function (a, b) {
-        if (a[prop] > b[prop]) {
+        if (a[props] > b[props]) {
             return 1;
-        } else if (a[prop] < b[prop]) {
+        } else if (a[props] < b[props]) {
             return -1;
         }
         return 0;
@@ -20,6 +20,7 @@ function sortPlants(prop) {
 const PlantList = (props) => {
 
     const [plants, setPlants] = useState([]);
+    let searchQuery = props.searchQuery;
 
     const getAllPlantData = async () => {
         let plantData = await getPlants();
@@ -73,9 +74,22 @@ const PlantList = (props) => {
         getAllPlantData();
     }, []);
 
+    //Function to check if a plant should be shown in search results based on a comparison of plant name and search query
+    function showPlantInSearchResults(plantName, searchQuery) {
+        let show = true;
+
+        if (searchQuery !== '') {
+            if (!plantName.toLowerCase().includes(searchQuery.toLowerCase())) {
+                show = false;
+            }
+        }
+        return show;
+    }
+
     return (
 
         <View style={styles.container}>
+
             <FlatList
                 data={plants}
                 contentContainerStyle={{
@@ -89,7 +103,13 @@ const PlantList = (props) => {
                         plant_type = "VEG";
                     }
 
+                    //Hide items which don't match search criteria
+                    if (showPlantInSearchResults(name, searchQuery) == false) {
+                        return null;
+                    }
+
                     return (
+
                         <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id } })}>
                             <Card>
 
