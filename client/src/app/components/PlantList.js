@@ -21,6 +21,7 @@ const PlantList = (props) => {
 
     const [plants, setPlants] = useState([]);
     let searchQuery = props.searchQuery;
+    let filterData = props.filterData;
 
     const getAllPlantData = async () => {
         let plantData = await getPlants();

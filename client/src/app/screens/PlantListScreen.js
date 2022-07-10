@@ -10,6 +10,7 @@ import PlantList from "../components/PlantList";
 const PlantListScreen = (props) => {
 
     const [query, setQuery] = useState('');
+    const [filterOptions, setFilterOptions] = useState(null);
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
@@ -25,8 +26,8 @@ const PlantListScreen = (props) => {
             <View style={styles.screen}>
                 <Text style={styles.title}>Plants</Text>
                 <SearchBar queryData={[query, setQuery]} />
-                <Filter />
-                <PlantList navigation={props.navigation} searchQuery={query} />
+                <Filter filterData={[filterOptions, setFilterOptions]} />
+                <PlantList navigation={props.navigation} searchQuery={query} filterData={filterOptions} />
             </View>
         </View>
 
