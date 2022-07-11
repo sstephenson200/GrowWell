@@ -76,12 +76,51 @@ const PlantList = (props) => {
     }, []);
 
     //Function to check if a plant should be shown in search results based on a comparison of plant name and search query
-    function showPlantInSearchResults(plantName, searchQuery) {
+    function showPlantInResults(plant, searchQuery, filterData) {
         let show = true;
+        let plantTypes = [];
 
         if (searchQuery !== '') {
-            if (!plantName.toLowerCase().includes(searchQuery.toLowerCase())) {
+            if (!plant.name.toLowerCase().includes(searchQuery.toLowerCase())) {
                 show = false;
+            }
+        }
+
+        if (filterData.length !== 0) {
+
+            for (let i = 0; i < filterData.length; i++) {
+                if (filterData[i] == "Fruit" || filterData[i] == "Herb" || filterData[i] == "Vegetable") {
+                    plantTypes.push(filterData[i]);
+                }
+            }
+
+            for (let i = 0; i < filterData.length; i++) {
+                switch (filterData[i]) {
+                    case "Fruit":
+                    case "Herb":
+                    case "Vegetable":
+                        if (!plantTypes.includes(plant.plant_type)) {
+                            show = false;
+                        }
+                        break;
+                    case "Sow":
+                        show = Infographic.MonthFilter(plant.sow_date);
+                        break;
+                    case "Plant":
+                        show = Infographic.MonthFilter(plant.plant_date);
+                        break;
+                    case "Transplant":
+                        show = Infographic.MonthFilter(plant.transplant_date);
+                        break;
+                    case "Harvest":
+                        show = Infographic.MonthFilter(plant.harvest_date);
+                        break;
+                    default:
+                }
+
+                if (show == false) {
+                    return show;
+                }
             }
         }
         return show;
@@ -105,7 +144,7 @@ const PlantList = (props) => {
                     }
 
                     //Hide items which don't match search criteria
-                    if (showPlantInSearchResults(name, searchQuery) == false) {
+                    if (showPlantInResults(item, searchQuery, filterData) == false) {
                         return null;
                     }
 

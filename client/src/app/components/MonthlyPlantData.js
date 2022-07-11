@@ -25,6 +25,27 @@ function getMonthArray(month1, month2) {
     return monthArray;
 }
 
+//Function to check if the current date is during a given schedule period
+function MonthFilter(schedule) {
+
+    if (schedule.length !== 0) {
+
+        let month1 = schedule[0];
+        let month2 = schedule[1];
+
+        let array = getMonthArray(month1, month2);
+
+        let date = new Date();
+        let currentMonth = date.getMonth() + 1;
+
+        if (array.includes(currentMonth)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function EmptyCircle(props) {
 
     if (props.plantPage == true) {
@@ -203,5 +224,6 @@ const styles = StyleSheet.create({
 module.exports = {
     PlantListInfographic,
     GeneralInfographic,
-    InfographicLabels
+    InfographicLabels,
+    MonthFilter
 }

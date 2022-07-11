@@ -10,7 +10,7 @@ import PlantList from "../components/PlantList";
 const PlantListScreen = (props) => {
 
     const [query, setQuery] = useState('');
-    const [filterOptions, setFilterOptions] = useState(null);
+    const [filterOptions, setFilterOptions] = useState([]);
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')

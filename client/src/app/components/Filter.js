@@ -25,6 +25,9 @@ const Filter = (props) => {
             style={styles.filter}
             listMode="SCROLLVIEW"
             placeholder="Filter Plants"
+            mode="BADGE"
+            badgeDotColors={["#9477B4", "#80C1E3", "#D26E8D", "#81BF63", "#E3B453", "#9477B4", "#80C1E3"]}
+            disabledItemLabelStyle={{ fontWeight: "bold" }}
             open={open}
             value={filterOptions}
             items={items}
@@ -32,8 +35,6 @@ const Filter = (props) => {
             setValue={setFilterOptions}
             setItems={setItems}
             multiple={true}
-            min={0}
-            max={5}
         />
     );
 }
@@ -44,7 +45,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 10,
         borderRadius: 15,
-        elevation: 5
+        elevation: 5,
+        borderColor: "#EFF5E4"
     }
 });
 
