@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
 import Header from '../components/Header';
 
@@ -9,6 +9,9 @@ const GardenScreen = (props) => {
             <Header navigation={props.navigation} />
             <View style={styles.screen}>
                 <Text>Garden Screen</Text>
+                <TouchableOpacity style={{ backgroundColor: "red" }} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateGarden" })}>
+                    <Text>CREATE GARDEN</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )

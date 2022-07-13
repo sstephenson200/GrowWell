@@ -8,32 +8,46 @@ import GardenScreen from "../screens/GardenScreen";
 import AlarmScreen from "../screens/AlarmScreen";
 import PlantListScreen from "../screens/PlantListScreen";
 
+//Method to allow tab bar to be hidden for various screens
+const getTabBarVisibility = (route) => {
+
+    if (route.params !== undefined) {
+        let screenName = route.params.screen;
+
+        if (screenName == "CreateGarden") {
+            return { display: "none" };
+        }
+    }
+
+    return {
+        position: "absolute",
+        width: "100%",
+        height: 85,
+        paddingHorizontal: 10,
+        backgroundColor: "#81BF63"
+    };
+}
+
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const Tabs = (route) => {
     return (
         <Tab.Navigator
             initialRouteName="Garden"
-            screenOptions={{
+            screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
-                tabBarStyle: {
-                    position: "absolute",
-                    width: "100%",
-                    height: 85,
-                    paddingHorizontal: 10,
-                    backgroundColor: "#81BF63"
-                }
-            }}
+                tabBarStyle: getTabBarVisibility(route)
+            })}
         >
 
             <Tab.Screen
                 name="StackNavigator"
                 component={StackNavigator}
-                options={{
+
+                options={({ route }) => ({
                     tabBarItemStyle: { display: "none" },
-                    // tabBarIconStyle: { display: "none" },
-                    headerShown: false
-                }}
+                    headerShown: false,
+                })}
             />
 
             <Tab.Screen

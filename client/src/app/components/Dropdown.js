@@ -6,28 +6,57 @@ const Dropdown = (props) => {
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
-    const [items, setItems] = useState(props.plots);
 
-    return (
-        <DropDownPicker
-            style={styles.dropdown}
-            listMode="SCROLLVIEW"
-            placeholder={props.placeholder}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-        />
-    );
+    let data = null;
+
+    if (props.plots !== undefined) {
+        data = props.plots
+    }
+
+    const [items, setItems] = useState(data);
+
+    if (props.styling == "largeDropdown") {
+        return (
+            <DropDownPicker
+                style={styles.largeDropdown}
+                listMode="SCROLLVIEW"
+                placeholder={props.placeholder}
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+            />
+        );
+    } else {
+        return (
+            <DropDownPicker
+                style={styles.smallDropdown}
+                listMode="SCROLLVIEW"
+                placeholder={props.placeholder}
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+            />
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-    dropdown: {
-        margin: 10,
-        width: 350,
-        alignSelf: "center"
+    largeDropdown: {
+        width: "90%",
+        alignSelf: "center",
+        margin: 10
+    },
+    smallDropdown: {
+        width: "50%",
+        marginHorizontal: 10,
+        borderColor: "grey",
+        color: "white"
     }
 });
 

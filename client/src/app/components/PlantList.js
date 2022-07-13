@@ -31,7 +31,7 @@ const PlantList = (props) => {
     //Get all plant data
     const getPlants = async () => {
         try {
-            const response = await fetch("http://192.168.1.110:8080/plant/getAllPlants");
+            const response = await fetch("https://grow-well-server.herokuapp.com/plant/getAllPlants");
             const json = await response.json();
             let sortedPlants = json.plants.sort(sortPlants("name"));
 
@@ -51,7 +51,7 @@ const PlantList = (props) => {
         let fileReaderInstance = new FileReader();
 
         for (let i = 0; i < plantData.length; i++) {
-            let blob = await axios.post("http://192.168.1.110:8080/plant/getImageByID", {
+            let blob = await axios.post("https://grow-well-server.herokuapp.com/plant/getImageByID", {
                 image_id: plantData[i].image[0]
             }, { responseType: 'blob' });
             let base64Image = null;

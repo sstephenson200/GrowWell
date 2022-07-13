@@ -30,7 +30,7 @@ const PlantScreen = (props) => {
     //Get plant data
     const getPlant = async () => {
         try {
-            const response = await axios.post("http://192.168.1.110:8080/plant/getPlantByID", {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/plant/getPlantByID", {
                 "plant_id": plant_id
             }, { responseType: 'json' });
             const plant = await response.data.plant;
@@ -53,7 +53,7 @@ const PlantScreen = (props) => {
         for (let i = 0; i < plantData.image.length; i++) {
 
             let id = plantData.image[i];
-            let blob = await axios.post("http://192.168.1.110:8080/plant/getImageByID", {
+            let blob = await axios.post("https://grow-well-server.herokuapp.com/plant/getImageByID", {
                 image_id: id
             }, { responseType: 'blob' });
             let base64Image = null;
@@ -141,7 +141,7 @@ const PlantScreen = (props) => {
 
                 <Text style={styles.subtitle}>Add To Garden</Text>
 
-                <Dropdown plots={plots} placeholder="Select Plot" />
+                <Dropdown plots={plots} placeholder="Select Plot" styling="largeDropdown" />
 
                 <TouchableOpacity style={styles.button} onPress={() => alert("Ready to add plant to garden.")}>
                     <Text style={styles.buttonText}>ADD PLANT</Text>
