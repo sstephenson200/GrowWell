@@ -17,7 +17,7 @@ router.post("/createGarden", [
         .isInt({ min: 1 }).withMessage("Width must be greater than 1m."),
 ], gardenController.createGarden);
 
-router.get("/getAllGardens", [
+router.post("/getAllGardens", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),
 ], gardenController.getAllGardens);
