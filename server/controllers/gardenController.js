@@ -31,11 +31,11 @@ const createGarden = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errors: validationErrors.array()[0].msg });
+        return response.status(200).json({ errors: validationErrors.array()[0].msg });
     }
 
     if (await gardenValidator.checkExistingGardenName(name, user_id)) {
-        return response.status(400).json({ errorMessage: "Garden name already in use." });
+        return response.status(200).json({ errorMessage: "Garden name already in use." });
     }
 
     //Create Plots
