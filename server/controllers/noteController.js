@@ -59,18 +59,18 @@ const createNote = async (request, response) => {
 
     //Check if required params are given
     if (!user_id) {
-        return response.status(400).json({ errorMessage: "User_id required." });
+        return response.status(200).json({ errorMessage: "User_id required." });
     } else if (!title) {
-        return response.status(400).json({ errorMessage: "Title required." });
+        return response.status(200).json({ errorMessage: "Title required." });
     }
 
     if (!validator.checkValidLength(title, 1, 30)) {
-        return response.status(400).json({ errorMessage: "Title must be between 1 and 30 characters." });
+        return response.status(200).json({ errorMessage: "Title must be between 1 and 30 characters." });
     }
 
     if (description != null) {
         if (!validator.checkValidLength(description, 1, 250)) {
-            return response.status(400).json({ errorMessage: "Description must be between 1 and 250 characters." });
+            return response.status(200).json({ errorMessage: "Description must be between 1 and 250 characters." });
         }
     }
 
@@ -79,23 +79,23 @@ const createNote = async (request, response) => {
 
     if (garden_id != null) {
         if (!validator.checkValidId(garden_id)) {
-            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden_id." });
         }
 
         existingGarden = await Garden.findOne({ _id: garden_id });
         if (!existingGarden) {
-            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden_id." });
         }
         gardenSize = existingGarden.plot.length;
     }
 
     if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
-        return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
+        return response.status(200).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
     if (plot_number != null) {
         if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-            return response.status(400).json({ errorMessage: "Invalid plot number." });
+            return response.status(200).json({ errorMessage: "Invalid plot number." });
         }
     }
 
@@ -127,16 +127,16 @@ const getNotesByPlant = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant_id." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant_id." });
     }
 
     const gardens = await Garden.find({ 'user_id': user_id, 'plot.plant_id': plant_id });
@@ -153,22 +153,22 @@ const getNotesByPlot = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
     if (!existingGarden) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const gardenSize = existingGarden.plot.length;
 
     if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-        return response.status(400).json({ errorMessage: "Invalid plot_number." });
+        return response.status(200).json({ errorMessage: "Invalid plot_number." });
     }
 
     const notes = await Note.find({ 'garden_id': garden_id, 'garden.plot.plot_number': plot_number });
@@ -183,7 +183,7 @@ const getNotesByDate = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const notes = await Note.find({ 'user_id': user_id, 'date': { $gte: moment(date).toDate(), $lte: moment(date).endOf('day').toDate() } });
@@ -198,7 +198,7 @@ const getNotesByMonth = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const startOfMonth = moment(date).startOf('month').format('YYYY-MM-DD');
@@ -216,16 +216,16 @@ const deleteNote = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     try {
@@ -247,20 +247,20 @@ const updateTitle = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     if (title == existingNote.title) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     try {
@@ -281,20 +281,20 @@ const updateDescription = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     if (description == existingNote.description) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     try {
@@ -315,36 +315,36 @@ const updateGardenPlot = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
-        return response.status(400).json({ errorMessage: "Plot_number must be provided with garden_id." });
+        return response.status(200).json({ errorMessage: "Plot_number must be provided with garden_id." });
     }
 
     if (garden_id && plot_number) {
         if (!validator.checkValidId(garden_id)) {
-            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden_id." });
         }
 
         const existingGarden = await Garden.findOne({ _id: garden_id });
         if (!existingGarden) {
-            return response.status(400).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden_id." });
         }
 
         const gardenSize = existingGarden.plot.length;
 
         if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-            return response.status(400).json({ errorMessage: "Invalid plot_number." });
+            return response.status(200).json({ errorMessage: "Invalid plot_number." });
         }
     } else {
         garden_id = null;
@@ -353,7 +353,7 @@ const updateGardenPlot = async (request, response) => {
 
     if (garden_id == existingNote.garden_id) {
         if (plot_number == existingNote.plot_number) {
-            return response.status(400).json({ errorMessage: "No change detected." });
+            return response.status(200).json({ errorMessage: "No change detected." });
         }
     }
 
@@ -377,16 +377,16 @@ const updateImages = async (request, response) => {
 
     //Check if required params are given
     if (!note_id) {
-        return response.status(400).json({ errorMessage: "Note_id required." });
+        return response.status(200).json({ errorMessage: "Note_id required." });
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(400).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note_id." });
     }
 
     //Get image_id array

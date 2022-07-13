@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 
 const { check, validationResult } = require('express-validator');
-const validator = require("../validators/validator");
 const userValidator = require("../validators/userValidator");
 
 const gardenController = require("./gardenController");
@@ -17,16 +16,16 @@ const createUser = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!userValidator.checkMatchingPasswords(password, passwordVerify)) {
-        return response.status(400).json({ errorMessage: "Entered passwords must match." });
+        return response.status(200).json({ errorMessage: "Entered passwords must match." });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-        return response.status(400).json({ errorMessage: "An account already exists for this email." });
+        return response.status(200).json({ errorMessage: "An account already exists for this email." });
     }
 
     const salt = await bcrypt.genSalt();
@@ -53,12 +52,12 @@ const getUsername = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const username = await User.findOne({ _id: user_id }).select("username");
     if (!username) {
-        return response.status(400).json({ errorMessage: "Invalid user_id." });
+        return response.status(200).json({ errorMessage: "Invalid user_id." });
     }
 
     return response.status(200).json({ username: username });
@@ -73,12 +72,12 @@ const login = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const existingUser = await User.findOne({ email });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     return response.status(200).json({ message: "You're ready to login!" });
@@ -91,12 +90,12 @@ const deleteUser = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     try {
@@ -120,16 +119,16 @@ const updateUsername = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     if (username == existingUser.username) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     try {
@@ -150,16 +149,16 @@ const updateEmail = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     if (email == existingUser.email) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     try {
@@ -180,20 +179,20 @@ const updatePassword = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(oldPassword, existingUser.password_hash)) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     if (!userValidator.checkMatchingPasswords(newPassword, newPasswordVerify)) {
-        return response.status(400).json({ errorMessage: "Entered passwords must match." });
+        return response.status(200).json({ errorMessage: "Entered passwords must match." });
     }
 
     if (userValidator.checkMatchingPasswords(oldPassword, newPassword)) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     //Encrypt Password

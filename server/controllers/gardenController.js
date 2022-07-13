@@ -8,9 +8,7 @@ const noteController = require("./noteController");
 
 const Garden = require("../models/gardenModel");
 const User = require("../models/userModel");
-const Alarm = require("../models/alarmModel");
 const Plant = require("../models/plantModel");
-const Note = require("../models/noteModel");
 
 //Function to delete all gardens for a given user_id
 async function deleteAllGardens(user_id) {
@@ -31,7 +29,7 @@ const createGarden = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errors: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (await gardenValidator.checkExistingGardenName(name, user_id)) {
@@ -67,7 +65,7 @@ const getAllGardens = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     const gardens = await Garden.find({ "user_id": user_id }).select("name");
@@ -82,16 +80,16 @@ const getGardenByID = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
     if (!existingGarden) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const garden = await Garden.findOne({ _id: garden_id });
@@ -106,16 +104,16 @@ const deleteGarden = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const existingUser = await User.findOne({ _id: user_id });
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(401).json({ errorMessage: "Invalid credentials." });
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     try {
@@ -138,24 +136,24 @@ const updateName = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
     if (!existingGarden) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     if (name == existingGarden.name) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     if (await gardenValidator.checkExistingGardenName(name, user_id)) {
-        return response.status(400).json({ errorMessage: "Garden name already in use." });
+        return response.status(200).json({ errorMessage: "Garden name already in use." });
     }
 
     try {
@@ -176,26 +174,26 @@ const updatePlotPlantedDate = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
     if (!existingGarden) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const gardenSize = existingGarden.plot.length;
 
     if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-        return response.status(400).json({ errorMessage: "Invalid plot_number." });
+        return response.status(200).json({ errorMessage: "Invalid plot_number." });
     }
 
     if (Date.parse(date_planted) == Date.parse(existingGarden.plot[plot_number].date_planted)) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     try {
@@ -216,35 +214,35 @@ const updatePlotPlant = async (request, response) => {
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ errorMessage: validationErrors.array()[0].msg });
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
     if (!validator.checkValidId(garden_id)) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant_id." });
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
     if (!existingGarden) {
-        return response.status(400).json({ errorMessage: "Invalid garden_id." });
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
     const gardenSize = existingGarden.plot.length;
 
     if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-        return response.status(400).json({ errorMessage: "Invalid plot_number." });
+        return response.status(200).json({ errorMessage: "Invalid plot_number." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(400).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant_id." });
     }
 
     if (plant_id === existingPlant._id) {
-        return response.status(400).json({ errorMessage: "No change detected." });
+        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     if (date_planted == null) {
