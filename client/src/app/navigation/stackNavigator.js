@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SettingsScreen from "../screens/SettingsScreen";
 import PlantScreen from "../screens/PlantScreen";
 import CreateGardenScreen from "../screens/CreateGardenScreen";
+import PlotScreen from "../screens/PlotScreen";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,11 @@ const StackNavigator = () => {
             <Stack.Screen
                 name="CreateGarden"
                 component={CreateGardenScreen}
+            />
+
+            <Stack.Screen
+                name="Plot"
+                component={PlotScreen}
             />
 
         </Stack.Navigator>

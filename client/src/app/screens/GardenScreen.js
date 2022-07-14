@@ -1,19 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { useFonts } from 'expo-font';
+import axios from 'axios';
+import { unescape } from 'underscore';
 
 import Header from '../components/Header';
+import Dropdown from "../components/Dropdown";
+import GardenGrid from '../components/GardenGrid';
 
 const GardenScreen = (props) => {
+
+    const [gardens, setGardens] = useState([]);
+    const [selectedGarden, setSelectedGarden] = useState(null);
+
+    async function getGardens() {
+        try {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
+                "user_id": "62cec6b63dd3dfcf2a4a6185"
+            }, { responseType: 'json' });
+
+            let status = response.status;
+
+            if (status == 200) {
+                let userGardens = response.data.gardens;
+                let gardenLabels = [];
+
+                if (userGardens !== null) {
+                    userGardens.forEach((garden) => {
+                        let name = garden.name;
+                        name = unescape(name);
+                        let garden_id = garden._id;
+                        let entry = { label: name, value: garden_id };
+                        gardenLabels.push(entry);
+                    });
+                }
+                setGardens(gardenLabels);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getGardens();
+    }, []);
+
+    const [loaded] = useFonts({
+        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+    });
+
+    if (!loaded) {
+        return null;
+    }
+
     return (
         <View style={styles.container}>
             <Header navigation={props.navigation} />
             <View style={styles.screen}>
-                <Text>Garden Screen</Text>
-                <TouchableOpacity style={{ backgroundColor: "red" }} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateGarden" })}>
-                    <Text>CREATE GARDEN</Text>
+
+                <Text style={styles.title}>Your Garden</Text>
+
+                <Dropdown gardens={gardens} selected={[selectedGarden, setSelectedGarden]} placeholder="Select Garden" styling="largeDropdown" />
+
+                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateGarden" })}>
+                    <Text style={styles.buttonText}>ADD NEW GARDEN</Text>
                 </TouchableOpacity>
+
+                {
+                    selectedGarden !== null ?
+
+                        <View>
+                            <GardenGrid garden_id={selectedGarden} navigation={props.navigation}></GardenGrid>
+
+                            <TouchableOpacity style={styles.deleteButton} onPress={() => alert("Ready to delete garden!")}>
+                                <Text style={styles.buttonText}>DELETE GARDEN</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        : <Text style={styles.text}>Garden not selected</Text>
+                }
+
             </View>
-        </View>
+        </View >
     )
 }
 
@@ -24,7 +93,41 @@ const styles = StyleSheet.create({
     },
     screen: {
         height: "100%",
-        backgroundColor: "#EFF5E4"
+        backgroundColor: "#EFF5E4",
+        marginTop: 10
+    },
+    title: {
+        textAlign: "center",
+        fontSize: 40,
+        fontFamily: "Montserrat"
+    },
+    button: {
+        backgroundColor: "#9477B4",
+        height: 40,
+        width: 200,
+        borderRadius: 8,
+        alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 10
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 18
+    },
+    deleteButton: {
+        backgroundColor: "red",
+        height: 40,
+        width: 200,
+        borderRadius: 8,
+        alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 10
+    },
+    text: {
+        textAlign: "center",
+        fontSize: 20
     }
 });
 

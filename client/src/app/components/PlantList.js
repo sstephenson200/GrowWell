@@ -43,8 +43,9 @@ const PlantList = (props) => {
 
     //Get corresponding plant images
     const getImages = async (plantData) => {
-        if (plantData.length <= 0)
+        if (plantData.length <= 0) {
             return;
+        }
 
         let updatedPlantData = [];
 
