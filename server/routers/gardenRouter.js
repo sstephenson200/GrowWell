@@ -22,7 +22,7 @@ router.post("/getAllGardens", [
         .not().isEmpty().withMessage("User_id required."),
 ], gardenController.getAllGardens);
 
-router.get("/getGardenByID", [
+router.post("/getGardenByID", [
     check('garden_id')
         .not().isEmpty().withMessage("Garden_id required."),
 ], gardenController.getGardenByID);
