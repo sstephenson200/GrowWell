@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     grid: {
         paddingHorizontal: 10,
         alignItems: "center",
-        paddingVertical: 20
+        paddingVertical: 10
     },
     plot: {
         width: 80,

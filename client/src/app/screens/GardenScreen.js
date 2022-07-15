@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 import { unescape } from 'underscore';
@@ -57,7 +57,7 @@ const GardenScreen = (props) => {
     return (
         <View style={styles.container}>
             <Header navigation={props.navigation} />
-            <View style={styles.screen}>
+            <ScrollView style={styles.screen} contentContainerStyle={{ flexGrow: 1 }}>
 
                 <Text style={styles.title}>Your Garden</Text>
 
@@ -70,19 +70,23 @@ const GardenScreen = (props) => {
                 {
                     selectedGarden !== null ?
 
-                        <View>
-                            <GardenGrid garden_id={selectedGarden} navigation={props.navigation}></GardenGrid>
+                        <View style={styles.grid}>
+                            <ScrollView horizontal={true}>
+                                <GardenGrid garden_id={selectedGarden} navigation={props.navigation}></GardenGrid>
+                            </ScrollView>
 
-                            <TouchableOpacity style={styles.deleteButton} onPress={() => alert("Ready to delete garden!")}>
-                                <Text style={styles.buttonText}>DELETE GARDEN</Text>
-                            </TouchableOpacity>
+                            <View>
+                                <TouchableOpacity style={styles.deleteButton} onPress={() => alert("Ready to delete garden!")}>
+                                    <Text style={styles.buttonText}>DELETE GARDEN</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
                         : <Text style={styles.text}>Garden not selected</Text>
                 }
 
-            </View>
-        </View >
+            </ScrollView>
+        </View>
     )
 }
 
@@ -115,6 +119,10 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 18
     },
+    grid: {
+        alignItems: "center",
+        marginBottom: 85
+    },
     deleteButton: {
         backgroundColor: "red",
         height: 40,
@@ -123,7 +131,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         alignItems: "center",
         justifyContent: "center",
-        margin: 10
+        margin: 15
     },
     text: {
         textAlign: "center",
