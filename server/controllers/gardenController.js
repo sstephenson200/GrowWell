@@ -170,7 +170,7 @@ const updateName = async (request, response) => {
 //Request to update a plot's planted date
 const updatePlotPlantedDate = async (request, response) => {
 
-    const { garden_id, plot_number, date_planted } = request.body;
+    let { garden_id, plot_number, date_planted } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
