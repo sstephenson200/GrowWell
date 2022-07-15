@@ -20,8 +20,6 @@ async function checkExistingGardenName(name, user_id) {
 //Check plot_number is valid
 function checkValidPlotNumber(gardenSize, plot_number) {
 
-    plot_number -= 1;
-
     if (plot_number >= 0 && plot_number < gardenSize) {
         return true;
     }
