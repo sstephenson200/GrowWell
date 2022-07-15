@@ -12,9 +12,9 @@ router.post("/createGarden", [
         .isLength({ min: 4, max: 30 }).withMessage("Name must be between 4 and 30 characters.")
         .escape(),
     check('length')
-        .isInt({ min: 1 }).withMessage("Length must be greater than 1m."),
+        .isInt({ min: 1, max: 50 }).withMessage("Length must be between 1 and 50m."),
     check('width')
-        .isInt({ min: 1 }).withMessage("Width must be greater than 1m."),
+        .isInt({ min: 1, max: 50 }).withMessage("Width must be between 1 and 50m."),
 ], gardenController.createGarden);
 
 router.post("/getAllGardens", [
