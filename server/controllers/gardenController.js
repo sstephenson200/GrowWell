@@ -230,6 +230,10 @@ const updatePlotPlant = async (request, response) => {
         if (!existingPlant) {
             return response.status(200).json({ errorMessage: "Invalid plant_id." });
         }
+
+        if (plant_id === existingPlant._id) {
+            return response.status(200).json({ errorMessage: "No change detected." });
+        }
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
@@ -241,10 +245,6 @@ const updatePlotPlant = async (request, response) => {
 
     if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
         return response.status(200).json({ errorMessage: "Invalid plot_number." });
-    }
-
-    if (plant_id === existingPlant._id) {
-        return response.status(200).json({ errorMessage: "No change detected." });
     }
 
     if (date_planted == null) {
