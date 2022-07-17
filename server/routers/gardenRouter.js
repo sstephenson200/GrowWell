@@ -59,7 +59,7 @@ router.put("/updatePlotPlantedDate", [
         .isDate().withMessage("Invalid date."),
 ], gardenController.updatePlotPlantedDate);
 
-router.post("/updatePlotPlant", [
+router.put("/updatePlotPlant", [
     check('garden_id')
         .not().isEmpty().withMessage("Garden_id required."),
     check('plot_number')
