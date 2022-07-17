@@ -221,7 +221,7 @@ const updatePlotPlant = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid garden_id." });
     }
 
-    if (plant_id !== null) {
+    if (plant_id !== undefined) {
         if (!validator.checkValidId(plant_id)) {
             return response.status(200).json({ errorMessage: "Invalid plant_id." });
         }
@@ -234,6 +234,8 @@ const updatePlotPlant = async (request, response) => {
         if (plant_id === existingPlant._id) {
             return response.status(200).json({ errorMessage: "No change detected." });
         }
+    } else {
+        plant_id = null;
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
