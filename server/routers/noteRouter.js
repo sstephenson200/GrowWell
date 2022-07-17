@@ -30,7 +30,7 @@ router.get("/getNotesByDate", [
         .isDate().withMessage("Invalid date."),
 ], noteController.getNotesByDate);
 
-router.get("/getNotesByMonth", [
+router.post("/getNotesByMonth", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),
     check('date')
