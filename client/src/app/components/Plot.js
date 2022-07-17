@@ -11,7 +11,6 @@ const Plot = (props) => {
     let plot_number = props.plot.plot_number;
     let plot_number_display = plot_number + 1;
     let plant_id = props.plot.plant_id;
-    let plotData = props.plot;
 
     // Get plant name for use in icon selection
     async function getPlantName() {

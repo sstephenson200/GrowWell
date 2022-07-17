@@ -4,8 +4,13 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 const Dropdown = (props) => {
 
-    let selectedGarden = props.selected[0];
-    let setSelectedGarden = props.selected[1];
+    let value = null;
+    let setValue = null;
+
+    if (props.selected !== undefined) {
+        value = props.selected[0];
+        setValue = props.selected[1];
+    }
 
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState([]);
@@ -16,6 +21,8 @@ const Dropdown = (props) => {
         data = props.plots;
     } else if (props.gardens !== undefined && props.gardens.length !== 0) {
         data = props.gardens;
+    } else if (props.plants !== undefined && props.plants.length !== 0) {
+        data = props.plants;
     }
 
     function updateItems(data) {
@@ -26,7 +33,7 @@ const Dropdown = (props) => {
 
     useEffect(() => {
         updateItems(data)
-    }, [props.gardens]);
+    }, [props.gardens, props.plants]);
 
     if (props.styling == "largeDropdown") {
         return (
@@ -35,10 +42,10 @@ const Dropdown = (props) => {
                 listMode="SCROLLVIEW"
                 placeholder={props.placeholder}
                 open={open}
-                value={selectedGarden}
+                value={value}
                 items={items}
                 setOpen={setOpen}
-                setValue={setSelectedGarden}
+                setValue={setValue}
                 setItems={setItems}
             />
         );
