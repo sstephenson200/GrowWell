@@ -66,7 +66,7 @@ router.put("/updatePlotPlant", [
         .not().isEmpty().withMessage("Plot_number required.")
         .isInt().withMessage("Plot_number must be an integer value."),
     check('plant_id')
-        .not().isEmpty().withMessage("Plant_id required."),
+        .optional(),
     check('date_planted')
         .optional()
         .isDate().withMessage("Invalid date."),
