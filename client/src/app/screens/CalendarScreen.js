@@ -6,13 +6,17 @@ const moment = require("moment");
 import axios from "axios";
 
 import Header from '../components/Header';
+import NoteSummary from '../components/NoteSummary';
 
 const CalendarScreen = (props) => {
 
     const [notes, setNotes] = useState([]);
     const [markedDates, setMarkedDates] = useState({});
+    const [selectedDay, setSelectedDay] = useState(null);
 
     let selectedMonth = null;
+
+    let now = moment(new Date()).format("YYYY-MM-DD");
 
     // Get notes for shown month
     async function getNotes() {
@@ -20,8 +24,7 @@ const CalendarScreen = (props) => {
         let date = null;
 
         if (selectedMonth == null) {
-            date = new Date();
-            date = moment(date).format("YYYY-MM-DD");
+            date = now;
         } else {
             date = selectedMonth.dateString;
         }
@@ -78,16 +81,17 @@ const CalendarScreen = (props) => {
         <View style={styles.container}>
             <Header navigation={props.navigation} />
             <View style={styles.screen}>
+
                 <Calendar
                     style={styles.calendar}
                     theme={{
                         calendarBackground: "#EFF5E4",
                         arrowColor: "#9477B4",
                         textMonthFontFamily: "Montserrat",
-                        textMonthFontSize: 35
+                        textMonthFontSize: 30
                     }}
                     onDayPress={day => {
-                        console.log("Day selected: ", day);
+                        setSelectedDay(day.dateString);
                     }}
                     onMonthChange={month => {
                         selectedMonth = month;
@@ -96,6 +100,13 @@ const CalendarScreen = (props) => {
                     firstDay={1}
                     markedDates={markedDates}
                 />
+
+                {
+                    selectedDay == null ?
+                        <NoteSummary date={now} notes={notes} />
+                        : <NoteSummary date={selectedDay} notes={notes} />
+                }
+
             </View>
         </View>
     )
@@ -108,10 +119,13 @@ const styles = StyleSheet.create({
     },
     screen: {
         height: "100%",
-        backgroundColor: "#EFF5E4"
+        backgroundColor: "#EFF5E4",
+        justifyContent: "center",
+        paddingBottom: 200
     },
     calendar: {
-        marginTop: 5
+        marginTop: 5,
+        marginBottom: 20
     }
 });
 
