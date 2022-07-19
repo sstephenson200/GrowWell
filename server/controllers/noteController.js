@@ -1,5 +1,4 @@
 const moment = require("moment");
-const mongoose = require("mongoose");
 const { deleteImages } = require("../middleware/imageUpload");
 
 const { check, validationResult } = require('express-validator');
@@ -122,61 +121,18 @@ const createNote = async (request, response) => {
 }
 
 //Request to get all notes for a given plant
-const getNotesByPlant = async (request, response) => {
+const getNotes = async (request, response) => {
 
-    const { user_id, plant_id } = request.body;
+    const { user_id } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
-    }
+    const notes = await Note.find({ 'user_id': user_id });
 
-    const existingPlant = await Plant.findOne({ _id: plant_id });
-    if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
-    }
-
-    let getNotes = () => {
-        Note.aggregate([
-            {
-                $match: { "user_id": user_id }
-            },
-            {
-                $unwind: { path: "$Note" }
-            },
-            {
-                $lookup: {
-                    from: "Garden",
-                    localField: "_id",
-                    foreignField: "user_id",
-                    as: "gardenInfo"
-                }
-            },
-            {
-                $project: {
-                    items: {
-                        $filter: {
-                            input: "$gardenInfo",
-                            as: "garden",
-                            cond: { "garden.plot.plant_id": plant_id }
-                        }
-                    }
-                }
-            }
-        ])
-    }
-
-    // const gardens = await Garden.find({ 'user_id': user_id, 'plot.plant_id': plant_id });
-
-    // const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens } });
-
-    // const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens }, 'gardens.plot.plant_id': plant_id });
-
-    return response.status(200).json({ notes: getNotes });
+    return response.status(200).json({ notes: notes });
 }
 
 //Request to get all notes for a given plot
@@ -466,7 +422,7 @@ module.exports = {
     deleteNotesByGarden,
     deleteAllNotes,
     createNote,
-    getNotesByPlant,
+    getNotes,
     getNotesByPlot,
     getNotesByDate,
     getNotesByMonth,
