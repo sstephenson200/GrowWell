@@ -143,7 +143,7 @@ const getNotesByPlant = async (request, response) => {
 
     // const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens } });
 
-    const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens }, 'garden.plot.plant_id': plant_id });
+    const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens }, 'gardens.plot.plant_id': plant_id });
 
     return response.status(200).json({ notes: notes });
 }
