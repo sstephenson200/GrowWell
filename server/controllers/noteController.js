@@ -1,4 +1,5 @@
 const moment = require("moment");
+const mongoose = require("mongoose");
 const { deleteImages } = require("../middleware/imageUpload");
 
 const { check, validationResult } = require('express-validator');
@@ -139,13 +140,43 @@ const getNotesByPlant = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid plant_id." });
     }
 
-    const gardens = await Garden.find({ 'user_id': user_id, 'plot.plant_id': plant_id });
+    let getNotes = () => {
+        Note.aggregate([
+            {
+                $match: { "user_id": user_id }
+            },
+            {
+                $unwind: { path: "$Note" }
+            },
+            {
+                $lookup: {
+                    from: "Garden",
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as: "gardenInfo"
+                }
+            },
+            {
+                $project: {
+                    items: {
+                        $filter: {
+                            input: "$gardenInfo",
+                            as: "garden",
+                            cond: { "garden.plot.plant_id": plant_id }
+                        }
+                    }
+                }
+            }
+        ])
+    }
+
+    // const gardens = await Garden.find({ 'user_id': user_id, 'plot.plant_id': plant_id });
 
     // const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens } });
 
-    const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens }, 'gardens.plot.plant_id': plant_id });
+    // const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens }, 'gardens.plot.plant_id': plant_id });
 
-    return response.status(200).json({ notes: notes });
+    return response.status(200).json({ notes: getNotes });
 }
 
 //Request to get all notes for a given plot
