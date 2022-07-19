@@ -139,11 +139,11 @@ const getNotesByPlant = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid plant_id." });
     }
 
-    // const gardens = await Garden.find({ 'user_id': user_id, 'plot.plant_id': plant_id });
+    const gardens = await Garden.find({ 'user_id': user_id, 'plot.plant_id': plant_id });
 
     // const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens } });
 
-    const notes = await Note.find({ 'user_id': user_id, 'garden.plot.plant_id': plant_id });
+    const notes = await Note.find({ 'user_id': user_id, 'garden_id': { $in: gardens }, 'garden.plot.plant_id': plant_id });
 
     return response.status(200).json({ notes: notes });
 }
