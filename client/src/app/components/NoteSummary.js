@@ -33,9 +33,7 @@ const NoteSummary = (props) => {
                                 }}
                             />
 
-                            <TouchableOpacity style={styles.button} onPress={() => {
-                                alert("Ready to go to note")
-                            }}>
+                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Note", params: { date: date, notes: noteSummaries } })}                            >
                                 <Text style={styles.buttonText}>VIEW</Text>
                             </TouchableOpacity>
 

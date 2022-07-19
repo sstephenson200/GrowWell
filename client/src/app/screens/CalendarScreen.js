@@ -103,8 +103,8 @@ const CalendarScreen = (props) => {
 
                 {
                     selectedDay == null ?
-                        <NoteSummary date={now} notes={notes} />
-                        : <NoteSummary date={selectedDay} notes={notes} />
+                        <NoteSummary date={now} notes={notes} navigation={props.navigation} />
+                        : <NoteSummary date={selectedDay} notes={notes} navigation={props.navigation} />
                 }
 
             </View>

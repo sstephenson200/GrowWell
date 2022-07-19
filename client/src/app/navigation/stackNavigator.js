@@ -4,6 +4,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import PlantScreen from "../screens/PlantScreen";
 import CreateGardenScreen from "../screens/CreateGardenScreen";
 import PlotScreen from "../screens/PlotScreen";
+import NoteScreen from '../screens/NoteScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,11 @@ const StackNavigator = () => {
             <Stack.Screen
                 name="Plot"
                 component={PlotScreen}
+            />
+
+            <Stack.Screen
+                name="Note"
+                component={NoteScreen}
             />
 
         </Stack.Navigator>

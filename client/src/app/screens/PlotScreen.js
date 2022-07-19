@@ -123,7 +123,7 @@ const PlotScreen = (props) => {
         } else {
             getPlants();
         }
-    }, []);
+    }, [props]);
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
