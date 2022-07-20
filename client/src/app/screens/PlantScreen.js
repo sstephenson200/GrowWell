@@ -8,6 +8,7 @@ import ImageSelect from "../components/SearchableImages";
 import Dropdown from "../components/Dropdown";
 import CareRequirementsTable from '../components/CareRequirementsTable';
 import Infographic from '../components/MonthlyPlantData';
+import NoteCard from '../components/NoteCard';
 
 const PlantScreen = (props) => {
 
@@ -21,9 +22,11 @@ const PlantScreen = (props) => {
     const plots = [{ label: "Plot 1", value: 1 }, { label: "Plot 2", value: 2 }, { label: "Plot 1", value: 3 }];
 
     const [plant, setPlant] = useState([]);
+    const [notes, setNotes] = useState([]);
 
     const getPlantData = async () => {
         let plantData = await getPlant();
+        getNotes();
         await getImages(plantData);
     }
 
@@ -72,6 +75,63 @@ const PlantScreen = (props) => {
                 setPlant(plantData);
             }
         }
+    }
+
+    // Get notes for shown month
+    async function getNotes() {
+
+        try {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", {
+                "user_id": "62cec6b63dd3dfcf2a4a6185",
+                "plant_id": plant_id
+            }, { responseType: 'json' });
+
+            let status = response.status;
+
+            if (status == 200) {
+                let allNotes = response.data.notes;
+
+                filterNotes(allNotes);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Get notes for shown month
+    async function filterNotes(notes) {
+
+        let filteredData = [];
+
+        for (let i = 0; i < notes.length; i++) {
+            let plot_number = notes[i].plot_number;
+            let garden_id = notes[i].garden_id
+
+            if (garden_id !== null) {
+                try {
+                    const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
+                        "garden_id": garden_id
+                    }, { responseType: 'json' });
+
+                    let status = response.status;
+
+                    if (status == 200) {
+                        let plot = response.data.garden.plot[plot_number];
+                        if (plot.plant_id === plant_id) {
+                            filteredData.push(
+                                <NoteCard key={[i]} note={notes[i]} />
+                            )
+                        }
+                    }
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+        }
+        setNotes(filteredData);
     }
 
     useEffect(() => {
@@ -212,7 +272,18 @@ const PlantScreen = (props) => {
                     incompatible_plant={plant.incompatible_plant}
                 />
 
-                <Text style={styles.subtitle}>{plant.name} Notes</Text>
+                {
+                    notes.length !== 0 ?
+                        <View>
+                            <Text style={styles.subtitle}>{plant.name} Notes</Text>
+
+                            <View style={styles.cards}>
+                                {notes}
+                            </View>
+
+                        </View>
+                        : null
+                }
 
             </ScrollView >
 
@@ -335,6 +406,9 @@ const styles = StyleSheet.create({
     },
     infographic: {
         paddingLeft: 10
+    },
+    cards: {
+        paddingVertical: 10
     }
 });
 
