@@ -68,7 +68,7 @@ const getAllGardens = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const gardens = await Garden.find({ "user_id": user_id }).select("name");
+    const gardens = await Garden.find({ "user_id": user_id });
 
     return response.status(200).json({ gardens: gardens });
 }
