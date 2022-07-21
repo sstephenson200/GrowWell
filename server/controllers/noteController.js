@@ -52,7 +52,7 @@ async function deleteAllNotes(user_id) {
 //Request to create a new note
 const createNote = async (request, response) => {
 
-    const parsedReq = JSON.parse(request.body.note);
+    const parsedReq = request.body.note;
 
     const { user_id, title, description, garden_id, plot_number } = parsedReq;
     const date = Date.now();
@@ -101,9 +101,11 @@ const createNote = async (request, response) => {
 
     //Get image_id array
     const image_id = [];
-    for (let i = 0; i < request.files.length; i++) {
-        const id = request.files[i].id;
-        image_id.push(id);
+    if (request.files !== undefined) {
+        for (let i = 0; i < request.files.length; i++) {
+            const id = request.files[i].id;
+            image_id.push(id);
+        }
     }
 
     try {
