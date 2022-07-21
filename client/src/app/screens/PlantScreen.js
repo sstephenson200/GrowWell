@@ -275,7 +275,7 @@ const PlantScreen = (props) => {
                 {
                     notes.length !== 0 ?
                         <View>
-                            <Text style={styles.subtitle}>{plant.name} Notes</Text>
+                            <Text style={styles.cardsTitle}>{plant.name} Notes</Text>
 
                             <View style={styles.cards}>
                                 {notes}
@@ -405,6 +405,12 @@ const styles = StyleSheet.create({
         width: 100
     },
     infographic: {
+        paddingLeft: 10
+    },
+    cardsTitle: {
+        fontSize: 25,
+        fontFamily: "Montserrat",
+        color: "black",
         paddingLeft: 10
     },
     cards: {

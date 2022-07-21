@@ -33,7 +33,7 @@ const Dropdown = (props) => {
 
     useEffect(() => {
         updateItems(data)
-    }, [props.gardens, props.plants]);
+    }, [props]);
 
     if (props.styling == "largeDropdown") {
         return (

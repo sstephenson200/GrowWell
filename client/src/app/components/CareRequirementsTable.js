@@ -111,7 +111,7 @@ function formatSpacing(array) {
 const CareRequirementsTable = (props) => {
 
     return (
-        <View>
+        <View style={styles.table}>
             <DataTable>
 
                 {
@@ -256,6 +256,9 @@ const CareRequirementsTable = (props) => {
 }
 
 const styles = StyleSheet.create({
+    table: {
+        paddingBottom: 10
+    },
     row: {
         width: 180,
         justifyContent: "center"
