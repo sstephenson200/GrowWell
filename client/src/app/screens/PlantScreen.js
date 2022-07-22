@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
+import { unescape } from 'underscore';
 
 import Header from '../components/Header';
 import ImageSelect from "../components/SearchableImages";
@@ -19,14 +20,22 @@ const PlantScreen = (props) => {
     let photo2 = null;
     let photo3 = null;
 
-    const plots = [{ label: "Plot 1", value: 1 }, { label: "Plot 2", value: 2 }, { label: "Plot 1", value: 3 }];
-
     const [plant, setPlant] = useState([]);
     const [notes, setNotes] = useState([]);
+    const [plots, setPlots] = useState([]);
+    const [selectedPlot, setSelectedPlot] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    //Function to reset state when leaving the page
+    function clearState() {
+        setErrorMessage("");
+        setSelectedPlot(null);
+    }
 
     const getPlantData = async () => {
         let plantData = await getPlant();
         getNotes();
+        getPlots();
         await getImages(plantData);
     }
 
@@ -74,6 +83,46 @@ const PlantScreen = (props) => {
             if (updatedPlantData[0].photo.length === plantData.image.length) {
                 setPlant(plantData);
             }
+        }
+    }
+
+    //Function to get garden names and plot numbers for plot selection dropdown
+    async function getPlots() {
+        try {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
+                "user_id": "62cec6b63dd3dfcf2a4a6185"
+            }, { responseType: 'json' });
+
+            let status = response.status;
+
+            if (status == 200) {
+                let userGardens = response.data.gardens;
+                let plotLabels = [];
+
+                if (userGardens !== null) {
+                    userGardens.forEach((garden) => {
+                        let name = garden.name;
+                        name = unescape(name);
+                        let garden_id = garden._id;
+
+                        for (let i = 0; i < garden.plot.length; i++) {
+                            //Prevent filled plots being shown
+                            if (garden.plot[i].plant_id == null) {
+                                let plot_number = garden.plot[i].plot_number;
+                                let displayedPlotNumber = plot_number + 1;
+                                let label = name + ": Plot " + displayedPlotNumber;
+                                let value = garden_id + ":" + plot_number;
+                                let entry = { label: label, value: value };
+                                plotLabels.push(entry);
+                            }
+                        }
+                    });
+                }
+                setPlots(plotLabels);
+            }
+
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -132,6 +181,37 @@ const PlantScreen = (props) => {
 
         }
         setNotes(filteredData);
+    }
+
+    //Add plant to garden plot
+    const addPlantToPlot = async () => {
+
+        if (selectedPlot !== null) {
+            let gardenData = selectedPlot.split(":");
+            let garden_id = gardenData[0];
+            let plot_number = gardenData[1];
+
+            try {
+
+                let response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
+                    "plant_id": plant_id,
+                    "plot_number": plot_number,
+                    "garden_id": garden_id
+                }, { responseType: 'json' });
+
+                let status = response.status;
+
+                if (status == 200) {
+                    clearState();
+                    props.navigation.navigate("Garden");
+                } else {
+                    setErrorMessage(response.data.errorMessage);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
     }
 
     useEffect(() => {
@@ -201,9 +281,15 @@ const PlantScreen = (props) => {
 
                 <Text style={styles.subtitle}>Add To Garden</Text>
 
-                <Dropdown plots={plots} placeholder="Select Plot" styling="largeDropdown" />
+                {
+                    errorMessage !== "" ?
+                        <Text style={styles.error}>{errorMessage}</Text>
+                        : null
+                }
 
-                <TouchableOpacity style={styles.button} onPress={() => alert("Ready to add plant to garden.")}>
+                <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" styling="largeDropdown" />
+
+                <TouchableOpacity style={styles.button} onPress={() => addPlantToPlot()}>
                     <Text style={styles.buttonText}>ADD PLANT</Text>
                 </TouchableOpacity>
 
@@ -360,6 +446,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         textAlign: "justify",
         fontSize: 15
+    },
+    error: {
+        color: "red",
+        textAlign: "center",
+        fontWeight: "bold"
     },
     plantPhotos: {
         flexDirection: "row",

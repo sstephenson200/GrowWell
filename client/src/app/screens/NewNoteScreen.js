@@ -23,6 +23,7 @@ const NewNoteScreen = (props) => {
         setSelectedPlot(null);
     }
 
+    //Function to get garden names and plot numbers for plot selection dropdown
     async function getPlots() {
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
@@ -146,7 +147,7 @@ const NewNoteScreen = (props) => {
                     onChangeText={setDescription}
                 />
 
-                <TouchableOpacity style={styles.addPhotosButton} onPress={async () => alert("Ready to add photo!")}>
+                <TouchableOpacity style={styles.addPhotosButton} onPress={async () => alert("Image Picker")}>
                     <Text style={styles.buttonText}>ADD PHOTOS</Text>
                 </TouchableOpacity>
 
@@ -220,8 +221,8 @@ const styles = StyleSheet.create({
     },
     addPhotosButton: {
         backgroundColor: "#9477B4",
-        height: 40,
-        width: 120,
+        height: 45,
+        width: 130,
         borderRadius: 8,
         alignItems: "center",
         justifyContent: "center",
@@ -236,8 +237,8 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "#9477B4",
-        height: 40,
-        width: 100,
+        height: 45,
+        width: 110,
         borderRadius: 8,
         alignItems: "center",
         justifyContent: "center",
@@ -245,8 +246,8 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         backgroundColor: "red",
-        height: 40,
-        width: 100,
+        height: 45,
+        width: 110,
         borderRadius: 8,
         alignItems: "center",
         justifyContent: "center",
