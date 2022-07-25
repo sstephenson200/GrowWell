@@ -20,7 +20,7 @@ router.post("/createAlarm", [
         .isInt({ min: 1 }).withMessage("Repeat schedule must be greater than 0 days."),
 ], alarmController.createAlarm);
 
-router.get("/getAllAlarms", [
+router.post("/getAllAlarms", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),
 ], alarmController.getAllAlarms);
