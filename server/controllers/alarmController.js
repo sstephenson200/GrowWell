@@ -57,6 +57,10 @@ const createAlarm = async (request, response) => {
         }
     }
 
+    if (!alarmValidator.checkValidDate(due_date)) {
+        return response.status(200).json({ errorMessage: "Invalid due_date." });
+    }
+
     if (!alarmValidator.checkDateInFuture(due_date)) {
         return response.status(200).json({ errorMessage: "Date must be in the future." });
     }

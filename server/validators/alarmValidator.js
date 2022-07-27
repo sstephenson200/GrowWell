@@ -5,6 +5,14 @@ function checkDateInFuture(date) {
     }
 }
 
+//Check if input is a Date
+function checkValidDate(date) {
+    if (date instanceof Date) {
+        return true;
+    }
+}
+
 module.exports = {
     checkDateInFuture,
+    checkValidDate
 }
