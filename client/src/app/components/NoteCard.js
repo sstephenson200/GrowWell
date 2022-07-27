@@ -21,12 +21,6 @@ const NoteCard = (props) => {
     let garden_id = props.note.garden_id;
     let plot_number = props.note.plot_number;
 
-    // let images = [
-    //     // require("../assets/images/logo.png"),
-    //     // require("../assets/images/plant_icons/Basil.png"),
-    //     // require("../assets/images/plant_icons/Carrot.png")
-    // ];
-
     async function getGarden() {
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {

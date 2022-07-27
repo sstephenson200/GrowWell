@@ -118,7 +118,7 @@ const NewNoteScreen = (props) => {
             <Header navigation={props.navigation} />
             <ScrollView style={styles.screen}>
 
-                <Text style={styles.title}>New Entry</Text>
+                <Text style={styles.title}>New Note</Text>
 
                 {
                     errorMessage !== "" ?
