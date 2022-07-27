@@ -13,8 +13,7 @@ router.post("/createAlarm", [
         .isLength({ min: 1, max: 30 }).withMessage("Title must be between 1 and 30 characters.")
         .escape(),
     check('due_date')
-        .not().isEmpty().withMessage("Due_date required.")
-        .isDate().withMessage("Invalid date."),
+        .not().isEmpty().withMessage("Due_date required."),
     check('schedule')
         .optional()
         .isInt({ min: 1 }).withMessage("Repeat schedule must be greater than 0 days."),
