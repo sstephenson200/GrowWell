@@ -7,7 +7,7 @@ function checkDateInFuture(date) {
 
 //Check if input is a Date
 function checkValidDate(date) {
-    if (date instanceof Date) {
+    if (Date.parse(date)) {
         return true;
     }
 }
