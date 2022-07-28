@@ -7,7 +7,9 @@ const alarmSchema = new mongoose.Schema({
     due_date: { type: Date, required: true },
     schedule: { type: Number, default: null },
     garden_id: { type: mongoose.Schema.Types.ObjectId, ref: "garden", default: null },
-    plot_number: { type: Number, default: null }
+    plot_number: { type: Number, default: null },
+    completion_status: { type: Boolean, default: false },
+    active_status: { type: Boolean, default: true }
 });
 
 const Alarm = mongoose.model("alarm", alarmSchema);
