@@ -93,7 +93,7 @@ const createAlarm = async (request, response) => {
         });
         const savedAlarm = await newAlarm.save();
 
-        return response.status(200).json({ message: "Alarm created successfully." });
+        return response.status(200).json({ message: "Alarm created successfully.", alarm: savedAlarm });
 
     } catch (error) {
         console.error(error);
