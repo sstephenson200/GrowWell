@@ -13,6 +13,9 @@ router.post("/createAlarm", [
         .escape(),
     check('due_date')
         .not().isEmpty().withMessage("Due_date required."),
+    check('isParent')
+        .optional()
+        .isBoolean().withMessage("isParent must be true or false."),
 ], alarmController.createAlarm);
 
 router.post("/getAllAlarms", [
