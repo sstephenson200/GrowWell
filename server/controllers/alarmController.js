@@ -344,9 +344,9 @@ const updateCompletionStatus = async (request, response) => {
     }
 
     try {
-        const alarm = await Alarm.updateOne(existingAlarm, { 'completion_status': completion_status });
+        await Alarm.updateOne(existingAlarm, { 'completion_status': completion_status });
 
-        return response.status(200).json({ message: "Alarm completion status updated successfully.", alarm: alarm });
+        return response.status(200).json({ message: "Alarm completion status updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -382,9 +382,9 @@ const updateActiveStatus = async (request, response) => {
     }
 
     try {
-        const alarm = await Alarm.updateOne(existingAlarm, { 'active_status': active_status });
+        await Alarm.updateOne(existingAlarm, { 'active_status': active_status });
 
-        return response.status(200).json({ message: "Alarm active status updated successfully.", alarm: alarm });
+        return response.status(200).json({ message: "Alarm active status updated successfully." });
 
     } catch (error) {
         console.error(error);
