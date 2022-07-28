@@ -163,7 +163,7 @@ const deleteAlarm = async (request, response) => {
     }
 }
 
-//Request to delete an alarm
+//Request to delete all alarms linked to a given parent alarm
 const deleteAlarmsByParent = async (request, response) => {
 
     const { parent } = request.body;
@@ -316,6 +316,82 @@ const updateGardenPlot = async (request, response) => {
     }
 }
 
+//Request to update an alarm's completion status
+const updateCompletionStatus = async (request, response) => {
+
+    const { alarm_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(alarm_id)) {
+        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
+    }
+
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
+    if (!existingAlarm) {
+        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
+    }
+
+    let completion_status = null;
+
+    if (existingAlarm.completion_status == true) {
+        completion_status = false;
+    } else {
+        completion_status = true;
+    }
+
+    try {
+        await Alarm.updateOne(existingAlarm, { 'completion_status': completion_status });
+
+        return response.status(200).json({ message: "Alarm completion status updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update an alarm's active status
+const updateActiveStatus = async (request, response) => {
+
+    const { alarm_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(alarm_id)) {
+        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
+    }
+
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
+    if (!existingAlarm) {
+        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
+    }
+
+    let active_status = null;
+
+    if (existingAlarm.active_status == true) {
+        active_status = false;
+    } else {
+        active_status = true;
+    }
+
+    try {
+        await Alarm.updateOne(existingAlarm, { 'active_status': active_status });
+
+        return response.status(200).json({ message: "Alarm active status updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
 module.exports = {
     deleteAlarmsByGarden,
     deleteAllAlarms,
@@ -326,5 +402,7 @@ module.exports = {
     deleteAlarmsByParent,
     updateTitle,
     updateDueDate,
-    updateGardenPlot
+    updateGardenPlot,
+    updateCompletionStatus,
+    updateActiveStatus
 }

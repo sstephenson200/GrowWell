@@ -64,4 +64,14 @@ router.put("/updateGardenPlot", [
         .isInt().withMessage("Plot_number must be an integer value."),
 ], alarmController.updateGardenPlot);
 
+router.put("/updateCompletionStatus", [
+    check('alarm_id')
+        .not().isEmpty().withMessage("Alarm_id required.")
+], alarmController.updateCompletionStatus);
+
+router.put("/updateActiveStatus", [
+    check('alarm_id')
+        .not().isEmpty().withMessage("Alarm_id required.")
+], alarmController.updateActiveStatus);
+
 module.exports = router;
