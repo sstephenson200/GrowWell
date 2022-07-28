@@ -1,7 +1,6 @@
 const router = require("express").Router();
-const moment = require("moment");
 
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 
 const alarmController = require("../controllers/alarmController");
 
@@ -14,9 +13,6 @@ router.post("/createAlarm", [
         .escape(),
     check('due_date')
         .not().isEmpty().withMessage("Due_date required."),
-    check('schedule')
-        .optional()
-        .isInt({ min: 1 }).withMessage("Repeat schedule must be greater than 0 days."),
 ], alarmController.createAlarm);
 
 router.post("/getAllAlarms", [
@@ -34,6 +30,11 @@ router.delete("/deleteAlarm", [
         .not().isEmpty().withMessage("Alarm_id required."),
 ], alarmController.deleteAlarm);
 
+router.delete("/deleteAlarmsByParent", [
+    check('parent')
+        .not().isEmpty().withMessage("Parent required."),
+], alarmController.deleteAlarmsByParent);
+
 router.put("/updateTitle", [
     check('alarm_id')
         .not().isEmpty().withMessage("Alarm_id required."),
@@ -50,14 +51,6 @@ router.put("/updateDueDate", [
         .not().isEmpty().withMessage("Due_date required.")
         .isDate().withMessage("Invalid date."),
 ], alarmController.updateDueDate);
-
-router.put("/updateSchedule", [
-    check('alarm_id')
-        .not().isEmpty().withMessage("Alarm_id required."),
-    check('schedule')
-        .optional()
-        .isInt({ min: 1 }).withMessage("Repeat schedule must be greater than 0 days."),
-], alarmController.updateSchedule);
 
 router.put("/updateGardenPlot", [
     check('alarm_id')

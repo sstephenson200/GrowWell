@@ -1,5 +1,5 @@
 const validator = require("../validators/validator");
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const alarmValidator = require("../validators/alarmValidator");
 const gardenValidator = require("../validators/gardenValidator");
 
@@ -33,7 +33,7 @@ async function deleteAllAlarms(user_id) {
 //Request to create new alarm record
 const createAlarm = async (request, response) => {
 
-    const { user_id, title, due_date, schedule, garden_id, plot_number } = request.body;
+    const { user_id, title, due_date, garden_id, plot_number, parent } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -76,9 +76,20 @@ const createAlarm = async (request, response) => {
         }
     }
 
+    if (parent != null) {
+        if (!validator.checkValidId(parent)) {
+            return response.status(200).json({ errorMessage: "Invalid parent." });
+        }
+
+        let existingAlarm = await Alarm.findOne({ _id: parent, 'user._id': user_id });
+        if (!existingAlarm) {
+            return response.status(200).json({ errorMessage: "Invalid parent." });
+        }
+    }
+
     try {
         const newAlarm = new Alarm({
-            user_id, title, due_date, schedule, garden_id, plot_number
+            user_id, title, due_date, garden_id, plot_number, parent
         });
         const savedAlarm = await newAlarm.save();
 
@@ -145,6 +156,27 @@ const deleteAlarm = async (request, response) => {
         await Alarm.findOneAndDelete({ _id: alarm_id });
 
         return response.status(200).json({ message: "Alarm deleted successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to delete an alarm
+const deleteAlarmsByParent = async (request, response) => {
+
+    const { parent } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    try {
+        await Alarm.deleteMany({ 'parent': parent });
+
+        return response.status(200).json({ message: "Alarms deleted successfully." });
 
     } catch (error) {
         console.error(error);
@@ -224,44 +256,6 @@ const updateDueDate = async (request, response) => {
     }
 }
 
-//Request to update an alarm's repeat schedule
-const updateSchedule = async (request, response) => {
-
-    let { alarm_id, schedule } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(alarm_id)) {
-        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
-    }
-
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
-    if (!existingAlarm) {
-        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
-    }
-
-    if (!schedule) {
-        schedule = null;
-    }
-
-    if (schedule == existingAlarm.schedule) {
-        return response.status(200).json({ errorMessage: "No change detected." });
-    }
-
-    try {
-        await Alarm.updateOne(existingAlarm, { 'schedule': schedule });
-
-        return response.status(200).json({ message: "Alarm schedule updated successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
 //Request to update an alarm's related garden plot
 const updateGardenPlot = async (request, response) => {
 
@@ -329,8 +323,8 @@ module.exports = {
     getAllAlarms,
     getAlarmByID,
     deleteAlarm,
+    deleteAlarmsByParent,
     updateTitle,
     updateDueDate,
-    updateSchedule,
     updateGardenPlot
 }
