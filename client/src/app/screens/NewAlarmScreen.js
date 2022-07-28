@@ -21,6 +21,7 @@ const NewAlarmScreen = (props) => {
     const [selectedPlot, setSelectedPlot] = useState(null);
     const [checked, setChecked] = useState(false);
     const [schedule, setSchedule] = useState(null);
+    const [numRepeats, setNumRepeats] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
     //Function to reset state when leaving the page
@@ -28,7 +29,9 @@ const NewAlarmScreen = (props) => {
         setDate(new Date());
         setTitle("");
         setSelectedPlot(null);
+        setChecked(false);
         setSchedule(null);
+        setNumRepeats(null);
         setErrorMessage("");
     }
 
@@ -69,9 +72,10 @@ const NewAlarmScreen = (props) => {
         }
     }
 
-    async function createAlarm(props, title, date, schedule, selectedPlot) {
+    async function createAlarm(title, date, schedule, numRepeats, parent, selectedPlot) {
 
         date = moment(date).format();
+        let error = false;
 
         let body = {
             "user_id": "62cec6b63dd3dfcf2a4a6185",
@@ -79,15 +83,41 @@ const NewAlarmScreen = (props) => {
             "due_date": date,
         };
 
-        if (schedule !== null) {
-            body.schedule = schedule;
+        if (parent !== null) {
+            body.parent = parent;
         }
 
-        if (selectedPlot !== null) {
+        if (schedule !== null) {
+            if (schedule < 1) {
+                setErrorMessage("Schedule must be greater than 0 days.");
+                error = true;
+                return;
+            }
+            if (numRepeats == null) {
+                setErrorMessage("Number of repeats must be provided with schedule.");
+                error = true;
+                return;
+            }
+            if (numRepeats < 1) {
+                setErrorMessage("Number of repeats must be greater than 0.");
+                error = true;
+                return;
+            }
+        } else if (schedule == null && numRepeats !== null) {
+            setErrorMessage("Schedule must be provided with number of repeats.");
+            error = true;
+            return;
+        }
+
+        if (error == true) {
+            return;
+        }
+
+        if (selectedPlot !== undefined && selectedPlot !== null) {
             let gardenData = selectedPlot.split(":");
             let garden_id = gardenData[0];
             let plot_number = gardenData[1];
-            body.garden_id = garden_id
+            body.garden_id = garden_id;
             body.plot_number = plot_number;
         }
 
@@ -100,8 +130,14 @@ const NewAlarmScreen = (props) => {
                 if (response.data.errorMessage !== undefined) {
                     setErrorMessage(response.data.errorMessage);
                 } else {
-                    clearState();
-                    props.navigation.navigate("Alarms");
+
+                    //Create repeat alarms
+                    if (schedule !== null && numRepeats !== null && numRepeats > 0) {
+                        let newDate = moment(date).add(schedule, 'd');
+                        let newNumRepeats = numRepeats - 1;
+                        let newParent = response.data.alarm._id;
+                        await createAlarm(title, newDate, schedule, newNumRepeats, newParent, selectedPlot);
+                    }
                 }
             }
 
@@ -165,13 +201,22 @@ const NewAlarmScreen = (props) => {
                     checked ?
 
                         <View style={styles.customRepeat}>
-                            <Text style={styles.subtitle}>Days To Repeat</Text>
+                            <Text style={styles.subtitle}>Days Between Repeats</Text>
                             <TextInput
                                 style={styles.textInput}
                                 placeholder="3"
                                 keyboardType="numeric"
                                 value={schedule}
                                 onChangeText={setSchedule}
+                            />
+
+                            <Text style={styles.subtitle}>Number of Repeats</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder="5"
+                                keyboardType="numeric"
+                                value={numRepeats}
+                                onChangeText={setNumRepeats}
                             />
                         </View>
 
@@ -187,7 +232,11 @@ const NewAlarmScreen = (props) => {
                         <Text style={styles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={async () => await createAlarm(props, title, date, schedule, selectedPlot)}>
+                    <TouchableOpacity style={styles.button} onPress={async () => {
+                        await createAlarm(title, date, schedule, numRepeats, null, selectedPlot);
+                        clearState();
+                        props.navigation.navigate("Alarms");
+                    }} >
                         <Text style={styles.buttonText}>SAVE</Text>
                     </TouchableOpacity>
 
@@ -201,12 +250,12 @@ const NewAlarmScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginBottom: 85
     },
     screen: {
         height: "100%",
-        backgroundColor: "#EFF5E4",
-        paddingBottom: 180
+        backgroundColor: "#EFF5E4"
     },
     title: {
         textAlign: "center",
@@ -243,7 +292,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flex: 2,
         justifyContent: "center",
-        marginTop: 5
+        marginTop: 5,
+        marginBottom: 10
     },
     button: {
         backgroundColor: "#9477B4",
