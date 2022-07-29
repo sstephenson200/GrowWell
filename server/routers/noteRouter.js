@@ -12,14 +12,6 @@ router.post("/getNotes", [
         .not().isEmpty().withMessage("User_id required."),
 ], noteController.getNotes);
 
-router.post("/getNotesByPlot", [
-    check('garden_id')
-        .not().isEmpty().withMessage("Garden_id required."),
-    check('plot_number')
-        .not().isEmpty().withMessage("Plot_number required.")
-        .isInt().withMessage("Plot_number must be an integer value."),
-], noteController.getNotesByPlot);
-
 router.get("/getNotesByDate", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),

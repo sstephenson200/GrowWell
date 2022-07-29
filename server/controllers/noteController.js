@@ -137,36 +137,6 @@ const getNotes = async (request, response) => {
     return response.status(200).json({ notes: notes });
 }
 
-//Request to get all notes for a given plot
-const getNotesByPlot = async (request, response) => {
-
-    const { garden_id, plot_number } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    if (!validator.checkValidId(garden_id)) {
-        return response.status(200).json({ errorMessage: "Invalid garden_id." });
-    }
-
-    const existingGarden = await Garden.findOne({ _id: garden_id });
-    if (!existingGarden) {
-        return response.status(200).json({ errorMessage: "Invalid garden_id." });
-    }
-
-    const gardenSize = existingGarden.plot.length;
-
-    if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-        return response.status(200).json({ errorMessage: "Invalid plot_number." });
-    }
-
-    const notes = await Note.find({ 'garden_id': garden_id, 'garden.plot.plot_number': plot_number });
-
-    return response.status(200).json({ notes: notes });
-}
-
 //Request to get all notes for a given date
 const getNotesByDate = async (request, response) => {
 
@@ -425,7 +395,6 @@ module.exports = {
     deleteAllNotes,
     createNote,
     getNotes,
-    getNotesByPlot,
     getNotesByDate,
     getNotesByMonth,
     deleteNote,
