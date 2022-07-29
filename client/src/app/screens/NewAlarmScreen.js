@@ -103,6 +103,11 @@ const NewAlarmScreen = (props) => {
                 error = true;
                 return;
             }
+
+            if (parent == null) {
+                body.isParent = true;
+            }
+
         } else if (schedule == null && numRepeats !== null) {
             setErrorMessage("Schedule must be provided with number of repeats.");
             error = true;
@@ -133,10 +138,13 @@ const NewAlarmScreen = (props) => {
 
                     //Create repeat alarms
                     if (schedule !== null && numRepeats !== null && numRepeats > 0) {
+
+                        if (parent == null) {
+                            parent = response.data.alarm._id;
+                        }
                         let newDate = moment(date).add(schedule, 'd');
                         let newNumRepeats = numRepeats - 1;
-                        let newParent = response.data.alarm._id;
-                        await createAlarm(title, newDate, schedule, newNumRepeats, newParent, selectedPlot);
+                        await createAlarm(title, newDate, schedule, newNumRepeats, parent, selectedPlot);
                     }
                 }
             }
