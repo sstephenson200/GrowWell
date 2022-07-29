@@ -6,6 +6,7 @@ import CreateGardenScreen from "../screens/CreateGardenScreen";
 import PlotScreen from "../screens/PlotScreen";
 import NoteScreen from '../screens/NoteScreen';
 import NewAlarmScreen from '../screens/NewAlarmScreen';
+import LoginScreen from "../screens/LoginScreen";
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,11 @@ const StackNavigator = () => {
             <Stack.Screen
                 name="NewAlarm"
                 component={NewAlarmScreen}
+            />
+
+            <Stack.Screen
+                name="Login"
+                component={LoginScreen}
             />
 
         </Stack.Navigator>
