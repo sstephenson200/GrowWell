@@ -174,22 +174,11 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
+        alignSelf: "center",
         marginTop: 10
     },
     button: {
         backgroundColor: "#9477B4",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
         height: 40,
         width: 100,
         borderRadius: 8,

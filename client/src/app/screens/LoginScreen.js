@@ -73,6 +73,12 @@ const LoginScreen = (props) => {
                     </TouchableOpacity>
                 </View>
 
+                <View style={styles.signUpOption}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "PasswordReset" })}>
+                        <Text style={styles.signUpLink}>Forgot your password?</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
 
             <Image style={styles.logo} source={require("../assets/images/logo.png")} />
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
         color: "white"
     },
     form: {
-        height: 400,
+        height: 450,
         width: "80%",
         alignSelf: "center",
         backgroundColor: "#EFF5E4",
@@ -154,22 +160,11 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
+        alignSelf: "center",
         marginTop: 10
     },
     button: {
         backgroundColor: "#9477B4",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
         height: 40,
         width: 100,
         borderRadius: 8,
