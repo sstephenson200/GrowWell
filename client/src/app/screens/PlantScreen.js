@@ -131,8 +131,7 @@ const PlantScreen = (props) => {
 
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185",
-                "plant_id": plant_id
+                "user_id": "62cec6b63dd3dfcf2a4a6185"
             }, { responseType: 'json' });
 
             let status = response.status;
@@ -155,7 +154,7 @@ const PlantScreen = (props) => {
 
         for (let i = 0; i < notes.length; i++) {
             let plot_number = notes[i].plot_number;
-            let garden_id = notes[i].garden_id
+            let garden_id = notes[i].garden_id;
 
             if (garden_id !== null) {
                 try {

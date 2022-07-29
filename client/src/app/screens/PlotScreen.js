@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import { unescape } from 'underscore';
 import axios from "axios";
@@ -7,6 +7,7 @@ import axios from "axios";
 import Header from '../components/Header';
 import ImageSelect from '../components/SearchableImages';
 import Dropdown from '../components/Dropdown';
+import NoteCard from '../components/NoteCard';
 
 //Method to sort plants array by name
 function sortPlants(props) {
@@ -25,6 +26,7 @@ const PlotScreen = (props) => {
     const [plantName, setPlantName] = useState(null);
     const [plants, setPlants] = useState([]);
     const [selectedPlant, setSelectedPlant] = useState(null);
+    const [notes, setNotes] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
 
     let plot = props.route.params.plot;
@@ -117,12 +119,68 @@ const PlotScreen = (props) => {
 
     }
 
+    // Get notes for shown month
+    async function getNotes() {
+
+        try {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", {
+                "user_id": "62cec6b63dd3dfcf2a4a6185"
+            }, { responseType: 'json' });
+
+            let status = response.status;
+
+            if (status == 200) {
+                let allNotes = response.data.notes;
+
+                filterNotes(allNotes);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Get notes for shown plot
+    async function filterNotes(notes) {
+
+        let filteredData = [];
+
+        for (let i = 0; i < notes.length; i++) {
+            let notePlotNumber = notes[i].plot_number;
+            let noteGardenID = notes[i].garden_id;
+
+            if (noteGardenID !== null) {
+                try {
+                    const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
+                        "garden_id": noteGardenID
+                    }, { responseType: 'json' });
+
+                    let status = response.status;
+
+                    if (status == 200) {
+                        if (plot.plot_number === notePlotNumber) {
+                            filteredData.push(
+                                <NoteCard key={[i]} note={notes[i]} />
+                            )
+                        }
+                    }
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+        }
+        setNotes(filteredData);
+    }
+
     useEffect(() => {
         if (plant_id !== null) {
             getPlantName();
         } else {
             getPlants();
         }
+        getNotes();
     }, [props]);
 
     const [loaded] = useFonts({
@@ -137,7 +195,7 @@ const PlotScreen = (props) => {
         <View style={styles.container}>
             <Header navigation={props.navigation} />
 
-            <View style={styles.screen}>
+            <ScrollView style={styles.screen}>
 
                 <Text style={styles.title}>Plot {plot_number}</Text>
                 <Text style={styles.subtitle}>{unescape(garden.name)}</Text>
@@ -159,6 +217,7 @@ const PlotScreen = (props) => {
                                         <Text style={styles.plantName}>{plantName}</Text>
                                     </View>
                                 </View>
+
 
                                 <View style={styles.titledData}>
                                     <Text style={styles.subtitle}>Date Planted</Text>
@@ -191,7 +250,20 @@ const PlotScreen = (props) => {
                         </View>
                 }
 
-            </View>
+                {
+                    notes.length !== 0 ?
+                        <View>
+                            <Text style={styles.cardsTitle}>Plot {plot_number} Notes</Text>
+
+                            <View style={styles.cards}>
+                                {notes}
+                            </View>
+
+                        </View>
+                        : null
+                }
+
+            </ScrollView>
 
         </View>
     )
@@ -200,7 +272,8 @@ const PlotScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginBottom: 85
     },
     screen: {
         height: "100%",
@@ -275,12 +348,20 @@ const styles = StyleSheet.create({
         alignItems: "center",
         alignSelf: "center",
         justifyContent: "center",
-        margin: 10,
-        marginBottom: 450
+        margin: 10
     },
     buttonText: {
         color: "white",
         fontSize: 18
+    },
+    cardsTitle: {
+        fontSize: 25,
+        fontFamily: "Montserrat",
+        color: "black",
+        paddingLeft: 10
+    },
+    cards: {
+        paddingVertical: 10
     }
 });
 
