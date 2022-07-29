@@ -12,7 +12,7 @@ router.post("/getNotes", [
         .not().isEmpty().withMessage("User_id required."),
 ], noteController.getNotes);
 
-router.get("/getNotesByPlot", [
+router.post("/getNotesByPlot", [
     check('garden_id')
         .not().isEmpty().withMessage("Garden_id required."),
     check('plot_number')
