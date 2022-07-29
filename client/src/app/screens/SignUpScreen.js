@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
-const LoginScreen = (props) => {
+const SignUpScreen = (props) => {
 
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
     const [loaded] = useFonts({
@@ -20,14 +22,16 @@ const LoginScreen = (props) => {
     //Function to reset state when leaving the page
     function clearState() {
         setEmail("");
+        setName("");
         setPassword("");
+        setPasswordConfirmation("");
         setErrorMessage("");
     }
 
-    //add login request
+    //add signup request
 
     return (
-        <View style={styles.screen}>
+        <ScrollView style={styles.screen}>
 
             <View style={styles.appTitle}>
                 <Text style={styles.appMainTitle}>Grow Well</Text>
@@ -35,12 +39,12 @@ const LoginScreen = (props) => {
             </View>
 
             <View style={styles.form}>
-                <Text style={styles.title}>Login</Text>
+                <Text style={styles.title}>Sign Up</Text>
 
-                <View style={styles.signUpOption}>
-                    <Text style={styles.signUpText}>Don't have an account?</Text>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "SignUp" })}>
-                        <Text style={styles.signUpLink}>Sign Up</Text>
+                <View style={styles.loginOption}>
+                    <Text style={styles.loginText}>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Login" })}>
+                        <Text style={styles.loginLink}>Login</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -58,6 +62,14 @@ const LoginScreen = (props) => {
                     onChangeText={setEmail}
                 />
 
+                <Text style={styles.subtitle}>Name</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Your Name"
+                    value={name}
+                    onChangeText={setName}
+                />
+
                 <Text style={styles.subtitle}>Password</Text>
                 <TextInput
                     style={styles.textInput}
@@ -67,9 +79,18 @@ const LoginScreen = (props) => {
                     onChangeText={setPassword}
                 />
 
+                <Text style={styles.subtitle}>Confirm Password</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    value={passwordConfirmation}
+                    onChangeText={setPasswordConfirmation}
+                />
+
                 <View style={styles.navigationButtons}>
-                    <TouchableOpacity style={styles.button} onPress={async () => alert("Ready to login")}>
-                        <Text style={styles.buttonText}>LOGIN</Text>
+                    <TouchableOpacity style={styles.button} onPress={async () => alert("Ready to sign up")}>
+                        <Text style={styles.buttonText}>SIGN UP</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -77,18 +98,17 @@ const LoginScreen = (props) => {
 
             <Image style={styles.logo} source={require("../assets/images/logo.png")} />
 
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     screen: {
         height: "100%",
-        backgroundColor: "#81BF63",
-        justifyContent: "center"
+        backgroundColor: "#81BF63"
     },
     appTitle: {
-        paddingVertical: 35
+        paddingVertical: 25
     },
     appMainTitle: {
         textAlign: "center",
@@ -103,7 +123,7 @@ const styles = StyleSheet.create({
         color: "white"
     },
     form: {
-        height: 400,
+        height: 600,
         width: "80%",
         alignSelf: "center",
         backgroundColor: "#EFF5E4",
@@ -111,16 +131,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "grey"
     },
-    signUpOption: {
+    loginOption: {
         paddingTop: 5,
         alignSelf: "center"
     },
-    signUpText: {
+    loginText: {
         paddingHorizontal: 2.5,
         fontSize: 15,
         textAlign: "center"
     },
-    signUpLink: {
+    loginLink: {
         paddingHorizontal: 2.5,
         fontSize: 15,
         color: "#9477B4",
@@ -185,8 +205,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: 100,
         height: 100,
-        marginVertical: 35
+        marginVertical: 25
     }
 });
 
-export default LoginScreen;
+export default SignUpScreen;

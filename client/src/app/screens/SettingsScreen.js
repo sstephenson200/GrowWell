@@ -14,6 +14,10 @@ const SettingsScreen = (props) => {
                     <Text style={styles.buttonText}>LOGIN</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "SignUp" })}>
+                    <Text style={styles.buttonText}>SIGN UP</Text>
+                </TouchableOpacity>
+
             </View>
         </View>
     )

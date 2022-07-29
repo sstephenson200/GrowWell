@@ -7,6 +7,7 @@ import PlotScreen from "../screens/PlotScreen";
 import NoteScreen from '../screens/NoteScreen';
 import NewAlarmScreen from '../screens/NewAlarmScreen';
 import LoginScreen from "../screens/LoginScreen";
+import SignUpScreen from '../screens/SignUpScreen';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,11 @@ const StackNavigator = () => {
             <Stack.Screen
                 name="Login"
                 component={LoginScreen}
+            />
+
+            <Stack.Screen
+                name="SignUp"
+                component={SignUpScreen}
             />
 
         </Stack.Navigator>

@@ -14,7 +14,7 @@ const getTabBarVisibility = (route) => {
     if (route.params !== undefined) {
         let screenName = route.params.screen;
 
-        if (screenName == "CreateGarden" || screenName == "Login") {
+        if (screenName == "CreateGarden" || screenName == "Login" || screenName == "SignUp") {
             return { display: "none" };
         }
     }
