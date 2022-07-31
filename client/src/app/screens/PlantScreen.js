@@ -343,6 +343,11 @@ const PlantScreen = (props) => {
                 <Text style={styles.subtitle}>Care Requirements</Text>
 
                 <CareRequirementsTable
+                    navigation={props.navigation}
+                    name={plant.name}
+                    sow_date={plant.sow_date}
+                    plant_date={plant.plant_date}
+                    harvest_date={plant.harvest_date}
                     spacing={plant.spacing}
                     sun_condition={plant.sun_condition}
                     soil_type={plant.soil_type}

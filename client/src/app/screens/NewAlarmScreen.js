@@ -14,6 +14,21 @@ const NewAlarmScreen = (props) => {
 
     let tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1);
+    let alarmTitle = null;
+    let alarmSchedule = null;
+    let alarmDuration = null;
+
+    if (props.route.params !== undefined) {
+        if (props.route.params.alarmTitle !== undefined) {
+            alarmTitle = props.route.params.alarmTitle
+        }
+        if (props.route.params.alarmSchedule !== undefined) {
+            alarmSchedule = props.route.params.alarmSchedule.toString();
+        }
+        if (props.route.params.alarmDuration !== undefined) {
+            alarmDuration = props.route.params.alarmDuration.toString();
+        }
+    }
 
     const [date, setDate] = useState(tomorrow);
     const [title, setTitle] = useState("");
@@ -37,6 +52,7 @@ const NewAlarmScreen = (props) => {
 
     //Function to get garden names and plot numbers for plot selection dropdown
     async function getPlots() {
+
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
                 "user_id": "62cec6b63dd3dfcf2a4a6185"
@@ -155,6 +171,21 @@ const NewAlarmScreen = (props) => {
     }
 
     useEffect(() => {
+
+        if (alarmTitle !== null) {
+            setTitle(alarmTitle);
+        }
+
+        if (alarmSchedule !== null) {
+            setChecked(true);
+            setSchedule(alarmSchedule);
+        }
+
+        if (alarmDuration !== null) {
+            setChecked(true);
+            setNumRepeats(alarmDuration);
+        }
+
         getPlots();
     }, []);
 
