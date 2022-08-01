@@ -174,7 +174,7 @@ const deleteAlarmsByParent = async (request, response) => {
     }
 
     try {
-        let removedAlarms = await Alarm.findMany({ 'parent': parent });
+        let removedAlarms = await Alarm.find({ 'parent': parent });
 
         await Alarm.deleteMany({ 'parent': parent });
 
