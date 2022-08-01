@@ -83,7 +83,7 @@ const PlantList = (props) => {
 
         if (searchQuery !== '') {
             if (!plant.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-                show = false;
+                return false;
             }
         }
 
@@ -101,7 +101,7 @@ const PlantList = (props) => {
                     case "Herb":
                     case "Vegetable":
                         if (!plantTypes.includes(plant.plant_type)) {
-                            show = false;
+                            return false;
                         }
                         break;
                     case "Sow":
@@ -120,7 +120,7 @@ const PlantList = (props) => {
                 }
 
                 if (show == false) {
-                    return show;
+                    return false;
                 }
             }
         }
