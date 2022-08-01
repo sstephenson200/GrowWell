@@ -9,11 +9,15 @@ import { Checkbox } from 'react-native-paper';
 import Header from '../components/Header';
 import DatePicker from '../components/DatePicker';
 import Dropdown from "../components/Dropdown";
+import { CancelNotification, ScheduleNotification } from "../notifications/PushNotification";
 
 const NewAlarmScreen = (props) => {
 
     let tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1);
+
+    let notificationID = null;
+
     let alarmTitle = null;
     let alarmSchedule = null;
     let alarmDuration = null;
@@ -74,7 +78,7 @@ const NewAlarmScreen = (props) => {
                             let plot_number = garden.plot[i].plot_number;
                             let displayedPlotNumber = plot_number + 1;
                             let label = name + ": Plot " + displayedPlotNumber;
-                            let value = garden_id + ":" + plot_number;
+                            let value = garden_id + ":" + plot_number + ":" + label;
                             let entry = { label: label, value: value };
                             plotLabels.push(entry);
                         }
@@ -142,6 +146,11 @@ const NewAlarmScreen = (props) => {
             body.plot_number = plot_number;
         }
 
+        notificationID = await ScheduleNotification(title, selectedPlot, date);
+        if (notificationID !== null) {
+            body.notification_id = notificationID;
+        }
+
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/alarm/createAlarm", body);
 
@@ -150,6 +159,7 @@ const NewAlarmScreen = (props) => {
             if (status == 200) {
                 if (response.data.errorMessage !== undefined) {
                     setErrorMessage(response.data.errorMessage);
+                    await CancelNotification(notificationID);
                 } else {
 
                     //Create repeat alarms

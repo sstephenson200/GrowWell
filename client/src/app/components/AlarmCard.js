@@ -6,9 +6,13 @@ import axios from 'axios';
 import { unescape } from 'underscore';
 import { Ionicons } from '@expo/vector-icons';
 
+import { ScheduleNotification, CancelNotification } from '../notifications/PushNotification';
+
 const AlarmCard = (props) => {
 
     let alarm_id = props.alarm.alarm_id;
+    let date = props.alarm.notificationDate;
+    let notification_id = props.alarm.notification_id;
     let time = props.alarm.time;
     let title = props.alarm.title;
     title = unescape(title);
@@ -28,6 +32,12 @@ const AlarmCard = (props) => {
     const toggleSwitch = () => {
         updateActiveStatus();
         setIsEnabled(previousState => !previousState);
+
+        if (isEnabled) {
+            CancelNotification(notification_id);
+        } else {
+            updateNotification();
+        }
     }
 
     const toggleModal = () => {
@@ -71,6 +81,12 @@ const AlarmCard = (props) => {
                     completion_status = true;
                 }
                 setComplete(completion_status);
+
+                if (completion_status == true && isEnabled) {
+                    toggleSwitch();
+                } else if (completion_status == false && !isEnabled) {
+                    toggleSwitch();
+                }
             }
         } catch (error) {
             console.log(error);
@@ -98,6 +114,8 @@ const AlarmCard = (props) => {
                 }
             }, { responseType: 'json' });
 
+            await CancelNotification(notification_id);
+
         } catch (error) {
             console.log(error);
         }
@@ -111,6 +129,17 @@ const AlarmCard = (props) => {
                     "parent": alarm
                 }
             }, { responseType: 'json' });
+
+            let status = response.status;
+
+            if (status == 200) {
+                if (response.data.alarms !== undefined && response.data.alarms.length !== 0) {
+                    for (let i = 0; i < response.data.alarms.length; i++) {
+                        let id = response.data.alarms[i].notification_id;
+                        await CancelNotification(id);
+                    }
+                }
+            }
 
         } catch (error) {
             console.log(error);
@@ -134,6 +163,30 @@ const AlarmCard = (props) => {
         }
 
         setModalVisible(false)
+    }
+
+    //Function to delete all recurring alarms
+    async function updateNotification() {
+
+        let selectedPlot = null;
+
+        if (gardenName !== null) {
+            let label = gardenName + ": Plot " + plot_number;
+            selectedPlot = garden_id + ":" + plot_number + ":" + label;
+        }
+
+        notification_id = await ScheduleNotification(title, selectedPlot, date);
+
+        try {
+            const response = await axios.put("https://grow-well-server.herokuapp.com/alarm/updateNotificationID", {
+                "alarm_id": alarm_id,
+                "notification_id": notification_id
+            },
+                { responseType: 'json' });
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {

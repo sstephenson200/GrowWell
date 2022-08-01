@@ -52,6 +52,8 @@ const AlarmScreen = (props) => {
         if (alarms.length !== 0) {
             for (let i = 0; i < alarms.length; i++) {
                 let alarm_id = alarms[i]._id;
+                let notificationDate = alarms[i].due_date;
+                let notification_id = alarms[i].notification_id;
                 let due_date = moment(alarms[i].due_date).format("YYYY-MM-DD");
                 let time = moment(alarms[i].due_date).format("h:mm A");
                 let title = alarms[i].title;
@@ -64,9 +66,9 @@ const AlarmScreen = (props) => {
 
                 if (garden_id !== null) {
                     let plot_number = alarms[i].plot_number;
-                    item = { alarm_id: alarm_id, time: time, title: title, garden_id: garden_id, plot_number: plot_number, isParent: isParent, parent: parent, completion_status: completion_status, active_status: active_status };
+                    item = { alarm_id: alarm_id, notificationDate: notificationDate, notification_id: notification_id, time: time, title: title, garden_id: garden_id, plot_number: plot_number, isParent: isParent, parent: parent, completion_status: completion_status, active_status: active_status };
                 } else {
-                    item = { alarm_id: alarm_id, time: time, title: title, isParent: isParent, parent: parent, completion_status: completion_status, active_status: active_status };
+                    item = { alarm_id: alarm_id, notificationDate: notificationDate, notification_id: notification_id, time: time, title: title, isParent: isParent, parent: parent, completion_status: completion_status, active_status: active_status };
                 }
 
                 if (alarmItems[due_date] !== undefined) {

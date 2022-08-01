@@ -34,7 +34,9 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-web": "0.17.7",
     "react-navigation": "^4.4.4",
-    "underscore": "^1.13.4"
+    "underscore": "^1.13.4",
+    "expo-notifications": "~0.15.4",
+    "expo-device": "~4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

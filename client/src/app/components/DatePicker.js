@@ -57,7 +57,7 @@ const DatePicker = (props) => {
                     mode={mode}
                     is24Hour={true}
                     onChange={onChange}
-                    minimumDate={tomorrow}
+                    minimumDate={new Date()}
                 />
             )}
         </View>

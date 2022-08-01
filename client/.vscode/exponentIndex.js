@@ -5,6 +5,6 @@ var { Component } = React;
 var ReactNative = require('c:/Users/sstep/Documents/Software Development/Dissertation Project/source_code/GrowWell/client/node_modules/react-native');
 var { AppRegistry } = ReactNative;
 AppRegistry.registerRunnable('main', function(appParameters) {
-    AppRegistry.runApplication('client', appParameters);
+    AppRegistry.runApplication('Grow Well Garden Manager', appParameters);
 });
 require('c:/Users/sstep/Documents/Software Development/Dissertation Project/source_code/GrowWell/client/index.js');
