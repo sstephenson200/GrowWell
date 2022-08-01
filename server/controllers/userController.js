@@ -63,6 +63,24 @@ const getUsername = async (request, response) => {
     return response.status(200).json({ username: username });
 }
 
+// Request to get a user by user_id
+const getUser = async (request, response) => {
+
+    const { user_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    const user = await User.findOne({ _id: user_id });
+    if (!user) {
+        return response.status(200).json({ errorMessage: "Invalid user_id." });
+    }
+
+    return response.status(200).json({ user: user });
+}
+
 // Request to log user into the system using email and password
 const login = async (request, response) => {
 
@@ -213,6 +231,7 @@ const updatePassword = async (request, response) => {
 module.exports = {
     createUser,
     getUsername,
+    getUser,
     login,
     deleteUser,
     updateUsername,

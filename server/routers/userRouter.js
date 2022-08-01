@@ -29,6 +29,11 @@ router.get("/getUsername", [
         .not().isEmpty().withMessage("User_id required."),
 ], userController.getUsername);
 
+router.get("/getUser", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+], userController.getUser);
+
 router.get("/login", [
     check('email')
         .not().isEmpty().withMessage("Email required.")
