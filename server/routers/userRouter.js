@@ -24,12 +24,12 @@ router.post("/createUser", [
         .trim(),
 ], userController.createUser);
 
-router.get("/getUsername", [
+router.post("/getUsername", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),
 ], userController.getUsername);
 
-router.get("/getUser", [
+router.post("/getUser", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),
 ], userController.getUser);
