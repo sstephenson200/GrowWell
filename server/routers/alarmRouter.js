@@ -79,4 +79,11 @@ router.put("/updateActiveStatus", [
         .not().isEmpty().withMessage("Alarm_id required.")
 ], alarmController.updateActiveStatus);
 
+router.put("/updateNotificationID", [
+    check('alarm_id')
+        .not().isEmpty().withMessage("Alarm_id required."),
+    check('notification_id')
+        .not().isEmpty().withMessage("Notification_id required."),
+], alarmController.updateNotificationID);
+
 module.exports = router;

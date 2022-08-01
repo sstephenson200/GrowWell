@@ -394,6 +394,36 @@ const updateActiveStatus = async (request, response) => {
     }
 }
 
+//Request to update an alarm's notification_id
+const updateNotificationID = async (request, response) => {
+
+    const { alarm_id, notification_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(alarm_id)) {
+        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
+    }
+
+    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
+    if (!existingAlarm) {
+        return response.status(200).json({ errorMessage: "Invalid alarm_id." });
+    }
+
+    try {
+        await Alarm.updateOne(existingAlarm, { 'notification_id': notification_id });
+
+        return response.status(200).json({ message: "Alarm notification_id updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
 module.exports = {
     deleteAlarmsByGarden,
     deleteAllAlarms,
@@ -406,5 +436,6 @@ module.exports = {
     updateDueDate,
     updateGardenPlot,
     updateCompletionStatus,
-    updateActiveStatus
+    updateActiveStatus,
+    updateNotificationID
 }
