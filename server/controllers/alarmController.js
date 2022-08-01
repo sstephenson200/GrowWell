@@ -33,7 +33,7 @@ async function deleteAllAlarms(user_id) {
 //Request to create new alarm record
 const createAlarm = async (request, response) => {
 
-    const { user_id, title, due_date, garden_id, plot_number, isParent, parent } = request.body;
+    const { user_id, title, due_date, garden_id, plot_number, isParent, parent, notification_id } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -89,7 +89,7 @@ const createAlarm = async (request, response) => {
 
     try {
         const newAlarm = new Alarm({
-            user_id, title, due_date, garden_id, plot_number, isParent, parent
+            user_id, title, due_date, garden_id, plot_number, isParent, parent, notification_id
         });
         const savedAlarm = await newAlarm.save();
 

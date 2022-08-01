@@ -10,7 +10,8 @@ const alarmSchema = new mongoose.Schema({
     isParent: { type: Boolean, default: false },
     parent: { type: mongoose.Schema.Types.ObjectId, ref: "alarm", default: null },
     completion_status: { type: Boolean, default: false },
-    active_status: { type: Boolean, default: true }
+    active_status: { type: Boolean, default: true },
+    notification_id: { type: String, required: true, trim: true }
 });
 
 const Alarm = mongoose.model("alarm", alarmSchema);

@@ -16,6 +16,8 @@ router.post("/createAlarm", [
     check('isParent')
         .optional()
         .isBoolean().withMessage("isParent must be true or false."),
+    check('notification_id')
+        .not().isEmpty().withMessage("Notification_id required."),
 ], alarmController.createAlarm);
 
 router.post("/getAllAlarms", [
