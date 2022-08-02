@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
+
 const CreateGardenScreen = (props) => {
 
     const [name, setName] = useState("");
@@ -29,7 +30,6 @@ const CreateGardenScreen = (props) => {
     async function createGarden(props, gardenName, length, width) {
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/garden/createGarden", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185",
                 "length": length,
                 "width": width,
                 "name": gardenName
