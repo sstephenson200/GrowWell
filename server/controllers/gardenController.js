@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const validator = require("../validators/validator");
 const userValidator = require("../validators/userValidator");
 const gardenValidator = require("../validators/gardenValidator");
@@ -25,7 +25,9 @@ async function deleteAllGardens(user_id) {
 //Create Garden Endpoint
 const createGarden = async (request, response) => {
 
-    const { user_id, length, width, name } = request.body;
+    let user_id = request.user;
+
+    const { length, width, name } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -61,12 +63,7 @@ const createGarden = async (request, response) => {
 //Request to get all garden names for a given user_id
 const getAllGardens = async (request, response) => {
 
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
+    let user_id = request.user;
 
     const gardens = await Garden.find({ "user_id": user_id });
 
@@ -100,7 +97,9 @@ const getGardenByID = async (request, response) => {
 //Request to delete a garden
 const deleteGarden = async (request, response) => {
 
-    const { user_id, garden_id, password } = request.body;
+    let user_id = request.user;
+
+    const { garden_id, password } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -132,7 +131,9 @@ const deleteGarden = async (request, response) => {
 //Request to update a garden's name
 const updateName = async (request, response) => {
 
-    const { user_id, garden_id, name } = request.body;
+    let user_id = request.user;
+
+    const { garden_id, name } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
