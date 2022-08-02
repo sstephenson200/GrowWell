@@ -74,8 +74,17 @@ const login = async (request, response) => {
 
     response.cookie("token", token, {
         httpOnly: true
-    }).send();
+    }).send({ message: "User logged in successfully." });
+}
 
+// Request to log user out of the system
+const logout = async (request, response) => {
+
+    //Clear JWT cookie
+    response.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0)
+    }).send({ message: "User logged out successfully." });
 }
 
 // Request to get a user by user_id
@@ -196,6 +205,7 @@ const updatePassword = async (request, response) => {
 module.exports = {
     createUser,
     login,
+    logout,
     getUser,
     deleteUser,
     updateEmail,

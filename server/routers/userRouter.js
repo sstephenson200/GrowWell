@@ -31,6 +31,8 @@ router.post("/login", [
         .trim()
 ], userController.login);
 
+router.get("/logout", userController.logout);
+
 router.post("/getUser", [
     check('user_id')
         .not().isEmpty().withMessage("User_id required."),
