@@ -9,100 +9,66 @@ import NewAlarmScreen from '../screens/NewAlarmScreen';
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from '../screens/SignUpScreen';
 import PasswordResetScreen from '../screens/PasswordResetScreen';
-import { useContext } from 'react';
-import AuthContext from '../context/AuthContext';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
 
-    const { loggedIn } = useContext(AuthContext);
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
 
-    if (loggedIn === true) {
+            <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+            />
 
-        return (
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false
-                }}
-            >
+            <Stack.Screen
+                name="SignUp"
+                component={SignUpScreen}
+            />
 
-                <Stack.Screen
-                    name="Settings"
-                    component={SettingsScreen}
-                />
+            <Stack.Screen
+                name="PasswordReset"
+                component={PasswordResetScreen}
+            />
 
-                <Stack.Screen
-                    name="Plant"
-                    component={PlantScreen}
-                    getId={({ params }) => params.plant_id}
-                />
+            <Stack.Screen
+                name="Settings"
+                component={SettingsScreen}
+            />
 
-                <Stack.Screen
-                    name="CreateGarden"
-                    component={CreateGardenScreen}
-                />
+            <Stack.Screen
+                name="Plant"
+                component={PlantScreen}
+                getId={({ params }) => params.plant_id}
+            />
 
-                <Stack.Screen
-                    name="Plot"
-                    component={PlotScreen}
-                />
+            <Stack.Screen
+                name="CreateGarden"
+                component={CreateGardenScreen}
+            />
 
-                <Stack.Screen
-                    name="Note"
-                    component={NoteScreen}
-                />
+            <Stack.Screen
+                name="Plot"
+                component={PlotScreen}
+            />
 
-                <Stack.Screen
-                    name="NewAlarm"
-                    component={NewAlarmScreen}
-                />
+            <Stack.Screen
+                name="Note"
+                component={NoteScreen}
+            />
 
-                <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                />
+            <Stack.Screen
+                name="NewAlarm"
+                component={NewAlarmScreen}
+            />
 
-                <Stack.Screen
-                    name="SignUp"
-                    component={SignUpScreen}
-                />
-
-                <Stack.Screen
-                    name="PasswordReset"
-                    component={PasswordResetScreen}
-                />
-
-            </Stack.Navigator>
-        );
-
-    } else {
-
-        return (
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false
-                }}
-            >
-
-                <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                />
-
-                <Stack.Screen
-                    name="SignUp"
-                    component={SignUpScreen}
-                />
-
-                <Stack.Screen
-                    name="PasswordReset"
-                    component={PasswordResetScreen}
-                />
-
-            </Stack.Navigator>
-        );
-    }
+        </Stack.Navigator>
+    );
 }
 
 export default StackNavigator;
