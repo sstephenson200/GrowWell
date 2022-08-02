@@ -33,7 +33,9 @@ async function deleteAllAlarms(user_id) {
 //Request to create new alarm record
 const createAlarm = async (request, response) => {
 
-    const { user_id, title, due_date, garden_id, plot_number, isParent, parent, notification_id } = request.body;
+    let user_id = request.user;
+
+    const { title, due_date, garden_id, plot_number, isParent, parent, notification_id } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -104,12 +106,7 @@ const createAlarm = async (request, response) => {
 //Request to get all alarms for a given user_id
 const getAllAlarms = async (request, response) => {
 
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
+    let user_id = request.user;
 
     const alarms = await Alarm.find({ 'user_id': user_id });
 
