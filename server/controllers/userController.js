@@ -77,6 +77,25 @@ const login = async (request, response) => {
     }).send({ message: "User logged in successfully." });
 }
 
+// Request to check if user is logged into system
+const checkLoggedIn = async (request, response) => {
+
+    try {
+        let token = request.cookies.token;
+
+        if (!token) {
+            return response.json(false);
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET);
+
+        response.send(true);
+
+    } catch (error) {
+        response.json(false);
+    }
+}
+
 // Request to log user out of the system
 const logout = async (request, response) => {
 
@@ -206,6 +225,7 @@ const updatePassword = async (request, response) => {
 module.exports = {
     createUser,
     login,
+    checkLoggedIn,
     logout,
     getUser,
     deleteUser,

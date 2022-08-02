@@ -32,6 +32,8 @@ router.post("/login", [
         .trim()
 ], userController.login);
 
+router.get("/checkLoggedIn", userController.checkLoggedIn);
+
 router.get("/logout", auth, userController.logout);
 
 router.post("/getUser", auth, userController.getUser);
