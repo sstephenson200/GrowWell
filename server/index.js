@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 
 //Read .env File
 dotenv.config();
@@ -11,6 +12,7 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Server Started on Port: ${port}`));
 
 app.use(express.json());
+app.use(cookieParser());
 
 //DB Connection
 mongoose.connect(process.env.MDB_CONNECT, (error) => {
