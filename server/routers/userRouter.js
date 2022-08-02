@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const auth = require("../middleware/auth");
 
 const { check, validationResult } = require('express-validator');
 
@@ -31,24 +32,17 @@ router.post("/login", [
         .trim()
 ], userController.login);
 
-router.get("/logout", userController.logout);
+router.get("/logout", auth, userController.logout);
 
-router.post("/getUser", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-], userController.getUser);
+router.post("/getUser", auth, userController.getUser);
 
 router.delete("/deleteUser", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('password')
         .not().isEmpty().withMessage("Password required.")
         .trim()
-], userController.deleteUser);
+], auth, userController.deleteUser);
 
 router.put("/updateEmail", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('email')
         .not().isEmpty().withMessage("Email required.")
         .isEmail().withMessage("Invalid email.")
@@ -57,11 +51,9 @@ router.put("/updateEmail", [
     check('password')
         .not().isEmpty().withMessage("Password required.")
         .trim()
-], userController.updateEmail);
+], auth, userController.updateEmail);
 
 router.put("/updatePassword", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('newPassword')
         .not().isEmpty().withMessage("New password required.")
         .isLength({ min: 8, max: 30 }).withMessage("Password must be between 8 and 30 characters.")
@@ -72,6 +64,6 @@ router.put("/updatePassword", [
     check('newPasswordVerify')
         .not().isEmpty().withMessage("New password verification required.")
         .trim(),
-], userController.updatePassword);
+], auth, userController.updatePassword);
 
 module.exports = router;

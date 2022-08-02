@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const userValidator = require("../validators/userValidator");
 
 const gardenController = require("./gardenController");
@@ -90,12 +90,7 @@ const logout = async (request, response) => {
 // Request to get a user by user_id
 const getUser = async (request, response) => {
 
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
+    let user_id = request.user;
 
     const user = await User.findOne({ _id: user_id });
     if (!user) {
@@ -108,7 +103,9 @@ const getUser = async (request, response) => {
 //Request to delete a user
 const deleteUser = async (request, response) => {
 
-    const { user_id, password } = request.body;
+    let user_id = request.user;
+
+    const { password } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -137,7 +134,9 @@ const deleteUser = async (request, response) => {
 //Request to update a user's email address
 const updateEmail = async (request, response) => {
 
-    const { user_id, email, password } = request.body;
+    let user_id = request.user;
+
+    const { email, password } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -167,7 +166,9 @@ const updateEmail = async (request, response) => {
 //Request to update a user's password
 const updatePassword = async (request, response) => {
 
-    const { user_id, newPassword, newPasswordVerify, oldPassword } = request.body;
+    let user_id = request.user;
+
+    const { newPassword, newPasswordVerify, oldPassword } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
