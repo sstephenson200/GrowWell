@@ -12,7 +12,7 @@ const User = require("../models/userModel");
 //Request to create a new user record
 const createUser = async (request, response) => {
 
-    const { email, username, password, passwordVerify } = request.body;
+    const { email, password, passwordVerify } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -33,7 +33,7 @@ const createUser = async (request, response) => {
 
     try {
         const newUser = new User({
-            email, username, password_hash
+            email, password_hash
         });
         const savedUser = await newUser.save();
 
@@ -43,24 +43,6 @@ const createUser = async (request, response) => {
         console.error(error);
         response.status(500).send();
     }
-}
-
-// Request to get a user's username by user_id
-const getUsername = async (request, response) => {
-
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    const username = await User.findOne({ _id: user_id }).select("username");
-    if (!username) {
-        return response.status(200).json({ errorMessage: "Invalid user_id." });
-    }
-
-    return response.status(200).json({ username: username });
 }
 
 // Request to get a user by user_id
@@ -123,36 +105,6 @@ const deleteUser = async (request, response) => {
         const deletedUser = await User.deleteOne({ _id: user_id });
 
         return response.status(200).json({ message: "User deleted successfully." });
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Request to update a user's username
-const updateUsername = async (request, response) => {
-
-    const { user_id, username, password } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    const existingUser = await User.findOne({ _id: user_id });
-    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(200).json({ errorMessage: "Invalid credentials." });
-    }
-
-    if (username == existingUser.username) {
-        return response.status(200).json({ errorMessage: "No change detected." });
-    }
-
-    try {
-        await User.updateOne(existingUser, { "username": username });
-
-        return response.status(200).json({ message: "Username updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -230,11 +182,9 @@ const updatePassword = async (request, response) => {
 
 module.exports = {
     createUser,
-    getUsername,
     getUser,
     login,
     deleteUser,
-    updateUsername,
     updateEmail,
     updatePassword
 }

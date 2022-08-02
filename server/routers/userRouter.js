@@ -10,10 +10,6 @@ router.post("/createUser", [
         .isEmail().withMessage("Invalid email.")
         .normalizeEmail()
         .trim(),
-    check('username')
-        .not().isEmpty().withMessage("Username required.")
-        .isLength({ min: 4, max: 30 }).withMessage("Username must be between 4 and 30 characters.")
-        .trim(),
     check('password')
         .not().isEmpty().withMessage("Password required.")
         .isLength({ min: 8, max: 30 }).withMessage("Password must be between 8 and 30 characters.")
@@ -23,11 +19,6 @@ router.post("/createUser", [
         .isLength({ min: 8, max: 30 }).withMessage("Password Verify must be between 8 and 30 characters.")
         .trim(),
 ], userController.createUser);
-
-router.post("/getUsername", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-], userController.getUsername);
 
 router.post("/getUser", [
     check('user_id')
@@ -52,18 +43,6 @@ router.delete("/deleteUser", [
         .not().isEmpty().withMessage("Password required.")
         .trim()
 ], userController.deleteUser);
-
-router.put("/updateUsername", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-    check('username')
-        .not().isEmpty().withMessage("Username required.")
-        .isLength({ min: 4, max: 30 }).withMessage("Username must be between 4 and 30 characters.")
-        .trim(),
-    check('password')
-        .not().isEmpty().withMessage("Password required.")
-        .trim()
-], userController.updateUsername);
 
 router.put("/updateEmail", [
     check('user_id')
