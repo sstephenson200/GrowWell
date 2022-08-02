@@ -1,37 +1,31 @@
 const router = require("express").Router();
 const { upload } = require("../middleware/imageUpload");
+const auth = require("../middleware/auth");
 
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 
 const noteController = require("../controllers/noteController");
 
-router.post("/createNote", upload.array("file", 3), noteController.createNote);
+router.post("/createNote", upload.array("file", 3), auth, noteController.createNote);
 
-router.post("/getNotes", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-], noteController.getNotes);
+router.post("/getNotes", auth, noteController.getNotes);
 
 router.get("/getNotesByDate", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('date')
         .not().isEmpty().withMessage("Date required.")
         .isDate().withMessage("Invalid date."),
-], noteController.getNotesByDate);
+], auth, noteController.getNotesByDate);
 
 router.post("/getNotesByMonth", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
     check('date')
         .not().isEmpty().withMessage("Date required.")
         .isDate().withMessage("Invalid date."),
-], noteController.getNotesByMonth);
+], auth, noteController.getNotesByMonth);
 
 router.delete("/deleteNote", [
     check('note_id')
         .not().isEmpty().withMessage("Note_id required."),
-], noteController.deleteNote);
+], auth, noteController.deleteNote);
 
 router.put("/updateTitle", [
     check('note_id')
@@ -40,7 +34,7 @@ router.put("/updateTitle", [
         .not().isEmpty().withMessage("Title required.")
         .isLength({ min: 1, max: 30 }).withMessage("Title must be between 1 and 30 characters.")
         .trim(),
-], noteController.updateTitle);
+], auth, noteController.updateTitle);
 
 router.put("/updateDescription", [
     check('note_id')
@@ -49,7 +43,7 @@ router.put("/updateDescription", [
         .not().isEmpty().withMessage("Description required.")
         .isLength({ min: 1, max: 250 }).withMessage("Description must be between 1 and 250 characters.")
         .trim(),
-], noteController.updateDescription);
+], auth, noteController.updateDescription);
 
 router.put("/updateGardenPlot", [
     check('note_id')
@@ -59,8 +53,8 @@ router.put("/updateGardenPlot", [
     check('plot_number')
         .optional()
         .isInt().withMessage("Plot_number must be an integer value."),
-], noteController.updateGardenPlot);
+], auth, noteController.updateGardenPlot);
 
-router.put("/updateImages", upload.array("file", 3), noteController.updateImages);
+router.put("/updateImages", upload.array("file", 3), auth, noteController.updateImages);
 
 module.exports = router;

@@ -1,12 +1,11 @@
 const moment = require("moment");
 const { deleteImages } = require("../middleware/imageUpload");
 
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const validator = require("../validators/validator");
 const gardenValidator = require("../validators/gardenValidator");
 
 const Note = require("../models/noteModel");
-const Plant = require("../models/plantModel");
 const Garden = require("../models/gardenModel");
 
 //Function to delete a note by garden_id
@@ -54,13 +53,13 @@ const createNote = async (request, response) => {
 
     const parsedReq = request.body.note;
 
-    const { user_id, title, description, garden_id, plot_number } = parsedReq;
+    let user_id = request.user;
+
+    const { title, description, garden_id, plot_number } = parsedReq;
     const date = Date.now();
 
     //Check if required params are given
-    if (!user_id) {
-        return response.status(200).json({ errorMessage: "User_id required." });
-    } else if (!title) {
+    if (!title) {
         return response.status(200).json({ errorMessage: "Title required." });
     }
 
@@ -125,12 +124,7 @@ const createNote = async (request, response) => {
 //Request to get all notes for a given plant
 const getNotes = async (request, response) => {
 
-    const { user_id } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
+    let user_id = request.user;
 
     const notes = await Note.find({ 'user_id': user_id });
 
@@ -140,7 +134,9 @@ const getNotes = async (request, response) => {
 //Request to get all notes for a given date
 const getNotesByDate = async (request, response) => {
 
-    const { user_id, date } = request.body;
+    let user_id = request.user;
+
+    const { date } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
@@ -155,7 +151,9 @@ const getNotesByDate = async (request, response) => {
 //Request to get all notes for a given month
 const getNotesByMonth = async (request, response) => {
 
-    const { user_id, date } = request.body;
+    let user_id = request.user;
+
+    const { date } = request.body;
 
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
