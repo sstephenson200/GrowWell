@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
+import AuthContext from '../context/AuthContext';
+
 const SignUpScreen = (props) => {
 
+    const { checkLoggedIn } = useContext(AuthContext);
+
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -22,13 +25,36 @@ const SignUpScreen = (props) => {
     //Function to reset state when leaving the page
     function clearState() {
         setEmail("");
-        setName("");
         setPassword("");
         setPasswordConfirmation("");
         setErrorMessage("");
     }
 
-    //add signup request
+    //Function to create a new user
+    async function createUser(props) {
+        try {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/user/createUser", {
+                "email": email,
+                "password": password,
+                "passwordVerify": passwordConfirmation
+            });
+
+            let status = response.status;
+
+            if (status == 200) {
+                if (response.data.errorMessage !== undefined) {
+                    setErrorMessage(response.data.errorMessage);
+                } else {
+                    clearState();
+                    await checkLoggedIn();
+                    props.navigation.navigate("StackNavigator", { screen: "CreateGarden" });
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <ScrollView style={styles.screen}>
@@ -58,16 +84,9 @@ const SignUpScreen = (props) => {
                 <TextInput
                     style={styles.textInput}
                     placeholder="email@example.com"
+                    keyboardType='email-address'
                     value={email}
                     onChangeText={setEmail}
-                />
-
-                <Text style={styles.subtitle}>Name</Text>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Your Name"
-                    value={name}
-                    onChangeText={setName}
                 />
 
                 <Text style={styles.subtitle}>Password</Text>
@@ -89,7 +108,7 @@ const SignUpScreen = (props) => {
                 />
 
                 <View style={styles.navigationButtons}>
-                    <TouchableOpacity style={styles.button} onPress={async () => alert("Ready to sign up")}>
+                    <TouchableOpacity style={styles.button} onPress={async () => await createUser(props)}>
                         <Text style={styles.buttonText}>SIGN UP</Text>
                     </TouchableOpacity>
                 </View>
@@ -123,7 +142,7 @@ const styles = StyleSheet.create({
         color: "white"
     },
     form: {
-        height: 600,
+        height: 500,
         width: "80%",
         alignSelf: "center",
         backgroundColor: "#EFF5E4",
