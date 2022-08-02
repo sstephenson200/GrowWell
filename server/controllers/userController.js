@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { check, validationResult } = require('express-validator');
 const userValidator = require("../validators/userValidator");
@@ -37,12 +38,44 @@ const createUser = async (request, response) => {
         });
         const savedUser = await newUser.save();
 
-        return response.status(200).json({ message: "User created successfully." });
+        //Auto login
+        const token = jwt.sign({
+            user: savedUser._id
+        }, process.env.JWT_SECRET);
+
+        response.cookie("token", token, {
+            httpOnly: true
+        }).send({ message: "User created successfully." });
 
     } catch (error) {
         console.error(error);
         response.status(500).send();
     }
+}
+
+// Request to log user into the system using email and password
+const login = async (request, response) => {
+
+    const { email, password } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
+        return response.status(200).json({ errorMessage: "Invalid credentials." });
+    }
+
+    const token = jwt.sign({
+        user: existingUser._id
+    }, process.env.JWT_SECRET);
+
+    response.cookie("token", token, {
+        httpOnly: true
+    }).send();
+
 }
 
 // Request to get a user by user_id
@@ -61,26 +94,6 @@ const getUser = async (request, response) => {
     }
 
     return response.status(200).json({ user: user });
-}
-
-// Request to log user into the system using email and password
-const login = async (request, response) => {
-
-    //JWT AUTH TO BE ADDED IN LATER SPRINT
-
-    const { email, password } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    const existingUser = await User.findOne({ email });
-    if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
-        return response.status(200).json({ errorMessage: "Invalid credentials." });
-    }
-
-    return response.status(200).json({ message: "You're ready to login!" });
 }
 
 //Request to delete a user
@@ -182,8 +195,8 @@ const updatePassword = async (request, response) => {
 
 module.exports = {
     createUser,
-    getUser,
     login,
+    getUser,
     deleteUser,
     updateEmail,
     updatePassword

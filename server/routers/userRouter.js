@@ -20,12 +20,7 @@ router.post("/createUser", [
         .trim(),
 ], userController.createUser);
 
-router.post("/getUser", [
-    check('user_id')
-        .not().isEmpty().withMessage("User_id required."),
-], userController.getUser);
-
-router.get("/login", [
+router.post("/login", [
     check('email')
         .not().isEmpty().withMessage("Email required.")
         .isEmail().withMessage("Invalid email.")
@@ -35,6 +30,11 @@ router.get("/login", [
         .not().isEmpty().withMessage("Password required.")
         .trim()
 ], userController.login);
+
+router.post("/getUser", [
+    check('user_id')
+        .not().isEmpty().withMessage("User_id required."),
+], userController.getUser);
 
 router.delete("/deleteUser", [
     check('user_id')
