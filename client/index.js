@@ -1,7 +1,6 @@
 import { registerRootComponent } from 'expo';
 import { AppRegistry } from "react-native";
 
-
 import App from './App';
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

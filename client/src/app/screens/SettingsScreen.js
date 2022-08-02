@@ -8,7 +8,6 @@ import Header from '../components/Header';
 const SettingsScreen = (props) => {
 
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
     const [emailPassword, setEmailPassword] = useState("");
     const [namePassword, setNamePassword] = useState("");
     const [oldPassword, setOldPassword] = useState("");
@@ -41,7 +40,6 @@ const SettingsScreen = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     setEmail(response.data.user.email);
-                    setName(response.data.user.username);
                 }
             }
 
@@ -82,30 +80,6 @@ const SettingsScreen = (props) => {
                 />
 
                 <TouchableOpacity style={styles.button} onPress={() => alert("Ready to update email")}>
-                    <Text style={styles.buttonText}>SAVE</Text>
-                </TouchableOpacity>
-
-
-                <Text style={styles.heading}>Change Your Username</Text>
-
-                <Text style={styles.subtitle}>Username</Text>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Username"
-                    value={name}
-                    onChangeText={setName}
-                />
-
-                <Text style={styles.subtitle}>Password</Text>
-                <TextInput
-                    style={styles.textInput}
-                    secureTextEntry={true}
-                    placeholder="Password"
-                    value={namePassword}
-                    onChangeText={setNamePassword}
-                />
-
-                <TouchableOpacity style={styles.button} onPress={() => alert("Ready to update name")}>
                     <Text style={styles.buttonText}>SAVE</Text>
                 </TouchableOpacity>
 
