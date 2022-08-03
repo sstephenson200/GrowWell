@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const generator = require("generate-password");
 
 const { validationResult } = require('express-validator');
 const userValidator = require("../validators/userValidator");
@@ -222,6 +223,44 @@ const updatePassword = async (request, response) => {
     }
 }
 
+//Request to reset a user's forgotten password
+const passwordReset = async (request, response) => {
+
+    const { email } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+        return response.status(200).json({ errorMessage: "No account exists for this email." });
+    }
+
+    let password = generator.generate({
+        length: 25,
+        numbers: true,
+        symbols: true,
+        lowercase: true,
+        uppercase: true
+    });
+
+    //Encrypt Password
+    const salt = await bcrypt.genSalt();
+    const password_hash = await bcrypt.hash(password, salt);
+
+    try {
+        await User.updateOne(existingUser, { "password_hash": password_hash });
+
+        return response.status(200).json({ message: "Password updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
 module.exports = {
     createUser,
     login,
@@ -230,5 +269,6 @@ module.exports = {
     getUser,
     deleteUser,
     updateEmail,
-    updatePassword
+    updatePassword,
+    passwordReset
 }
