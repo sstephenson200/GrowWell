@@ -68,12 +68,12 @@ router.put("/updatePassword", [
         .trim(),
 ], auth, userController.updatePassword);
 
-router.put("/passwordReset", [
+router.put("/resetPassword", [
     check('email')
         .not().isEmpty().withMessage("Email required.")
         .isEmail().withMessage("Invalid email.")
         .normalizeEmail()
         .trim(),
-], userController.passwordReset);
+], userController.resetPassword);
 
 module.exports = router;

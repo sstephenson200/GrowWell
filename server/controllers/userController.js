@@ -5,6 +5,8 @@ const generator = require("generate-password");
 const { validationResult } = require('express-validator');
 const userValidator = require("../validators/userValidator");
 
+const passwordMailer = require("../mailer/passwordMailer");
+
 const gardenController = require("./gardenController");
 const alarmController = require("./alarmController");
 const noteController = require("./noteController");
@@ -224,7 +226,7 @@ const updatePassword = async (request, response) => {
 }
 
 //Request to reset a user's forgotten password
-const passwordReset = async (request, response) => {
+const resetPassword = async (request, response) => {
 
     const { email } = request.body;
 
@@ -253,6 +255,8 @@ const passwordReset = async (request, response) => {
     try {
         await User.updateOne(existingUser, { "password_hash": password_hash });
 
+        passwordMailer.mailer(email, password);
+
         return response.status(200).json({ message: "Password updated successfully." });
 
     } catch (error) {
@@ -270,5 +274,5 @@ module.exports = {
     deleteUser,
     updateEmail,
     updatePassword,
-    passwordReset
+    resetPassword
 }
