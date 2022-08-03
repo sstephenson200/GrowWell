@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
+import AuthContext from "../context/AuthContext";
+
 const LoginScreen = (props) => {
+
+    const { checkLoggedIn } = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -24,9 +28,33 @@ const LoginScreen = (props) => {
         setErrorMessage("");
     }
 
-    //add login request
+    //Function to create a new user
+    async function login(props) {
+        try {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/user/login", {
+                "email": email,
+                "password": password
+            });
+
+            let status = response.status;
+
+            if (status == 200) {
+                if (response.data.errorMessage !== undefined) {
+                    setErrorMessage(response.data.errorMessage);
+                } else {
+                    clearState();
+                    await checkLoggedIn();
+                    props.navigation.navigate("Garden");
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
+
         <View style={styles.screen}>
 
             <View style={styles.appTitle}>
@@ -54,6 +82,7 @@ const LoginScreen = (props) => {
                 <TextInput
                     style={styles.textInput}
                     placeholder="email@example.com"
+                    keyboardType='email-address'
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -68,7 +97,7 @@ const LoginScreen = (props) => {
                 />
 
                 <View style={styles.navigationButtons}>
-                    <TouchableOpacity style={styles.button} onPress={async () => alert("Ready to login")}>
+                    <TouchableOpacity style={styles.button} onPress={async () => await login(props)}>
                         <Text style={styles.buttonText}>LOGIN</Text>
                     </TouchableOpacity>
                 </View>
