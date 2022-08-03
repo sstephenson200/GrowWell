@@ -58,9 +58,7 @@ const NewAlarmScreen = (props) => {
     async function getPlots() {
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185"
-            }, { responseType: 'json' });
+            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
 
             let status = response.status;
 
@@ -98,7 +96,6 @@ const NewAlarmScreen = (props) => {
         let error = false;
 
         let body = {
-            "user_id": "62cec6b63dd3dfcf2a4a6185",
             "title": title,
             "due_date": date,
         };

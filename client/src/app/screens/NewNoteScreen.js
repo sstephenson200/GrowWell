@@ -26,9 +26,7 @@ const NewNoteScreen = (props) => {
     //Function to get garden names and plot numbers for plot selection dropdown
     async function getPlots() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185"
-            }, { responseType: 'json' });
+            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
 
             let status = response.status;
 
@@ -64,7 +62,6 @@ const NewNoteScreen = (props) => {
 
         let body = {
             note: {
-                "user_id": "62cec6b63dd3dfcf2a4a6185",
                 "title": title
             }
         };

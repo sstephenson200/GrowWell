@@ -16,9 +16,7 @@ const AlarmScreen = (props) => {
     // Get alarms for shown month
     async function getAlarms() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/alarm/getAllAlarms", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185"
-            }, { responseType: 'json' });
+            const response = await axios.post("https://grow-well-server.herokuapp.com/alarm/getAllAlarms", { responseType: 'json' });
 
             let status = response.status;
 

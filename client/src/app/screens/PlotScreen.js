@@ -123,9 +123,7 @@ const PlotScreen = (props) => {
     async function getNotes() {
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185"
-            }, { responseType: 'json' });
+            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", { responseType: 'json' });
 
             let status = response.status;
 

@@ -15,9 +15,7 @@ const GardenScreen = (props) => {
 
     async function getGardens() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", {
-                "user_id": "62cec6b63dd3dfcf2a4a6185"
-            }, { responseType: 'json' });
+            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
 
             let status = response.status;
 
