@@ -22,7 +22,28 @@ const PasswordReset = (props) => {
         setErrorMessage("");
     }
 
-    //add reset request
+    //Function to create a new user
+    async function resetPassword(props) {
+        try {
+            const response = await axios.put("https://grow-well-server.herokuapp.com/user/resetPassword", {
+                "email": email
+            });
+
+            let status = response.status;
+
+            if (status == 200) {
+                if (response.data.errorMessage !== undefined) {
+                    setErrorMessage(response.data.errorMessage);
+                } else {
+                    clearState();
+                    props.navigation.navigate("StackNavigator", { screen: "Login" });
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
 
@@ -49,7 +70,7 @@ const PasswordReset = (props) => {
 
                 <View style={styles.navigationButtons}>
 
-                    <TouchableOpacity style={styles.button} onPress={async () => alert("Ready to reset password")}>
+                    <TouchableOpacity style={styles.button} onPress={async () => await resetPassword(props)}>
                         <Text style={styles.buttonText}>RESET PASSWORD</Text>
                     </TouchableOpacity>
 
