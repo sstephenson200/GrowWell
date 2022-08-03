@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+import SplashScreen from '../screens/SplashScreen';
+
 const AuthContext = createContext();
 
 function AuthContextProvider(props) {
@@ -26,6 +28,12 @@ function AuthContextProvider(props) {
     useEffect(() => {
         checkLoggedIn();
     }, []);
+
+    if (loggedIn == null) {
+        return (
+            <SplashScreen />
+        );
+    }
 
     return (
         <AuthContext.Provider value={{ loggedIn, checkLoggedIn }}>
