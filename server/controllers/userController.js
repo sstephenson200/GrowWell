@@ -174,6 +174,11 @@ const updateEmail = async (request, response) => {
         return response.status(200).json({ errorMessage: "No change detected." });
     }
 
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+        return response.status(200).json({ errorMessage: "An account already exists for this email." });
+    }
+
     try {
         await User.updateOne(existingUser, { "email": email });
 
