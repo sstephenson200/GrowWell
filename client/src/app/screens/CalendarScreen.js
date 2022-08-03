@@ -13,8 +13,7 @@ const CalendarScreen = (props) => {
     const [notes, setNotes] = useState([]);
     const [markedDates, setMarkedDates] = useState({});
     const [selectedDay, setSelectedDay] = useState(null);
-
-    let selectedMonth = null;
+    const [selectedMonth, setSelectedMonth] = useState(null);
 
     let now = moment(new Date()).format("YYYY-MM-DD");
 
@@ -93,7 +92,7 @@ const CalendarScreen = (props) => {
                         setSelectedDay(day.dateString);
                     }}
                     onMonthChange={month => {
-                        selectedMonth = month;
+                        setSelectedMonth(month);
                     }}
                     hideExtraDays={true}
                     firstDay={1}
