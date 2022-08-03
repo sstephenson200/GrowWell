@@ -36,6 +36,28 @@ const PasswordReset = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     clearState();
+                    logout(props);
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    //Function to log out the user by clearing loggedIn cookies
+    async function logout(props) {
+
+        try {
+            const response = await axios.get("https://grow-well-server.herokuapp.com/user/logout");
+
+            let status = response.status;
+
+            if (status == 200) {
+                if (response.data.errorMessage !== undefined) {
+                    setErrorMessage(response.data.errorMessage);
+                } else {
+                    checkLoggedIn();
                     props.navigation.navigate("StackNavigator", { screen: "Login" });
                 }
             }

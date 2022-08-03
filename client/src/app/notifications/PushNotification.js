@@ -118,3 +118,8 @@ async function RegisterNotification() {
 export async function CancelNotification(notifId) {
     await Notifications.cancelScheduledNotificationAsync(notifId);
 }
+
+//Cancel all notifications
+export async function CancelAllNotifications() {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+}
