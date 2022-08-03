@@ -120,7 +120,7 @@ const deleteGarden = async (request, response) => {
         const deletedAlarms = await alarmController.deleteAlarmsByGarden(garden_id);
         const deletedGarden = await Garden.deleteOne({ _id: garden_id });
 
-        return response.status(200).json({ message: "Garden deleted successfully." });
+        return response.status(200).json({ message: "Garden deleted successfully.", alarms: deletedAlarms });
 
     } catch (error) {
         console.error(error);

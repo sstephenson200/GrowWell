@@ -10,11 +10,12 @@ const Garden = require("../models/gardenModel");
 async function deleteAlarmsByGarden(garden_id) {
 
     try {
+        let deletedAlarms = await Alarm.find({ 'garden_id': garden_id }).select("notification_id");
         await Alarm.deleteMany({ 'garden_id': garden_id });
-        return true;
+        return deletedAlarms;
 
     } catch (error) {
-        return false;
+        console.log(error);
     }
 }
 
