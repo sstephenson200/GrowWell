@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Dimensions, Platform, Button, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Dimensions, Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import expoCameraroll from 'expo-cameraroll';
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
@@ -98,15 +98,16 @@ export default class ImageBrowser extends React.Component {
         if (selectedCount === this.props.max) headerText = headerText + ' (Max)';
         return (
             <View style={styles.header}>
-                <Button
-                    title="Exit"
-                    onPress={() => this.props.callback(Promise.resolve([]))}
-                />
-                <Text>{headerText}</Text>
-                <Button
-                    title="Choose"
-                    onPress={() => this.prepareCallback()}
-                />
+                <TouchableOpacity style={styles.button} onPress={() => this.props.callback(Promise.resolve([]))}>
+                    <Text style={styles.buttonText}>EXIT</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.headerText}>{headerText}</Text>
+
+                <TouchableOpacity style={styles.button} onPress={() => this.prepareCallback()}>
+                    <Text style={styles.buttonText}>DONE</Text>
+                </TouchableOpacity>
+
             </View>
         )
     }
@@ -141,8 +142,10 @@ export default class ImageBrowser extends React.Component {
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
-                {this.renderImages()}
-            </View>
+                <View style={styles.imageContainer}>
+                    {this.renderImages()}
+                </View>
+            </View >
         );
     }
 }
@@ -150,16 +153,39 @@ export default class ImageBrowser extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: "space-between",
+        marginBottom: 180,
+        backgroundColor: "#81BF63",
     },
     header: {
-        height: 50,
+        height: 85,
+        backgroundColor: "#81BF63",
         width: width,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
+        justifyContent: "space-between",
+        flexDirection: "row",
         alignItems: 'center',
         padding: 10,
         marginTop: 20
     },
+    headerText: {
+        color: "white"
+    },
+    button: {
+        backgroundColor: "#9477B4",
+        height: 45,
+        width: 110,
+        borderRadius: 8,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 10
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 16
+    },
+    imageContainer: {
+        backgroundColor: "#EFF5E4"
+    }
 })
 
 
