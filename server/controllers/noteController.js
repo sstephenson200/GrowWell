@@ -51,7 +51,7 @@ async function deleteAllNotes(user_id) {
 //Request to create a new note
 const createNote = async (request, response) => {
 
-    const parsedReq = request.body.note;
+    const parsedReq = JSON.parse(request.body.note);
 
     let user_id = request.user;
 

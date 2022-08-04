@@ -40,11 +40,6 @@ const NoteCard = (props) => {
                 if (plant_id !== null) {
                     getPlant(plant_id);
                 }
-
-                if (props.note.image.length !== 0) {
-                    getImages();
-                }
-
             }
 
         } catch (error) {
@@ -91,6 +86,9 @@ const NoteCard = (props) => {
         setNotePhotos([]);
         if (garden_id !== null) {
             getGarden();
+        }
+        if (props.note.image.length !== 0) {
+            getImages();
         }
     }, [props]);
 

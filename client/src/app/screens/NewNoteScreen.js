@@ -6,6 +6,8 @@ import { unescape } from 'underscore';
 
 import Header from '../components/Header';
 import Dropdown from "../components/Dropdown";
+import ImageBrowser from '../components/ImageBrowser';
+import ImageCarousel from '../components/ImageCarousel';
 
 const NewNoteScreen = (props) => {
 
@@ -14,6 +16,8 @@ const NewNoteScreen = (props) => {
     const [description, setDescription] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [selectedPlot, setSelectedPlot] = useState(null);
+    const [imageBrowserOpen, setImageBrowserOpen] = useState(false);
+    const [photos, setPhotos] = useState([]);
 
     //Function to reset state when leaving the page
     function clearState() {
@@ -21,6 +25,7 @@ const NewNoteScreen = (props) => {
         setDescription("");
         setErrorMessage("");
         setSelectedPlot(null);
+        setPhotos([]);
     }
 
     //Function to get garden names and plot numbers for plot selection dropdown
@@ -60,27 +65,46 @@ const NewNoteScreen = (props) => {
 
     async function createNote(props, title, description, selectedPlot) {
 
-        let body = {
-            note: {
-                "title": title
-            }
-        };
+        let noteDetails = {
+            "title": title
+        }
 
         if (description !== "") {
-            body.note.description = description;
+            noteDetails.description = description;
         }
 
         if (selectedPlot !== null) {
             let gardenData = selectedPlot.split(":");
             let garden_id = gardenData[0];
             let plot_number = gardenData[1];
-            body.note.garden_id = garden_id
-            body.note.plot_number = plot_number;
+            noteDetails.garden_id = garden_id;
+            noteDetails.plot_number = plot_number;
+        }
+
+        let formData = new FormData();
+        formData.append("note", JSON.stringify(noteDetails));
+
+        if (photos.length !== 0) {
+            for (let i = 0; i < photos.length; i++) {
+                let localUri = photos[i].uri;
+                let filename = localUri.split('/').pop();
+                let match = /\.(\w+)$/.exec(filename);
+                let type = match ? `image/${match[1]}` : `image`;
+
+                formData.append("file", {
+                    uri: localUri,
+                    name: filename,
+                    type
+                });
+            }
         }
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/note/createNote", body);
-
+            const response = await axios.post("https://grow-well-server.herokuapp.com/note/createNote", formData, {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            });
 
             let status = response.status;
 
@@ -98,6 +122,13 @@ const NewNoteScreen = (props) => {
         }
     }
 
+    const imageBrowserCallback = (callback) => {
+        callback.then((photos) => {
+            setImageBrowserOpen(false);
+            setPhotos(photos);
+        });
+    }
+
     useEffect(() => {
         getPlots();
     }, []);
@@ -108,6 +139,15 @@ const NewNoteScreen = (props) => {
 
     if (!loaded) {
         return null;
+    }
+
+    if (imageBrowserOpen) {
+        return (
+            <ImageBrowser
+                max={3}
+                callback={imageBrowserCallback}
+            />
+        );
     }
 
     return (
@@ -144,15 +184,21 @@ const NewNoteScreen = (props) => {
                     onChangeText={setDescription}
                 />
 
-                <TouchableOpacity style={styles.addPhotosButton} onPress={async () => alert("Image Picker")}>
+                <TouchableOpacity style={styles.addPhotosButton} onPress={() => setImageBrowserOpen(true)}>
                     <Text style={styles.buttonText}>ADD PHOTOS</Text>
                 </TouchableOpacity>
+
+                {
+                    photos.length !== 0 ?
+                        <ImageCarousel style={styles.carousel} data={photos} styling="large" />
+                        : null
+                }
 
                 <View style={styles.navigationButtons}>
 
                     <TouchableOpacity style={styles.cancelButton} onPress={() => {
-                        clearState()
-                        props.navigation.navigate("Calendar")
+                        clearState();
+                        props.navigation.navigate("Calendar");
                     }}>
                         <Text style={styles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
@@ -171,12 +217,12 @@ const NewNoteScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginBottom: 85
     },
     screen: {
         height: "100%",
-        backgroundColor: "#EFF5E4",
-        paddingBottom: 180
+        backgroundColor: "#EFF5E4"
     },
     title: {
         textAlign: "center",
@@ -226,11 +272,15 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginVertical: 15
     },
+    carousel: {
+        alignItems: "center",
+        marginVertical: 10,
+    },
     navigationButtons: {
         flexDirection: "row",
         flex: 2,
         justifyContent: "center",
-        marginTop: 5
+        marginVertical: 15
     },
     button: {
         backgroundColor: "#9477B4",

@@ -1,20 +1,25 @@
 import React from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 import ImageCarouselItem from './ImageCarouselItem';
 
-const sliderWidth = Dimensions.get('window').width * 0.45;
-const itemWidth = Math.round(sliderWidth) * 0.7;
+let sliderWidth = Dimensions.get('window').width * 0.45;
+let itemWidth = Math.round(sliderWidth) * 0.7;
 
 const ImageCarousel = (props) => {
+
+    if (props.styling !== undefined) {
+        sliderWidth = Dimensions.get('window').width;
+        itemWidth = Math.round(sliderWidth) * 0.7;
+    }
 
     let data = props.data;
 
     return (
         <View>
             <Carousel
-                layout={"stack"}
+                layout={"default"}
                 data={data}
                 renderItem={ImageCarouselItem}
                 sliderWidth={sliderWidth}

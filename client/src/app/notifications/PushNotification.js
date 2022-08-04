@@ -89,14 +89,14 @@ async function RegisterNotification() {
         }
 
         if (finalStatus !== "granted") {
-            alert("Failed to get push token");
+            alert("Notification permission is required for this feature.");
             return;
         }
 
         token = (await Notifications.getExpoPushTokenAsync()).data;
 
     } else {
-        alert("Must use physical device for notifications");
+        alert("Only physical devices can utilise notification features.");
     }
 
     if (Platform.OS === "android") {
