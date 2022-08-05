@@ -58,7 +58,7 @@ const PasswordReset = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     checkLoggedIn();
-                    props.navigation.navigate("StackNavigator", { screen: "Login" });
+                    props.navigation.replace("Login");
                 }
             }
 

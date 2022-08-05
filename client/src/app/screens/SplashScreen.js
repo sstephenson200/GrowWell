@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 
 const SplashScreen = (props) => {
 

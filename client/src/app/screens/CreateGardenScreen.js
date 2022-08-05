@@ -3,7 +3,6 @@ import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
-
 const CreateGardenScreen = (props) => {
 
     const [name, setName] = useState("");
@@ -108,8 +107,7 @@ const CreateGardenScreen = (props) => {
             </View>
 
         </View>
-
-    )
+    );
 }
 
 const styles = StyleSheet.create({
