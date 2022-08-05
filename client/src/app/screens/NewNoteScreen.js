@@ -113,7 +113,7 @@ const NewNoteScreen = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     clearState();
-                    props.navigation.navigate("Calendar");
+                    props.navigation.navigate("Calendar", { params: { updated: true } });
                 }
             }
 
@@ -198,7 +198,7 @@ const NewNoteScreen = (props) => {
 
                     <TouchableOpacity style={styles.cancelButton} onPress={() => {
                         clearState();
-                        props.navigation.navigate("Calendar", { params: { updated: true } });
+                        props.navigation.navigate("Calendar");
                     }}>
                         <Text style={styles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>

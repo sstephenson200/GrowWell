@@ -68,7 +68,7 @@ const CalendarScreen = (props) => {
         if (props.route.params !== undefined) {
             props.route.params = undefined;
         }
-    }, [selectedMonth, props.route.params]);
+    }, [selectedMonth, props]);
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
