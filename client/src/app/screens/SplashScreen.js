@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 const SplashScreen = (props) => {
 
     useEffect(() => {
-        const timer = setTimeout(() => { }, 3000);
+        const timer = setTimeout(() => { }, 2000);
         return () => clearTimeout(timer);
     }, []);
 

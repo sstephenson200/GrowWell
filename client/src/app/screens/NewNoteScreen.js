@@ -198,7 +198,7 @@ const NewNoteScreen = (props) => {
 
                     <TouchableOpacity style={styles.cancelButton} onPress={() => {
                         clearState();
-                        props.navigation.navigate("Calendar");
+                        props.navigation.navigate("Calendar", { params: { updated: true } });
                     }}>
                         <Text style={styles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
