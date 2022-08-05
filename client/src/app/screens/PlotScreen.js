@@ -27,6 +27,7 @@ const PlotScreen = (props) => {
     const [plants, setPlants] = useState([]);
     const [selectedPlant, setSelectedPlant] = useState(null);
     const [notes, setNotes] = useState([]);
+    const [updatePlot, setUpdatePlot] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     let plot = props.route.params.plot;
@@ -108,7 +109,8 @@ const PlotScreen = (props) => {
 
             if (status == 200) {
                 clearState();
-                props.navigation.navigate("Garden");
+                setUpdatePlot(!updatePlot);
+                props.navigation.navigate("Garden", { updatePlot });
             } else {
                 setErrorMessage(response.data.errorMessage);
             }
@@ -147,27 +149,11 @@ const PlotScreen = (props) => {
             let notePlotNumber = notes[i].plot_number;
             let noteGardenID = notes[i].garden_id;
 
-            if (noteGardenID !== null) {
-                try {
-                    const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
-                        "garden_id": noteGardenID
-                    }, { responseType: 'json' });
-
-                    let status = response.status;
-
-                    if (status == 200) {
-                        if (plot.plot_number === notePlotNumber) {
-                            filteredData.push(
-                                <NoteCard key={[i]} note={notes[i]} />
-                            )
-                        }
-                    }
-
-                } catch (error) {
-                    console.log(error);
-                }
+            if (noteGardenID == garden._id && notePlotNumber == plot.plot_number) {
+                filteredData.push(
+                    <NoteCard key={[i]} note={notes[i]} />
+                )
             }
-
         }
         setNotes(filteredData);
     }

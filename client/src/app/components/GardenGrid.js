@@ -9,6 +9,10 @@ const GardenGrid = (props) => {
     const [garden, setGarden] = useState(null);
 
     let garden_id = props.garden_id;
+    let updated = null;
+    if (props.updated !== undefined) {
+        updated = props.updated;
+    }
 
     //Get garden data
     async function getGardenData(garden_id) {
@@ -31,8 +35,11 @@ const GardenGrid = (props) => {
 
     //Update garden data when garden_id changes
     useEffect(() => {
-        getGardenData(garden_id)
-    }, [garden_id]);
+        getGardenData(garden_id);
+        if (updated !== null) {
+            updated = null;
+        }
+    }, [garden_id, updated]);
 
     //Generate plot grid
     const PlotGrid = () => {

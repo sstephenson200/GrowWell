@@ -3,7 +3,7 @@ import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 import Modal from 'react-native-modal';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
-import { unescape } from 'underscore';
+import { create, unescape } from 'underscore';
 
 import Header from '../components/Header';
 import Dropdown from "../components/Dropdown";
@@ -16,6 +16,7 @@ const GardenScreen = (props) => {
     const [selectedGarden, setSelectedGarden] = useState(null);
     const [password, setPassword] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+    const [deletedGarden, setDeletedGarden] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const toggleModal = () => {
@@ -71,6 +72,9 @@ const GardenScreen = (props) => {
                         }
                     }
                     setModalVisible(false);
+                    setPassword("");
+                    setDeletedGarden(!deletedGarden);
+                    setSelectedGarden(null);
                 }
             }
 
@@ -81,7 +85,7 @@ const GardenScreen = (props) => {
 
     useEffect(() => {
         getGardens();
-    }, []);
+    }, [deletedGarden, props]);
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
@@ -148,7 +152,12 @@ const GardenScreen = (props) => {
 
                         <View style={styles.grid}>
                             <ScrollView horizontal={true}>
-                                <GardenGrid garden_id={selectedGarden} navigation={props.navigation}></GardenGrid>
+                                {
+                                    props.route.params !== undefined && props.route.params.updatePlot !== undefined ?
+                                        <GardenGrid garden_id={selectedGarden} navigation={props.navigation} updated={props.route.params.updatePlot}></GardenGrid>
+                                        :
+                                        <GardenGrid garden_id={selectedGarden} navigation={props.navigation}></GardenGrid>
+                                }
                             </ScrollView>
 
                             <View>

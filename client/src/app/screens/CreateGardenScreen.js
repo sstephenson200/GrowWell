@@ -42,7 +42,7 @@ const CreateGardenScreen = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     clearState();
-                    props.navigation.navigate("Garden");
+                    props.navigation.navigate("Garden", { created: true });
                 }
             }
 
