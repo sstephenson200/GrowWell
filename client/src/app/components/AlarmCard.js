@@ -23,6 +23,9 @@ const AlarmCard = (props) => {
     let completion_status = props.alarm.completion_status;
     let active_status = props.alarm.active_status;
 
+    let deleteCard = props.deleteCard[0];
+    let setDeleteCard = props.deleteCard[1];
+
     const [gardenName, setGardenName] = useState(null);
     const [isEnabled, setIsEnabled] = useState(active_status);
     const [complete, setComplete] = useState(false);
@@ -115,6 +118,7 @@ const AlarmCard = (props) => {
             }, { responseType: 'json' });
 
             await CancelNotification(notification_id);
+            setDeleteCard(true);
 
         } catch (error) {
             console.log(error);
@@ -139,6 +143,8 @@ const AlarmCard = (props) => {
                         await CancelNotification(id);
                     }
                 }
+
+                setDeleteCard(true);
             }
 
         } catch (error) {
@@ -147,12 +153,11 @@ const AlarmCard = (props) => {
     }
 
     //Function to process deletion of recurring alarms based on user selection
-    function processAlarmDeletion() {
+    async function processAlarmDeletion() {
 
         if (radioChecked == "single") {
             deleteAlarm(alarm_id);
         } else if (radioChecked == "multiple") {
-
             if (isParent !== false) {
                 deleteAlarm(alarm_id);
                 deleteRecurringAlarms(alarm_id);
@@ -161,8 +166,7 @@ const AlarmCard = (props) => {
                 deleteRecurringAlarms(parent);
             }
         }
-
-        setModalVisible(false)
+        setModalVisible(false);
     }
 
     //Function to delete all recurring alarms
@@ -194,7 +198,7 @@ const AlarmCard = (props) => {
             getGarden(garden_id);
         }
         setComplete(completion_status);
-    }, [props]);
+    }, [props.alarm]);
 
     return (
         <View>
@@ -253,7 +257,7 @@ const AlarmCard = (props) => {
                                         <Ionicons name="ios-trash-outline" size={26} color="red" onPress={toggleModal} />
                                         :
                                         <Ionicons name="ios-trash-outline" size={26} color="red" onPress={() => {
-                                            deleteAlarm(alarm_id)
+                                            deleteAlarm(alarm_id);
                                         }} />
                                 }
                             </TouchableOpacity>

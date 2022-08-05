@@ -90,10 +90,11 @@ const NewAlarmScreen = (props) => {
         }
     }
 
-    async function createAlarm(title, date, schedule, numRepeats, parent, selectedPlot) {
+    async function createAlarm(props, title, date, schedule, numRepeats, parent, selectedPlot) {
 
         date = moment(date).format();
         let error = false;
+        let message = "";
 
         let body = {
             "title": title,
@@ -156,19 +157,25 @@ const NewAlarmScreen = (props) => {
             if (status == 200) {
                 if (response.data.errorMessage !== undefined) {
                     setErrorMessage(response.data.errorMessage);
+                    message = response.data.errorMessage;
                     await CancelNotification(notificationID);
                 } else {
 
                     //Create repeat alarms
-                    if (schedule !== null && numRepeats !== null && numRepeats > 0) {
+                    if (schedule !== null && numRepeats !== null && numRepeats > 1) {
 
                         if (parent == null) {
                             parent = response.data.alarm._id;
                         }
                         let newDate = moment(date).add(schedule, 'd');
                         let newNumRepeats = numRepeats - 1;
-                        await createAlarm(title, newDate, schedule, newNumRepeats, parent, selectedPlot);
+                        await createAlarm(props, title, newDate, schedule, newNumRepeats, parent, selectedPlot);
                     }
+                }
+
+                if ((numRepeats == null || numRepeats == 1) && message == "") {
+                    clearState();
+                    props.navigation.navigate("Alarms", { params: { updated: true } });
                 }
             }
 
@@ -272,16 +279,14 @@ const NewAlarmScreen = (props) => {
                 <View style={styles.navigationButtons}>
 
                     <TouchableOpacity style={styles.cancelButton} onPress={() => {
-                        clearState()
-                        props.navigation.navigate("Alarms")
+                        clearState();
+                        props.navigation.navigate("Alarms");
                     }}>
                         <Text style={styles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} onPress={async () => {
-                        await createAlarm(title, date, schedule, numRepeats, null, selectedPlot);
-                        clearState();
-                        props.navigation.navigate("Alarms");
+                        await createAlarm(props, title, date, schedule, numRepeats, null, selectedPlot);
                     }} >
                         <Text style={styles.buttonText}>SAVE</Text>
                     </TouchableOpacity>

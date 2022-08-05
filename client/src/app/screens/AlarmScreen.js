@@ -12,6 +12,7 @@ import AlarmCard from '../components/AlarmCard';
 const AlarmScreen = (props) => {
 
     const [items, setItems] = useState({});
+    const [deleteAlarm, setDeleteAlarm] = useState(null);
 
     // Get alarms for shown month
     async function getAlarms() {
@@ -31,7 +32,13 @@ const AlarmScreen = (props) => {
 
     useEffect(() => {
         getAlarms();
-    }, [props]);
+        if (props.route.params !== undefined) {
+            props.route.params = undefined;
+        }
+        if (deleteAlarm !== null) {
+            setDeleteAlarm(null);
+        }
+    }, [props, deleteAlarm]);
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
@@ -121,7 +128,7 @@ const AlarmScreen = (props) => {
 
     function renderItem(item) {
         return (
-            <AlarmCard alarm={item} />
+            <AlarmCard alarm={item} deleteCard={[deleteAlarm, setDeleteAlarm]} />
         );
     }
 
