@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
-import { unescape } from 'underscore';
+import { select, unescape } from 'underscore';
 import axios from "axios";
 
 import Header from '../components/Header';
@@ -86,20 +86,17 @@ const PlotScreen = (props) => {
     const addPlantToPlot = async (selectedPlant) => {
 
         try {
-
             let response = null;
+            let previousDatePlanted = plot.date_planted;
 
             if (selectedPlant !== null) {
-                response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
+                response = await axios.put("http://192.168.1.110:8080/garden/updatePlotPlant", {
                     "plant_id": selectedPlant,
                     "plot_number": plot.plot_number,
                     "garden_id": garden._id
                 }, { responseType: 'json' });
             } else {
-
-                //need to add removed plant to plot history in later sprint
-
-                response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
+                response = await axios.put("http://192.168.1.110:8080/garden/updatePlotPlant", {
                     "plot_number": plot.plot_number,
                     "garden_id": garden._id
                 }, { responseType: 'json' });
@@ -108,17 +105,23 @@ const PlotScreen = (props) => {
             let status = response.status;
 
             if (status == 200) {
-                clearState();
-                setUpdatePlot(!updatePlot);
-                props.navigation.navigate("Garden", { updatePlot });
-            } else {
-                setErrorMessage(response.data.errorMessage);
+                if (response.data.errorMessage !== undefined) {
+                    setErrorMessage(response.data.errorMessage);
+                } else {
+                    if (selectedPlant == null) {
+                        await updatePlotHistory(previousDatePlanted);
+                    }
+                    if (errorMessage == "") {
+                        clearState();
+                        setUpdatePlot(!updatePlot);
+                        props.navigation.navigate("Garden", { updatePlot });
+                    }
+                }
             }
 
         } catch (error) {
             console.log(error);
         }
-
     }
 
     // Get notes for shown month
@@ -156,6 +159,30 @@ const PlotScreen = (props) => {
             }
         }
         setNotes(filteredData);
+    }
+
+    //Add plant to garden plot history
+    const updatePlotHistory = async (date_planted) => {
+
+        try {
+            const response = await axios.put("http://192.168.1.110:8080/garden/updatePlotHistory", {
+                "plant_id": plant_id,
+                "date_planted": date_planted,
+                "plot_number": plot.plot_number,
+                "garden_id": garden._id
+            }, { responseType: 'json' });
+
+            let status = response.status;
+
+            if (status == 200) {
+                if (response.data.errorMessage !== undefined) {
+                    setErrorMessage(response.data.errorMessage);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
     useEffect(() => {
@@ -241,6 +268,19 @@ const PlotScreen = (props) => {
 
                             <View style={styles.cards}>
                                 {notes}
+                            </View>
+
+                        </View>
+                        : null
+                }
+
+                {
+                    plot.plot_history.length !== 0 ?
+                        <View>
+                            <Text style={styles.cardsTitle}>Grown Previously</Text>
+
+                            <View>
+                                <Text>Plant history</Text>
                             </View>
 
                         </View>
