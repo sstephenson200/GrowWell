@@ -90,13 +90,13 @@ const PlotScreen = (props) => {
             let previousDatePlanted = plot.date_planted;
 
             if (selectedPlant !== null) {
-                response = await axios.put("http://192.168.1.110:8080/garden/updatePlotPlant", {
+                response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
                     "plant_id": selectedPlant,
                     "plot_number": plot.plot_number,
                     "garden_id": garden._id
                 }, { responseType: 'json' });
             } else {
-                response = await axios.put("http://192.168.1.110:8080/garden/updatePlotPlant", {
+                response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
                     "plot_number": plot.plot_number,
                     "garden_id": garden._id
                 }, { responseType: 'json' });
@@ -165,7 +165,7 @@ const PlotScreen = (props) => {
     const updatePlotHistory = async (date_planted) => {
 
         try {
-            const response = await axios.put("http://192.168.1.110:8080/garden/updatePlotHistory", {
+            const response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotHistory", {
                 "plant_id": plant_id,
                 "date_planted": date_planted,
                 "plot_number": plot.plot_number,
