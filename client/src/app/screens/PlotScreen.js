@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import ImageSelect from '../components/SearchableImages';
 import Dropdown from '../components/Dropdown';
 import NoteCard from '../components/NoteCard';
+import PlotHistory from '../components/PlotHistory';
 
 //Method to sort plants array by name
 function sortPlants(props) {
@@ -27,6 +28,7 @@ const PlotScreen = (props) => {
     const [plants, setPlants] = useState([]);
     const [selectedPlant, setSelectedPlant] = useState(null);
     const [notes, setNotes] = useState([]);
+    const [plotHistory, setPlotHistory] = useState([]);
     const [updatePlot, setUpdatePlot] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -161,6 +163,21 @@ const PlotScreen = (props) => {
         setNotes(filteredData);
     }
 
+    function getPlotHistory() {
+
+        let history = [];
+
+        if (plot.plot_history.length !== 0) {
+
+            for (let i = 0; i < plot.plot_history.length; i++) {
+                history.push(
+                    <PlotHistory key={[i]} plot_history={plot.plot_history[i]} />
+                );
+            }
+        }
+        setPlotHistory(history);
+    }
+
     //Add plant to garden plot history
     const updatePlotHistory = async (date_planted) => {
 
@@ -192,6 +209,7 @@ const PlotScreen = (props) => {
             getPlants();
         }
         getNotes();
+        getPlotHistory();
     }, [props]);
 
     const [loaded] = useFonts({
@@ -275,12 +293,12 @@ const PlotScreen = (props) => {
                 }
 
                 {
-                    plot.plot_history.length !== 0 ?
+                    plotHistory.length !== 0 ?
                         <View>
                             <Text style={styles.cardsTitle}>Grown Previously</Text>
 
                             <View>
-                                <Text>Plant history</Text>
+                                {plotHistory}
                             </View>
 
                         </View>
