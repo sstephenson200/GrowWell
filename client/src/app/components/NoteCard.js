@@ -20,6 +20,7 @@ const NoteCard = (props) => {
     description = unescape(description);
     let garden_id = props.note.garden_id;
     let plot_number = props.note.plot_number;
+    let plant_id = props.note.plant_id;
 
     async function getGarden() {
         try {
@@ -34,8 +35,6 @@ const NoteCard = (props) => {
                 name = unescape(name);
 
                 setGardenName(name);
-
-                let plant_id = response.data.garden.plot[plot_number].plant_id;
 
                 if (plant_id !== null) {
                     getPlant(plant_id);
