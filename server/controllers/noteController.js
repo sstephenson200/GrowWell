@@ -57,6 +57,7 @@ const createNote = async (request, response) => {
 
     const { title, description, garden_id, plot_number } = parsedReq;
     const date = Date.now();
+    let plant_id = null;
 
     //Check if required params are given
     if (!title) {
@@ -96,6 +97,10 @@ const createNote = async (request, response) => {
         if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
             return response.status(200).json({ errorMessage: "Invalid plot number." });
         }
+
+        if (existingGarden.plot[plot_number].plant_id !== null) {
+            plant_id = existingGarden.plot[plot_number].plant_id !== null;
+        }
     }
 
     //Get image_id array
@@ -109,7 +114,7 @@ const createNote = async (request, response) => {
 
     try {
         const newNote = new Note({
-            user_id, title, description, date, image: image_id, garden_id, plot_number
+            user_id, title, description, date, image: image_id, garden_id, plot_number, plant_id
         });
         const savedNote = await newNote.save();
 

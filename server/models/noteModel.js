@@ -8,7 +8,8 @@ const noteSchema = new mongoose.Schema({
     date: { type: Date, required: true },
     image: [{ type: mongoose.Schema.Types.ObjectId, ref: "image", default: null }],
     garden_id: { type: mongoose.Schema.Types.ObjectId, ref: "garden", default: null },
-    plot_number: { type: Number, default: null }
+    plot_number: { type: Number, default: null },
+    plant_id: { type: mongoose.Schema.Types.ObjectId, ref: "plant", default: null }
 });
 
 const Note = mongoose.model("note", noteSchema);
