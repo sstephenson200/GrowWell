@@ -64,4 +64,16 @@ router.put("/updatePlotPlant", [
         .isDate().withMessage("Invalid date."),
 ], auth, gardenController.updatePlotPlant);
 
+router.put("/updatePlotHistory", [
+    check('garden_id')
+        .not().isEmpty().withMessage("Garden_id required."),
+    check('plot_number')
+        .not().isEmpty().withMessage("Plot_number required.")
+        .isInt().withMessage("Plot_number must be an integer value."),
+    check('plant_id')
+        .not().isEmpty().withMessage("Plant_id required."),
+    check('date_planted')
+        .isDate().withMessage("Invalid date."),
+], auth, gardenController.updatePlotHistory);
+
 module.exports = router;

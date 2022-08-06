@@ -255,9 +255,58 @@ const updatePlotPlant = async (request, response) => {
     }
 
     try {
-        await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { 'plot.$.plant_id': plant_id, 'plot.$.date_planted': date_planted } });
+        if (plant_id == null) {
+            await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { 'plot.$.plant_id': plant_id, 'plot.$.date_planted': null } });
+        } else {
+            await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { 'plot.$.plant_id': plant_id, 'plot.$.date_planted': date_planted } });
+        }
 
         return response.status(200).json({ message: "Plot plant updated successfully." });
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Request to update a plot's history
+const updatePlotHistory = async (request, response) => {
+
+    let { garden_id, plot_number, plant_id, date_planted } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(garden_id)) {
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+    if (!existingPlant) {
+        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+    }
+
+    const existingGarden = await Garden.findOne({ _id: garden_id });
+    if (!existingGarden) {
+        return response.status(200).json({ errorMessage: "Invalid garden_id." });
+    }
+
+    const gardenSize = existingGarden.plot.length;
+
+    if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
+        return response.status(200).json({ errorMessage: "Invalid plot_number." });
+    }
+
+    try {
+        await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { 'plot.$.plot_history': [{ 'plant_id': plant_id, "date_planted": date_planted }] } });
+
+        return response.status(200).json({ message: "Plot history updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -273,5 +322,6 @@ module.exports = {
     deleteAllGardens,
     updateName,
     updatePlotPlantedDate,
-    updatePlotPlant
+    updatePlotPlant,
+    updatePlotHistory
 }
