@@ -99,7 +99,7 @@ const createNote = async (request, response) => {
         }
 
         if (existingGarden.plot[plot_number].plant_id !== null) {
-            plant_id = existingGarden.plot[plot_number].plant_id !== null;
+            plant_id = existingGarden.plot[plot_number].plant_id;
         }
     }
 
