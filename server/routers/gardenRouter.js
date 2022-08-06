@@ -73,7 +73,7 @@ router.put("/updatePlotHistory", [
     check('plant_id')
         .not().isEmpty().withMessage("Plant_id required."),
     check('date_planted')
-        .isDate().withMessage("Invalid date."),
+        .not().isEmpty().withMessage("Date_planted required."),
 ], auth, gardenController.updatePlotHistory);
 
 module.exports = router;

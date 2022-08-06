@@ -303,8 +303,15 @@ const updatePlotHistory = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid plot_number." });
     }
 
+    if (!Date.parse(date_planted)) {
+        return response.status(200).json({ errorMessage: "Invalid date_planted." });
+    }
+
+    let plot_history = existingGarden.plot[plot_number].plot_history;
+    plot_history.push({ 'plant_id': plant_id, 'date_planted': date_planted });
+
     try {
-        await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { 'plot.$.plot_history': [{ 'plant_id': plant_id, "date_planted": date_planted }] } });
+        await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { 'plot.$.plot_history': plot_history } });
 
         return response.status(200).json({ message: "Plot history updated successfully." });
 
