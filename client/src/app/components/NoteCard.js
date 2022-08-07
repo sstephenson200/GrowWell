@@ -77,12 +77,10 @@ const NoteCard = (props) => {
                 photos.push(base64Image);
             }
         }
-
         setNotePhotos(photos);
     }
 
     useEffect(() => {
-        setNotePhotos([]);
         if (garden_id !== null) {
             getGarden();
         }

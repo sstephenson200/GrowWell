@@ -14,15 +14,15 @@ import NoteCard from '../components/NoteCard';
 const PlantScreen = (props) => {
 
     let plant_id = props.route.params.plant_id;
-    let name = null;
-    let plant_type = null;
-    let photo1 = null;
-    let photo2 = null;
-    let photo3 = null;
+    let name = props.route.params.name;
+    let plant_type = props.route.params.plant_type == "Vegetable" ? "VEG" : props.route.params.plant_type.toUppercase();
+    let photo1 = props.route.params.photo;
 
     const [plant, setPlant] = useState([]);
     const [notes, setNotes] = useState([]);
     const [plots, setPlots] = useState([]);
+    const [photo2, setPhoto2] = useState(null);
+    const [photo3, setPhoto3] = useState(null);
     const [selectedPlot, setSelectedPlot] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -36,7 +36,7 @@ const PlantScreen = (props) => {
         let plantData = await getPlant();
         getNotes();
         getPlots();
-        await getImages(plantData);
+        getImages(plantData);
     }
 
     //Get plant data
@@ -46,6 +46,7 @@ const PlantScreen = (props) => {
                 "plant_id": plant_id
             }, { responseType: 'json' });
             const plant = await response.data.plant;
+            setPlant(response.data.plant);
             return plant;
         } catch (error) {
             console.error(error);
@@ -54,8 +55,9 @@ const PlantScreen = (props) => {
 
     //Get corresponding plant images
     const getImages = async (plantData) => {
-        if (plantData.image.length <= 0)
+        if (plantData.image.length <= 0) {
             return;
+        }
 
         let updatedPlantData = [];
         let plantPhotos = [];
@@ -81,6 +83,8 @@ const PlantScreen = (props) => {
 
         fileReaderInstance.onloadend = () => {
             if (updatedPlantData[0].photo.length === plantData.image.length) {
+                setPhoto2(plantData.photo[1]);
+                setPhoto3(plantData.photo[2]);
                 setPlant(plantData);
             }
         }
@@ -222,18 +226,6 @@ const PlantScreen = (props) => {
         return null;
     }
 
-    //Set plant variables when images have been added and plant data reset
-    if (plant.length !== 0) {
-        name = plant.name;
-        plant_type = plant.plant_type.toUpperCase();
-        if (plant_type == "VEGETABLE") {
-            plant_type = "VEG";
-        }
-        photo1 = plant.photo[0];
-        photo2 = plant.photo[1];
-        photo3 = plant.photo[2];
-    }
-
     return (
 
         <View style={styles.container}>
@@ -263,16 +255,30 @@ const PlantScreen = (props) => {
 
                 <Text style={styles.description}>{plant.description}</Text>
 
-                <View style={styles.plantPhotos}>
-                    <Image
-                        style={styles.photo}
-                        source={{ uri: photo2 }}
-                    />
-                    <Image
-                        style={styles.photo}
-                        source={{ uri: photo3 }}
-                    />
-                </View>
+                {
+                    plant.photo !== undefined && plant.photo[1] !== null && plant.photo[2] !== null ?
+                        <View style={styles.plantPhotos}>
+                            <Image
+                                style={styles.photo}
+                                source={{ uri: photo2 }}
+                            />
+                            <Image
+                                style={styles.photo}
+                                source={{ uri: photo3 }}
+                            />
+                        </View>
+                        :
+                        <View style={styles.plantPhotos}>
+                            <Image
+                                style={styles.photo}
+                                source={require("../assets/images/placeholder.png")}
+                            />
+                            <Image
+                                style={styles.photo}
+                                source={require("../assets/images/placeholder.png")}
+                            />
+                        </View>
+                }
 
                 <Text style={styles.subtitle}>Add To Garden</Text>
 

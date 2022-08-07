@@ -25,7 +25,7 @@ const PlantList = (props) => {
 
     const getAllPlantData = async () => {
         let plantData = await getPlants();
-        await getImages(plantData);
+        getImages(plantData);
     }
 
     //Get all plant data
@@ -35,7 +35,9 @@ const PlantList = (props) => {
             const json = await response.json();
             let sortedPlants = json.plants.sort(sortPlants("name"));
 
-            return sortedPlants;
+            setPlants(sortedPlants);
+
+            return (sortedPlants);
         } catch (error) {
             console.error(error);
         }
@@ -151,7 +153,7 @@ const PlantList = (props) => {
 
                     return (
 
-                        <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id } })}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id, name: item.name, plant_type: item.plant_type, photo: item.photo } })}>
                             <Card>
 
                                 <View style={styles.plantData}>
@@ -175,10 +177,18 @@ const PlantList = (props) => {
                                 </View>
 
                                 <View>
-                                    <Image
-                                        style={styles.image}
-                                        source={{ uri: item.photo }}
-                                    />
+                                    {
+                                        item.photo !== undefined ?
+                                            <Image
+                                                style={styles.image}
+                                                source={{ uri: item.photo }}
+                                            />
+                                            :
+                                            <Image
+                                                style={styles.image}
+                                                source={require("../assets/images/placeholder.png")}
+                                            />
+                                    }
                                 </View>
 
                             </Card>
