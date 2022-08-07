@@ -11,9 +11,9 @@ import AlarmScreen from "../screens/Alarm/AlarmScreen";
 import PlantListScreen from "../screens/Plant/PlantListScreen";
 
 //Method to allow tab bar to be hidden for various screens
-const getTabBarVisibility = (route) => {
+const getTabBarVisibility = (route, loggedIn) => {
 
-    if (route.params !== undefined) {
+    if (route.params !== undefined || !loggedIn) {
 
         let screenName = null;
 
@@ -21,7 +21,7 @@ const getTabBarVisibility = (route) => {
             screenName = route.params.screen;
         }
 
-        if (screenName == "Login" || screenName == "SignUp" || screenName == "PasswordReset") {
+        if (!loggedIn || screenName == "Login" || screenName == "SignUp" || screenName == "PasswordReset") {
             return { display: "none" };
         }
     }
