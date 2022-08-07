@@ -1,52 +1,15 @@
 const moment = require("moment");
-const { deleteImages } = require("../middleware/imageUpload");
 
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 const validator = require("../validators/validator");
 const gardenValidator = require("../validators/gardenValidator");
+
+const { deleteImages } = require("../middleware/imageUpload");
 
 const Note = require("../models/noteModel");
 const Garden = require("../models/gardenModel");
 
-//Function to delete a note by garden_id
-async function deleteNotesByGarden(garden_id) {
-
-    const existingNote = await Note.findOne({ 'garden_id': garden_id });
-    if (!existingNote) {
-        return false;
-    }
-
-    try {
-        let notes = await Note.find({ 'garden_id': garden_id });
-        await Note.deleteMany({ 'garden_id': garden_id });
-        notes.forEach((note) => {
-            deleteImages(note.image);
-        });
-
-        return true;
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send();
-    }
-}
-
-//Function to delete all notes for a given user_id
-async function deleteAllNotes(user_id) {
-
-    try {
-        let notes = await Note.find({ 'user_id': user_id });
-        await Note.deleteMany({ 'user_id': user_id });
-        notes.forEach((note) => {
-            deleteImages(note.image);
-        });
-        return true;
-
-    } catch (error) {
-        return false;
-    }
-
-}
+// *** CREATE REQUESTS ***
 
 //Request to create a new note
 const createNote = async (request, response) => {
@@ -79,18 +42,18 @@ const createNote = async (request, response) => {
 
     if (garden_id != null) {
         if (!validator.checkValidId(garden_id)) {
-            return response.status(200).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden ID." });
         }
 
         existingGarden = await Garden.findOne({ _id: garden_id });
         if (!existingGarden) {
-            return response.status(200).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden ID." });
         }
         gardenSize = existingGarden.plot.length;
     }
 
     if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
-        return response.status(200).json({ errorMessage: "Plot_number must be provided with garden_id." });
+        return response.status(200).json({ errorMessage: "Plot number must be provided with garden ID." });
     }
 
     if (plot_number != null) {
@@ -126,12 +89,14 @@ const createNote = async (request, response) => {
     }
 }
 
+// *** GET REQUESTS ***
+
 //Request to get all notes for a given plant
 const getNotes = async (request, response) => {
 
     let user_id = request.user;
 
-    const notes = await Note.find({ 'user_id': user_id });
+    const notes = await Note.find({ "user_id": user_id });
 
     return response.status(200).json({ notes: notes });
 }
@@ -148,7 +113,7 @@ const getNotesByDate = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const notes = await Note.find({ 'user_id': user_id, 'date': { $gte: moment(date).toDate(), $lte: moment(date).endOf('day').toDate() } });
+    const notes = await Note.find({ "user_id": user_id, "date": { $gte: moment(date).toDate(), $lte: moment(date).endOf("day").toDate() } });
 
     return response.status(200).json({ notes: notes });
 }
@@ -165,13 +130,15 @@ const getNotesByMonth = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const startOfMonth = moment(date).startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = moment(date).endOf('month').format('YYYY-MM-DD');
+    const startOfMonth = moment(date).startOf("month").format("YYYY-MM-DD");
+    const endOfMonth = moment(date).endOf("month").format("YYYY-MM-DD");
 
-    const notes = await Note.find({ 'user_id': user_id, 'date': { $gte: moment(startOfMonth).toDate(), $lte: moment(endOfMonth).toDate() } });
+    const notes = await Note.find({ "user_id": user_id, "date": { $gte: moment(startOfMonth).toDate(), $lte: moment(endOfMonth).toDate() } });
 
     return response.status(200).json({ notes: notes });
 }
+
+// *** DELETE REQUESTS ***
 
 //Request to delete a note
 const deleteNote = async (request, response) => {
@@ -184,12 +151,12 @@ const deleteNote = async (request, response) => {
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     try {
@@ -204,6 +171,47 @@ const deleteNote = async (request, response) => {
     }
 }
 
+//Function to delete a note by garden_id
+async function deleteNotesByGarden(garden_id) {
+
+    const existingNote = await Note.findOne({ "garden_id": garden_id });
+    if (!existingNote) {
+        return false;
+    }
+
+    try {
+        let notes = await Note.find({ "garden_id": garden_id });
+        await Note.deleteMany({ "garden_id": garden_id });
+        notes.forEach((note) => {
+            deleteImages(note.image);
+        });
+
+        return true;
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send();
+    }
+}
+
+//Function to delete all notes for a given user_id
+async function deleteAllNotes(user_id) {
+
+    try {
+        let notes = await Note.find({ "user_id": user_id });
+        await Note.deleteMany({ "user_id": user_id });
+        notes.forEach((note) => {
+            deleteImages(note.image);
+        });
+        return true;
+
+    } catch (error) {
+        return false;
+    }
+}
+
+// *** UPDATE REQUESTS ***
+
 //Request to update a note's title
 const updateTitle = async (request, response) => {
 
@@ -215,12 +223,12 @@ const updateTitle = async (request, response) => {
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     if (title == existingNote.title) {
@@ -228,7 +236,7 @@ const updateTitle = async (request, response) => {
     }
 
     try {
-        await Note.updateOne(existingNote, { 'title': title });
+        await Note.updateOne(existingNote, { "title": title });
 
         return response.status(200).json({ message: "Note title updated successfully." });
 
@@ -249,12 +257,12 @@ const updateDescription = async (request, response) => {
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     if (description == existingNote.description) {
@@ -262,7 +270,7 @@ const updateDescription = async (request, response) => {
     }
 
     try {
-        await Note.updateOne(existingNote, { 'description': description });
+        await Note.updateOne(existingNote, { "description": description });
 
         return response.status(200).json({ message: "Note description updated successfully." });
 
@@ -283,32 +291,32 @@ const updateGardenPlot = async (request, response) => {
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     if (!gardenValidator.checkGardenAndPlotsProvided(garden_id, plot_number)) {
-        return response.status(200).json({ errorMessage: "Plot_number must be provided with garden_id." });
+        return response.status(200).json({ errorMessage: "Plot number must be provided with garden ID." });
     }
 
     if (garden_id && plot_number) {
         if (!validator.checkValidId(garden_id)) {
-            return response.status(200).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden ID." });
         }
 
         const existingGarden = await Garden.findOne({ _id: garden_id });
         if (!existingGarden) {
-            return response.status(200).json({ errorMessage: "Invalid garden_id." });
+            return response.status(200).json({ errorMessage: "Invalid garden ID." });
         }
 
         const gardenSize = existingGarden.plot.length;
 
         if (!gardenValidator.checkValidPlotNumber(gardenSize, plot_number)) {
-            return response.status(200).json({ errorMessage: "Invalid plot_number." });
+            return response.status(200).json({ errorMessage: "Invalid plot number." });
         }
     } else {
         garden_id = null;
@@ -322,7 +330,7 @@ const updateGardenPlot = async (request, response) => {
     }
 
     try {
-        await Note.updateOne(existingNote, { 'garden_id': garden_id, 'plot_number': plot_number });
+        await Note.updateOne(existingNote, { "garden_id": garden_id, "plot_number": plot_number });
 
         return response.status(200).json({ message: "Note garden plot updated successfully." });
 
@@ -341,16 +349,16 @@ const updateImages = async (request, response) => {
 
     //Check if required params are given
     if (!note_id) {
-        return response.status(200).json({ errorMessage: "Note_id required." });
+        return response.status(200).json({ errorMessage: "Note ID required." });
     }
 
     if (!validator.checkValidId(note_id)) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     const existingNote = await Note.findOne({ _id: note_id });
     if (!existingNote) {
-        return response.status(200).json({ errorMessage: "Invalid note_id." });
+        return response.status(200).json({ errorMessage: "Invalid note ID." });
     }
 
     //Get image_id array

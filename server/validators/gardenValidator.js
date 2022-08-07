@@ -2,7 +2,6 @@ const Garden = require("../models/gardenModel");
 
 //Check if both garden_id and plot_number are provided
 function checkGardenAndPlotsProvided(garden_id, plot_number) {
-
     if ((garden_id != null && plot_number == null) || (garden_id == null && plot_number != null)) {
         return false;
     }
@@ -11,15 +10,14 @@ function checkGardenAndPlotsProvided(garden_id, plot_number) {
 
 //Check if garden name already in use for given user
 async function checkExistingGardenName(name, user_id) {
-    const existingGarden = await Garden.findOne({ 'name': name, 'user._id': user_id });
+    const existingGarden = await Garden.findOne({ "name": name, "user._id": user_id });
     if (existingGarden) {
         return true;
     }
 }
 
-//Check plot_number is valid
+//Check plot_number is valid for given garden size
 function checkValidPlotNumber(gardenSize, plot_number) {
-
     if (plot_number >= 0 && plot_number < gardenSize) {
         return true;
     }

@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const generator = require("generate-password");
 
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 const userValidator = require("../validators/userValidator");
 
 const passwordMailer = require("../mailer/passwordMailer");
@@ -12,6 +12,8 @@ const alarmController = require("./alarmController");
 const noteController = require("./noteController");
 
 const User = require("../models/userModel");
+
+// *** CREATE REQUESTS ***
 
 //Request to create a new user record
 const createUser = async (request, response) => {
@@ -55,6 +57,8 @@ const createUser = async (request, response) => {
         response.status(500).send();
     }
 }
+
+// *** AUTH REQUESTS ***
 
 // Request to log user into the system using email and password
 const login = async (request, response) => {
@@ -109,6 +113,8 @@ const logout = async (request, response) => {
     }).send({ message: "User logged out successfully." });
 }
 
+// *** GET REQUESTS ***
+
 // Request to get a user by user_id
 const getUser = async (request, response) => {
 
@@ -116,11 +122,13 @@ const getUser = async (request, response) => {
 
     const user = await User.findOne({ _id: user_id });
     if (!user) {
-        return response.status(200).json({ errorMessage: "Invalid user_id." });
+        return response.status(200).json({ errorMessage: "Invalid user ID." });
     }
 
     return response.status(200).json({ user: user });
 }
+
+// *** DELETE REQUESTS *** 
 
 //Request to delete a user
 const deleteUser = async (request, response) => {
@@ -152,6 +160,8 @@ const deleteUser = async (request, response) => {
         response.status(500).send();
     }
 }
+
+// *** UPDATE REQUESTS ***
 
 //Request to update a user's email address
 const updateEmail = async (request, response) => {

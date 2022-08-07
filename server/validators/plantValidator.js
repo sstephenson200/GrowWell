@@ -57,12 +57,11 @@ function checkValidMonthSchedule(schedule) {
 
 //Check entered list contents are valid enum values
 function checkValidPlantEnum(list) {
-    let flag = false;
     const listName = list.name;
     if (typeof list.type !== 'string') {
         for (let i = 0; i < list.type.length; i++) {
             if (Object.values(Plant.schema.path(listName).$embeddedSchemaType.enumValues).includes(list.type[i])) {
-                flag = true;
+                //true
             } else {
                 return false;
             }

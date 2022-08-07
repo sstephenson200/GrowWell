@@ -7,7 +7,7 @@ function auth(request, response, next) {
         let token = request.cookies.token;
 
         if (!token) {
-            return response.status(401).json({ errorMessage: "Unauthorized" });
+            return response.status(200).json({ errorMessage: "Unauthorized" });
         }
 
         let verified = jwt.verify(token, process.env.JWT_SECRET);
@@ -18,7 +18,7 @@ function auth(request, response, next) {
 
     } catch (error) {
         console.error(error);
-        response.status(401).json({ errorMessage: "Unauthorized" });
+        response.status(200).json({ errorMessage: "Unauthorized" });
     }
 }
 

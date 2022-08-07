@@ -1,11 +1,14 @@
-const { deleteImages, bucket } = require("../middleware/imageUpload");
 const mongoose = require("mongoose");
 
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 const validator = require("../validators/validator");
 const plantValidator = require("../validators/plantValidator");
 
+const { deleteImages, bucket } = require("../middleware/imageUpload");
+
 const Plant = require("../models/plantModel");
+
+// *** CREATE REQUESTS ***
 
 //Create Plant Endpoint
 const createPlant = async (request, response) => {
@@ -22,15 +25,15 @@ const createPlant = async (request, response) => {
     } else if (!plant_type) {
         return response.status(200).json({ errorMessage: "Plant type required." });
     } else if (!sun_condition) {
-        return response.status(200).json({ errorMessage: "Sun_condition required." });
+        return response.status(200).json({ errorMessage: "Sun condition required." });
     } else if (!soil_type) {
-        return response.status(200).json({ errorMessage: "Soil_type required." });
+        return response.status(200).json({ errorMessage: "Soil type required." });
     } else if (!soil_ph) {
-        return response.status(200).json({ errorMessage: "Soil_ph required." });
+        return response.status(200).json({ errorMessage: "Soil pH required." });
     } else if (!water_schedule) {
-        return response.status(200).json({ errorMessage: "Water_schedule required." });
+        return response.status(200).json({ errorMessage: "Water schedule required." });
     } else if (!indoor_schedule) {
-        return response.status(200).json({ errorMessage: "Indoor_schedule required." });
+        return response.status(200).json({ errorMessage: "Indoor schedule required." });
     } else if (!spacing) {
         return response.status(200).json({ errorMessage: "Spacing required." });
     }
@@ -52,7 +55,7 @@ const createPlant = async (request, response) => {
     }
 
     if (!Array.isArray(sun_condition) || !Array.isArray(soil_type) || !Array.isArray(soil_ph)) {
-        return response.status(200).json({ errorMessage: "Sun_condition, soil_type and soil_ph must be entered as arrays." });
+        return response.status(200).json({ errorMessage: "Sun condition, soil type and soil pH must be entered as arrays." });
     }
 
     let enums = [{ type: plant_type, name: "plant_type" }, { type: sun_condition, name: "sun_condition" }, { type: soil_type, name: "soil_type" }, { type: soil_ph, name: "soil_ph" }];
@@ -114,7 +117,7 @@ const createPlant = async (request, response) => {
         const listName = optionalWeeklySchedules[i].name;
         if (optionalWeeklySchedules[i].type != null) {
             if (plantValidator.checkArrayLength(optionalWeeklySchedules[i].type, 1)) {
-                if (typeof optionalWeeklySchedules[i].type[0] !== 'string') {
+                if (typeof optionalWeeklySchedules[i].type[0] !== "string") {
                     return response.status(200).json({ errorMessage: "Single values for " + listName + " must be entered as strings." });
                 } else {
                     optionalWeeklySchedules[i].type[0] = optionalWeeklySchedules[i].type[0].trim();
@@ -136,17 +139,17 @@ const createPlant = async (request, response) => {
     for (let i = 0; i < stringArrays.length; i++) {
         const listName = stringArrays[i].name;
         if (stringArrays[i].type !== null) {
-            if (typeof stringArrays[i].type !== 'string') {
+            if (typeof stringArrays[i].type !== "string") {
                 editedStringArraysEntry = [...new Set(stringArrays[i].type)];
                 for (let j = 0; j < editedStringArraysEntry.length; j++) {
-                    if (typeof editedStringArraysEntry[j] !== 'string') {
+                    if (typeof editedStringArraysEntry[j] !== "string") {
                         return response.status(200).json({ errorMessage: listName + " values must be entered as strings." });
                     }
                     editedString = editedStringArraysEntry[j].trim();
                     editedStringArraysEntry[j] = editedString;
                 }
             } else {
-                return response.status(200).json({ errorMessage: "Plant_problem, companion_plant and incompatible_plant must be entered as arrays." });
+                return response.status(200).json({ errorMessage: "Plant problem, companion plants and incompatible plants must be entered as arrays." });
             }
         }
         editedStringArrays.push(editedStringArraysEntry);
@@ -181,6 +184,8 @@ const createPlant = async (request, response) => {
     }
 }
 
+// *** GET REQUESTS ***
+
 //Request to get all plants
 const getAllPlants = async (request, response) => {
 
@@ -200,7 +205,7 @@ const getImageByID = (request, response) => {
     }
 
     if (!validator.checkValidId(image_id)) {
-        return response.status(200).json({ errorMessage: "Invalid image_id." });
+        return response.status(200).json({ errorMessage: "Invalid image ID." });
     }
 
     image_id = new mongoose.Types.ObjectId(image_id);
@@ -233,16 +238,18 @@ const getPlantByID = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     return response.status(200).json({ plant: existingPlant });
 }
+
+// *** DELETE REQUESTS ***
 
 //Request to delete a plant for a given plant_id
 const deletePlant = async (request, response) => {
@@ -255,7 +262,7 @@ const deletePlant = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     try {
@@ -270,6 +277,8 @@ const deletePlant = async (request, response) => {
     }
 }
 
+// *** UPDATE REQUESTS *** 
+
 //Request to update a plant's name
 const updateName = async (request, response) => {
 
@@ -281,12 +290,12 @@ const updateName = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (name == existingPlant.name) {
@@ -294,7 +303,7 @@ const updateName = async (request, response) => {
     }
 
     try {
-        await Plant.updateOne(existingPlant, { 'name': name });
+        await Plant.updateOne(existingPlant, { "name": name });
 
         return response.status(200).json({ message: "Plant name updated successfully." });
 
@@ -315,12 +324,12 @@ const updateDescription = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (description == existingPlant.description) {
@@ -328,7 +337,7 @@ const updateDescription = async (request, response) => {
     }
 
     try {
-        await Plant.updateOne(existingPlant, { 'description': description });
+        await Plant.updateOne(existingPlant, { "description": description });
 
         return response.status(200).json({ message: "Plant description updated successfully." });
 
@@ -349,25 +358,25 @@ const updateEnums = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (!Object.values(plantValidator.enumTypes).includes(enumType)) {
-        return response.status(200).json({ errorMessage: "Invalid enumType." });
+        return response.status(200).json({ errorMessage: "Invalid enum type." });
     }
 
     if (enumType == "plant_type") {
-        if (typeof enumValue !== 'string') {
-            return response.status(200).json({ errorMessage: "Plant_type must be entered as a string." });
+        if (typeof enumValue !== "string") {
+            return response.status(200).json({ errorMessage: "Plant type must be entered as a string." });
         }
     } else {
         if (!Array.isArray(enumValue)) {
-            return response.status(200).json({ errorMessage: "Sun_condition, soil_type and soil_ph must be entered as arrays." });
+            return response.status(200).json({ errorMessage: "Sun condition, soil type and soil pH must be entered as arrays." });
         }
         enumValue = [...new Set(enumValue)];
     }
@@ -403,16 +412,16 @@ const updateMonthlySchedules = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (!Object.values(plantValidator.monthlyScheduleTypes).includes(scheduleType)) {
-        return response.status(200).json({ errorMessage: "Invalid ScheduleType." });
+        return response.status(200).json({ errorMessage: "Invalid schedule type." });
     }
 
     if (!plantValidator.checkArrayLength(scheduleValue, 2)) {
@@ -447,16 +456,16 @@ const updateRequiredWeeklySchedules = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (!Object.values(plantValidator.requiredWeeklyScheduleTypes).includes(scheduleType)) {
-        return response.status(200).json({ errorMessage: "Invalid ScheduleType." });
+        return response.status(200).json({ errorMessage: "Invalid schedule type." });
     }
 
     if (!plantValidator.checkArrayLength(scheduleValue, 2)) {
@@ -491,22 +500,22 @@ const updateOptionalWeeklySchedules = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (!Object.values(plantValidator.optionalWeeklyScheduleTypes).includes(scheduleType)) {
-        return response.status(200).json({ errorMessage: "Invalid ScheduleType." });
+        return response.status(200).json({ errorMessage: "Invalid schedule type." });
     }
 
     let editedString = "";
 
     if (plantValidator.checkArrayLength(scheduleValue, 1)) {
-        if (typeof scheduleValue[0] !== 'string') {
+        if (typeof scheduleValue[0] !== "string") {
             return response.status(200).json({ errorMessage: "Single values for optional schedules must be entered as strings." });
         }
         editedString = scheduleValue[0].trim();
@@ -546,12 +555,12 @@ const updateCompostSchedule = async (request, response) => {
     }
 
     if (!plantValidator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (compost_schedule == existingPlant.compost_schedule) {
@@ -559,9 +568,9 @@ const updateCompostSchedule = async (request, response) => {
     }
 
     try {
-        await Plant.updateOne(existingPlant, { 'compost_schedule': compost_schedule });
+        await Plant.updateOne(existingPlant, { "compost_schedule": compost_schedule });
 
-        return response.status(200).json({ message: "Plant compost_schedule updated successfully." });
+        return response.status(200).json({ message: "Plant compost schedule updated successfully." });
 
     } catch (error) {
         console.error(error);
@@ -580,26 +589,26 @@ const updateLists = async (request, response) => {
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     if (!Object.values(plantValidator.listTypes).includes(listType)) {
-        return response.status(200).json({ errorMessage: "Invalid listType." });
+        return response.status(200).json({ errorMessage: "Invalid list type." });
     }
 
     if (!Array.isArray(listValue)) {
-        return response.status(200).json({ errorMessage: "Plant_problem, companion_plant and incompatible_plant must be entered as arrays." });
+        return response.status(200).json({ errorMessage: "Plant problem, companion plants and incompatible plants must be entered as arrays." });
     }
 
     let editedList = [];
 
     for (let i = 0; i < listValue.length; i++) {
-        if (typeof listValue[i] !== 'string') {
+        if (typeof listValue[i] !== "string") {
             return response.status(200).json({ errorMessage: listType + " values must be entered as strings." });
         }
         let editedString = listValue[i].trim();
@@ -631,16 +640,16 @@ const updateImages = async (request, response) => {
 
     //Check if required params are given
     if (!plant_id) {
-        return response.status(200).json({ errorMessage: "Plant_id required." });
+        return response.status(200).json({ errorMessage: "Plant ID required." });
     }
 
     if (!validator.checkValidId(plant_id)) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     const existingPlant = await Plant.findOne({ _id: plant_id });
     if (!existingPlant) {
-        return response.status(200).json({ errorMessage: "Invalid plant_id." });
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
     //Get image_id array

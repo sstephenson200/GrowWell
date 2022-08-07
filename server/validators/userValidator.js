@@ -15,7 +15,6 @@ async function checkPasswordCorrect(password, storedPasswordHash) {
     return match;
 }
 
-
 module.exports = {
     checkMatchingPasswords,
     checkPasswordCorrect
