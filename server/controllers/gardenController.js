@@ -130,7 +130,7 @@ async function deleteAllGardens(user_id) {
         return true;
 
     } catch (error) {
-        return false;
+        throw error;
     }
 }
 
@@ -243,8 +243,6 @@ const updatePlotPlant = async (request, response) => {
         if (plant_id === existingPlant._id) {
             return response.status(200).json({ errorMessage: "No change detected." });
         }
-    } else {
-        plant_id = null;
     }
 
     const existingGarden = await Garden.findOne({ _id: garden_id });
@@ -263,7 +261,7 @@ const updatePlotPlant = async (request, response) => {
     }
 
     try {
-        if (plant_id == null) {
+        if (plant_id == undefined) {
             await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": plant_id, "plot.$.date_planted": null } });
         } else {
             await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": plant_id, "plot.$.date_planted": date_planted } });

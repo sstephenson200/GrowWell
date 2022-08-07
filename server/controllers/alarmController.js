@@ -182,7 +182,7 @@ async function deleteAllAlarms(user_id) {
         await Alarm.deleteMany({ "user_id": user_id });
         return true;
     } catch (error) {
-        return false;
+        throw error;
     }
 }
 
@@ -339,13 +339,7 @@ const updateCompletionStatus = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid alarm ID." });
     }
 
-    let completion_status = null;
-
-    if (existingAlarm.completion_status == true) {
-        completion_status = false;
-    } else {
-        completion_status = true;
-    }
+    let completion_status = !existingAlarm.completion_status;
 
     try {
         await Alarm.updateOne(existingAlarm, { "completion_status": completion_status });
@@ -377,13 +371,7 @@ const updateActiveStatus = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid alarm ID." });
     }
 
-    let active_status = null;
-
-    if (existingAlarm.active_status == true) {
-        active_status = false;
-    } else {
-        active_status = true;
-    }
+    let active_status = !existingAlarm.active_status;
 
     try {
         await Alarm.updateOne(existingAlarm, { "active_status": active_status });

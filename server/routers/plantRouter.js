@@ -7,25 +7,39 @@ const { check } = require("express-validator");
 
 const plantController = require("../controllers/plantController");
 
+// *** CREATE REQUESTS ***
+
+//Request to create a new plant
 router.post("/createPlant", upload.array("file", 3), auth, plantController.createPlant);
 
+// *** GET REQUESTS ***
+
+//Request to get all plant data
 router.get("/getAllPlants", plantController.getAllPlants);
 
+//Request to get an image by image_id for use in rendering
 router.post("/getImageByID", [
     check("image_id")
         .not().isEmpty().withMessage("Image ID required."),
 ], plantController.getImageByID);
 
+//Request to get plant data for a given plant_id
 router.post("/getPlantByID", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
 ], plantController.getPlantByID);
 
+// *** DELETE REQUESTS ***
+
+//Request to delete a plant by plant_id
 router.delete("/deletePlant", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
 ], auth, plantController.deletePlant);
 
+// *** UPDATE REQUESTS ***
+
+//Request to update a plant's name
 router.put("/updateName", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -35,6 +49,7 @@ router.put("/updateName", [
         .trim(),
 ], auth, plantController.updateName);
 
+//Request to update a plant's description
 router.put("/updateDescription", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -44,6 +59,7 @@ router.put("/updateDescription", [
         .trim(),
 ], auth, plantController.updateDescription);
 
+//Request to update any enum value for a given plant_id: plant_type, sun_condition, soil_type or soil_ph
 router.put("/updateEnums", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -54,6 +70,7 @@ router.put("/updateEnums", [
         .not().isEmpty().withMessage("Enum value required."),
 ], auth, plantController.updateEnums);
 
+//Request to update any monthly schedule value for a given plant_id: sow_date, plant_date, transplant_date or harvest_date
 router.put("/updateMonthlySchedules", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -64,6 +81,7 @@ router.put("/updateMonthlySchedules", [
         .not().isEmpty().withMessage("Schedule value required."),
 ], auth, plantController.updateMonthlySchedules);
 
+//Request to update any required weekly schedule value for a given plant_id: water_schedule, spacing
 router.put("/updateRequiredWeeklySchedules", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -74,6 +92,7 @@ router.put("/updateRequiredWeeklySchedules", [
         .not().isEmpty().withMessage("Schedule value required."),
 ], auth, plantController.updateRequiredWeeklySchedules);
 
+//Request to update any optional weekly schedule value for a given plant_id: prune_schedule, feed_schedule, indoor_schedule
 router.put("/updateOptionalWeeklySchedules", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -84,6 +103,7 @@ router.put("/updateOptionalWeeklySchedules", [
         .not().isEmpty().withMessage("Schedule value required."),
 ], auth, plantController.updateOptionalWeeklySchedules);
 
+//Request to update a plant's compost_schedule
 router.put("/updateCompostSchedule", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),
@@ -93,6 +113,7 @@ router.put("/updateCompostSchedule", [
         .trim(),
 ], auth, plantController.updateCompostSchedule);
 
+//Request to update any list value for a given plant_id: plant_problem, companion_plant, incompatible_plant
 router.put("/updateLists", [
     check("plant_id")
         .not().isEmpty().withMessage("Plant ID required."),

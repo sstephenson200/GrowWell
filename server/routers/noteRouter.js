@@ -7,27 +7,34 @@ const { check } = require("express-validator");
 
 const noteController = require("../controllers/noteController");
 
+// *** CREATE REQUESTS ***
+
+//Request to create a new note
 router.post("/createNote", upload.array("file", 3), auth, noteController.createNote);
 
+// *** GET REQUESTS ***
+
+//Request to get all notes for a given user
 router.post("/getNotes", auth, noteController.getNotes);
 
-router.get("/getNotesByDate", [
-    check("date")
-        .not().isEmpty().withMessage("Date required.")
-        .isDate().withMessage("Invalid date."),
-], auth, noteController.getNotesByDate);
-
+//Request to get all notes for a given user in a given month
 router.post("/getNotesByMonth", [
     check("date")
         .not().isEmpty().withMessage("Date required.")
         .isDate().withMessage("Invalid date."),
 ], auth, noteController.getNotesByMonth);
 
+// *** DELETE REQUESTS ***
+
+//Request to delete a note by note_id
 router.delete("/deleteNote", [
     check("note_id")
         .not().isEmpty().withMessage("Note ID required."),
 ], auth, noteController.deleteNote);
 
+// *** UPDATE REQUESTS ***
+
+//Request to update a note's title
 router.put("/updateTitle", [
     check("note_id")
         .not().isEmpty().withMessage("Alarm ID required."),
@@ -37,6 +44,7 @@ router.put("/updateTitle", [
         .trim(),
 ], auth, noteController.updateTitle);
 
+//Request to update a note's description
 router.put("/updateDescription", [
     check("note_id")
         .not().isEmpty().withMessage("Alarm ID required."),
@@ -46,6 +54,7 @@ router.put("/updateDescription", [
         .trim(),
 ], auth, noteController.updateDescription);
 
+//Request to update a note's linked garden plot
 router.put("/updateGardenPlot", [
     check("note_id")
         .not().isEmpty().withMessage("Note ID required."),
@@ -56,6 +65,7 @@ router.put("/updateGardenPlot", [
         .isInt().withMessage("Plot number must be an integer value."),
 ], auth, noteController.updateGardenPlot);
 
+//Request to add or remove images from a note
 router.put("/updateImages", upload.array("file", 3), auth, noteController.updateImages);
 
 module.exports = router;

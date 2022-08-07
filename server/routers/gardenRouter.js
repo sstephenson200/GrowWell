@@ -6,6 +6,9 @@ const { check } = require("express-validator");
 
 const gardenController = require("../controllers/gardenController");
 
+// *** CREATE REQUESTS ***
+
+//Request to create a new garden
 router.post("/createGarden", [
     check("name")
         .not().isEmpty().withMessage("Name required.")
@@ -16,13 +19,20 @@ router.post("/createGarden", [
         .isInt({ min: 1, max: 20 }).withMessage("Width must be between 1 and 20m."),
 ], auth, gardenController.createGarden);
 
+// *** GET REQUESTS ***
+
+//Request to get all gardens for a given user
 router.post("/getAllGardens", auth, gardenController.getAllGardens);
 
+//Request to get a garden by a given garden_id
 router.post("/getGardenByID", [
     check("garden_id")
         .not().isEmpty().withMessage("Garden ID required."),
 ], auth, gardenController.getGardenByID);
 
+// *** DELETE REQUESTS ***
+
+//Request to delete a garden by garden_id
 router.delete("/deleteGarden", [
     check("garden_id")
         .not().isEmpty().withMessage("Garden ID required."),
@@ -31,6 +41,9 @@ router.delete("/deleteGarden", [
         .trim()
 ], auth, gardenController.deleteGarden);
 
+// *** UPDATE REQUESTS ***
+
+//Request to update a garden's name
 router.put("/updateName", [
     check("garden_id")
         .not().isEmpty().withMessage("Garden ID required."),
@@ -40,6 +53,7 @@ router.put("/updateName", [
         .trim(),
 ], auth, gardenController.updateName);
 
+//Requset to update when a plant was planted in a given plot
 router.put("/updatePlotPlantedDate", [
     check("garden_id")
         .not().isEmpty().withMessage("Garden ID required."),
@@ -51,6 +65,7 @@ router.put("/updatePlotPlantedDate", [
         .isDate().withMessage("Invalid date."),
 ], auth, gardenController.updatePlotPlantedDate);
 
+//Request to update the plant in a specific plot - can also be used to remove a plant by assigning plant_id to null
 router.put("/updatePlotPlant", [
     check("garden_id")
         .not().isEmpty().withMessage("Garden ID required."),
@@ -64,6 +79,7 @@ router.put("/updatePlotPlant", [
         .isDate().withMessage("Invalid date."),
 ], auth, gardenController.updatePlotPlant);
 
+//Request to add plant data to plot history - should be called when a plant is removed from a plot
 router.put("/updatePlotHistory", [
     check("garden_id")
         .not().isEmpty().withMessage("Garden ID required."),

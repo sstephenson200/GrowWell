@@ -101,23 +101,6 @@ const getNotes = async (request, response) => {
     return response.status(200).json({ notes: notes });
 }
 
-//Request to get all notes for a given date
-const getNotesByDate = async (request, response) => {
-
-    let user_id = request.user;
-
-    const { date } = request.body;
-
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
-    }
-
-    const notes = await Note.find({ "user_id": user_id, "date": { $gte: moment(date).toDate(), $lte: moment(date).endOf("day").toDate() } });
-
-    return response.status(200).json({ notes: notes });
-}
-
 //Request to get all notes for a given month
 const getNotesByMonth = async (request, response) => {
 
@@ -206,7 +189,7 @@ async function deleteAllNotes(user_id) {
         return true;
 
     } catch (error) {
-        return false;
+        throw error;
     }
 }
 
@@ -406,7 +389,6 @@ module.exports = {
     deleteAllNotes,
     createNote,
     getNotes,
-    getNotesByDate,
     getNotesByMonth,
     deleteNote,
     updateTitle,
