@@ -16,7 +16,7 @@ const Stack = createStackNavigator();
 
 const StackNavigator = (props) => {
 
-    const { loggedIn, checkLoggedIn } = useContext(AuthContext);
+    const { loggedIn } = useContext(AuthContext);
 
     return (
         <Stack.Navigator
