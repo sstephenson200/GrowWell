@@ -1,21 +1,20 @@
 import React, { useState, useContext } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
-import AuthContext from '../context/AuthContext';
+import AuthContext from "../../context/AuthContext";
 
-const SignUpScreen = (props) => {
+const LoginScreen = (props) => {
 
     const { checkLoggedIn } = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
@@ -26,17 +25,15 @@ const SignUpScreen = (props) => {
     function clearState() {
         setEmail("");
         setPassword("");
-        setPasswordConfirmation("");
         setErrorMessage("");
     }
 
     //Function to create a new user
-    async function createUser(props) {
+    async function login(props) {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/user/createUser", {
+            const response = await axios.post("https://grow-well-server.herokuapp.com/user/login", {
                 "email": email,
-                "password": password,
-                "passwordVerify": passwordConfirmation
+                "password": password
             });
 
             let status = response.status;
@@ -47,7 +44,7 @@ const SignUpScreen = (props) => {
                 } else {
                     clearState();
                     await checkLoggedIn();
-                    props.navigation.navigate("StackNavigator", { screen: "CreateGarden" });
+                    props.navigation.navigate("Garden");
                 }
             }
 
@@ -57,7 +54,8 @@ const SignUpScreen = (props) => {
     }
 
     return (
-        <ScrollView style={styles.screen}>
+
+        <View style={styles.screen}>
 
             <View style={styles.appTitle}>
                 <Text style={styles.appMainTitle}>Grow Well</Text>
@@ -65,12 +63,12 @@ const SignUpScreen = (props) => {
             </View>
 
             <View style={styles.form}>
-                <Text style={styles.title}>Sign Up</Text>
+                <Text style={styles.title}>Login</Text>
 
-                <View style={styles.loginOption}>
-                    <Text style={styles.loginText}>Already have an account?</Text>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Login" })}>
-                        <Text style={styles.loginLink}>Login</Text>
+                <View style={styles.signUpOption}>
+                    <Text style={styles.signUpText}>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "SignUp" })}>
+                        <Text style={styles.signUpLink}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -98,36 +96,34 @@ const SignUpScreen = (props) => {
                     onChangeText={setPassword}
                 />
 
-                <Text style={styles.subtitle}>Confirm Password</Text>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    value={passwordConfirmation}
-                    onChangeText={setPasswordConfirmation}
-                />
-
                 <View style={styles.navigationButtons}>
-                    <TouchableOpacity style={styles.button} onPress={async () => await createUser(props)}>
-                        <Text style={styles.buttonText}>SIGN UP</Text>
+                    <TouchableOpacity style={styles.button} onPress={async () => await login(props)}>
+                        <Text style={styles.buttonText}>LOGIN</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.signUpOption}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "PasswordReset" })}>
+                        <Text style={styles.signUpLink}>Forgot your password?</Text>
                     </TouchableOpacity>
                 </View>
 
             </View>
 
-            <Image style={styles.logo} source={require("../assets/images/logo.png")} />
+            <Image style={styles.logo} source={require("../../assets/images/logo.png")} />
 
-        </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     screen: {
         height: "100%",
-        backgroundColor: "#81BF63"
+        backgroundColor: "#81BF63",
+        justifyContent: "center"
     },
     appTitle: {
-        paddingVertical: 25
+        paddingVertical: 35
     },
     appMainTitle: {
         textAlign: "center",
@@ -142,7 +138,7 @@ const styles = StyleSheet.create({
         color: "white"
     },
     form: {
-        height: 500,
+        height: 450,
         width: "80%",
         alignSelf: "center",
         backgroundColor: "#EFF5E4",
@@ -150,16 +146,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "grey"
     },
-    loginOption: {
+    signUpOption: {
         paddingTop: 5,
         alignSelf: "center"
     },
-    loginText: {
+    signUpText: {
         paddingHorizontal: 2.5,
         fontSize: 15,
         textAlign: "center"
     },
-    loginLink: {
+    signUpLink: {
         paddingHorizontal: 2.5,
         fontSize: 15,
         color: "#9477B4",
@@ -213,8 +209,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: 100,
         height: 100,
-        marginVertical: 25
+        marginVertical: 35
     }
 });
 
-export default SignUpScreen;
+export default LoginScreen;

@@ -1,4 +1,4 @@
-import Images from "../assets/images/plant_icons/icons";
+import Images from "../../assets/images/plant_icons/icons";
 
 function imageSelect(imageName) {
 

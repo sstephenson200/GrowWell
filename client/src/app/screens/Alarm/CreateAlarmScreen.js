@@ -6,12 +6,12 @@ import { unescape } from 'underscore';
 const moment = require("moment");
 import { Checkbox } from 'react-native-paper';
 
-import Header from '../components/Header';
-import DatePicker from '../components/DatePicker';
-import Dropdown from "../components/Dropdown";
-import { CancelNotification, ScheduleNotification } from "../notifications/PushNotification";
+import Header from '../../components/Header';
+import DatePicker from '../../components/Alarm/DatePicker';
+import Dropdown from "../../components/Dropdown";
+import { CancelNotification, ScheduleNotification } from "../../notifications/PushNotification";
 
-const NewAlarmScreen = (props) => {
+const CreateAlarmScreen = (props) => {
 
     let tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -204,7 +204,7 @@ const NewAlarmScreen = (props) => {
     }, []);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
@@ -370,4 +370,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default NewAlarmScreen;
+export default CreateAlarmScreen;

@@ -92,7 +92,7 @@ function formatSchedules(props, scheduleTitle, array) {
             <DataTable.Cell>
                 {arrayString}
                 <TouchableOpacity style={styles.icon}>
-                    <Ionicons name="ios-alarm" size={22} color="black" onPress={() => props.navigation.navigate("StackNavigator", { screen: "NewAlarm", params: { alarmTitle: alarmTitle, alarmSchedule: alarmSchedule, alarmDuration: alarmDuration } })} />
+                    <Ionicons name="ios-alarm" size={22} color="black" onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm", params: { alarmTitle: alarmTitle, alarmSchedule: alarmSchedule, alarmDuration: alarmDuration } })} />
                 </TouchableOpacity>
             </DataTable.Cell>
         </View>

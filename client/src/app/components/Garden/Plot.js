@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import axios from "axios";
 
-import ImageSelect from "../components/SearchableImages";
+import ImageSelect from "../Plant/SearchableImages";
 
 const Plot = (props) => {
 

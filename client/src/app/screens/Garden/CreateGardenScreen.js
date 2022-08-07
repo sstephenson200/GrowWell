@@ -11,7 +11,7 @@ const CreateGardenScreen = (props) => {
     const [errorMessage, setErrorMessage] = useState("");
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {

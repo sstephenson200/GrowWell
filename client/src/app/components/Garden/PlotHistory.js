@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 const moment = require("moment");
 import axios from 'axios';
 
-import ImageSelect from '../components/SearchableImages';
+import ImageSelect from '../Plant/SearchableImages';
 
 const PlotHistory = (props) => {
 

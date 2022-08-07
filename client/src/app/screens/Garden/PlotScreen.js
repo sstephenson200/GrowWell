@@ -4,11 +4,11 @@ import { useFonts } from 'expo-font';
 import { select, unescape } from 'underscore';
 import axios from "axios";
 
-import Header from '../components/Header';
-import ImageSelect from '../components/SearchableImages';
-import Dropdown from '../components/Dropdown';
-import NoteCard from '../components/NoteCard';
-import PlotHistory from '../components/PlotHistory';
+import Header from '../../components/Header';
+import ImageSelect from '../../components/Plant/SearchableImages';
+import Dropdown from '../../components/Dropdown';
+import NoteCard from '../../components/Note/NoteCard';
+import PlotHistory from '../../components/Garden/PlotHistory';
 
 //Method to sort plants array by name
 function sortPlants(props) {
@@ -213,7 +213,7 @@ const PlotScreen = (props) => {
     }, [props]);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {

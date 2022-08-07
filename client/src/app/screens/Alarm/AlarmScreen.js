@@ -6,8 +6,8 @@ import { unescape } from 'underscore';
 const moment = require("moment");
 import axios from "axios";
 
-import Header from '../components/Header';
-import AlarmCard from '../components/AlarmCard';
+import Header from '../../components/Header';
+import AlarmCard from '../../components/Alarm/AlarmCard';
 
 const AlarmScreen = (props) => {
 
@@ -41,7 +41,7 @@ const AlarmScreen = (props) => {
     }, [props, deleteAlarm]);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
@@ -139,7 +139,7 @@ const AlarmScreen = (props) => {
 
                 <Text style={styles.title}>Your Alarms</Text>
 
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "NewAlarm" })}>
+                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm" })}>
                     <Text style={styles.buttonText}>ADD NEW ALARM</Text>
                 </TouchableOpacity>
 

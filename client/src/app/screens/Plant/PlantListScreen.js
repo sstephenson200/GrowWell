@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 
-import Header from '../components/Header';
-import SearchBar from '../components/SearchBar';
-import Filter from '../components/Filter';
-import PlantList from "../components/PlantList";
+import Header from '../../components/Header';
+import SearchBar from '../../components/Plant/SearchBar';
+import Filter from '../../components/Plant/Filter';
+import PlantList from "../../components/Plant/PlantList";
 
 const PlantListScreen = (props) => {
 
@@ -13,7 +13,7 @@ const PlantListScreen = (props) => {
     const [filterOptions, setFilterOptions] = useState([]);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {

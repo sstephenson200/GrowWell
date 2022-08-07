@@ -1,15 +1,15 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { useContext } from 'react';
 
-import SettingsScreen from "../screens/SettingsScreen";
-import PlantScreen from "../screens/PlantScreen";
-import CreateGardenScreen from "../screens/CreateGardenScreen";
-import PlotScreen from "../screens/PlotScreen";
-import NoteScreen from '../screens/NoteScreen';
-import NewAlarmScreen from '../screens/NewAlarmScreen';
-import LoginScreen from "../screens/LoginScreen";
-import SignUpScreen from '../screens/SignUpScreen';
-import PasswordResetScreen from '../screens/PasswordResetScreen';
+import SettingsScreen from "../screens/User/SettingsScreen";
+import PlantScreen from "../screens/Plant/PlantScreen";
+import CreateGardenScreen from "../screens/Garden/CreateGardenScreen";
+import PlotScreen from "../screens/Garden/PlotScreen";
+import NoteScreen from '../screens/Note/NoteScreen';
+import CreateAlarmScreen from '../screens/Alarm/CreateAlarmScreen';
+import LoginScreen from "../screens/User/LoginScreen";
+import SignUpScreen from '../screens/User/SignUpScreen';
+import PasswordResetScreen from '../screens/User/PasswordResetScreen';
 import AuthContext from '../context/AuthContext';
 
 const Stack = createStackNavigator();
@@ -52,8 +52,8 @@ const StackNavigator = (props) => {
                 />
 
                 <Stack.Screen
-                    name="NewAlarm"
-                    component={NewAlarmScreen}
+                    name="CreateAlarm"
+                    component={CreateAlarmScreen}
                 />
             </> : <>
                 <Stack.Screen

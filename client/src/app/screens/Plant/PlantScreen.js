@@ -4,18 +4,18 @@ import { useFonts } from 'expo-font';
 import axios from 'axios';
 import { unescape } from 'underscore';
 
-import Header from '../components/Header';
-import ImageSelect from "../components/SearchableImages";
-import Dropdown from "../components/Dropdown";
-import CareRequirementsTable from '../components/CareRequirementsTable';
-import Infographic from '../components/MonthlyPlantData';
-import NoteCard from '../components/NoteCard';
+import Header from '../../components/Header';
+import ImageSelect from "../../components/Plant/SearchableImages";
+import Dropdown from "../../components/Dropdown";
+import CareRequirementsTable from '../../components/Plant/CareRequirementsTable';
+import Infographic from '../../components/Plant/MonthlyPlantData';
+import NoteCard from '../../components/Note/NoteCard';
 
 const PlantScreen = (props) => {
 
     let plant_id = props.route.params.plant_id;
     let name = props.route.params.name;
-    let plant_type = props.route.params.plant_type == "Vegetable" ? "VEG" : props.route.params.plant_type.toUppercase();
+    let plant_type = props.route.params.plant_type == "Vegetable" ? "VEG" : String(props.route.params.plant_type).toUpperCase();
     let photo1 = props.route.params.photo;
 
     const [plant, setPlant] = useState([]);
@@ -219,7 +219,7 @@ const PlantScreen = (props) => {
 
     //Load title font
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
@@ -271,11 +271,11 @@ const PlantScreen = (props) => {
                         <View style={styles.plantPhotos}>
                             <Image
                                 style={styles.photo}
-                                source={require("../assets/images/placeholder.png")}
+                                source={require("../../assets/images/placeholder.png")}
                             />
                             <Image
                                 style={styles.photo}
-                                source={require("../assets/images/placeholder.png")}
+                                source={require("../../assets/images/placeholder.png")}
                             />
                         </View>
                 }

@@ -4,11 +4,11 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 import AuthContext from '../context/AuthContext';
 import StackNavigator from './StackNavigator';
-import CalendarScreen from "../screens/CalendarScreen";
-import NewNoteScreen from "../screens/NewNoteScreen";
-import GardenScreen from "../screens/GardenScreen";
-import AlarmScreen from "../screens/AlarmScreen";
-import PlantListScreen from "../screens/PlantListScreen";
+import CalendarScreen from "../screens/Note/CalendarScreen";
+import CreateNoteScreen from "../screens/Note/CreateNoteScreen";
+import GardenScreen from "../screens/Garden/GardenScreen";
+import AlarmScreen from "../screens/Alarm/AlarmScreen";
+import PlantListScreen from "../screens/Plant/PlantListScreen";
 
 //Method to allow tab bar to be hidden for various screens
 const getTabBarVisibility = (route) => {
@@ -82,7 +82,7 @@ const Tabs = (route) => {
 
             <Tab.Screen
                 name="Notes"
-                component={NewNoteScreen}
+                component={CreateNoteScreen}
                 options={{
                     tabBarIcon: () => {
                         return <FontAwesome name="book" size={40} color="white" />

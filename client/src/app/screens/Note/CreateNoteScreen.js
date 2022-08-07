@@ -4,12 +4,12 @@ import { useFonts } from 'expo-font';
 import axios from 'axios';
 import { unescape } from 'underscore';
 
-import Header from '../components/Header';
-import Dropdown from "../components/Dropdown";
-import ImageBrowser from '../components/ImageBrowser';
-import ImageCarousel from '../components/ImageCarousel';
+import Header from '../../components/Header';
+import Dropdown from "../../components/Dropdown";
+import ImageBrowser from '../../components/Note/ImageBrowser';
+import ImageCarousel from '../../components/Note/ImageCarousel';
 
-const NewNoteScreen = (props) => {
+const CreateNoteScreen = (props) => {
 
     const [title, setTitle] = useState("");
     const [plots, setPlots] = useState([]);
@@ -134,7 +134,7 @@ const NewNoteScreen = (props) => {
     }, []);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
@@ -306,4 +306,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default NewNoteScreen;
+export default CreateNoteScreen;

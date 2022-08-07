@@ -4,9 +4,9 @@ import Modal from 'react-native-modal';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
 
-import Header from '../components/Header';
-import AuthContext from "../context/AuthContext";
-import { CancelAllNotifications } from '../notifications/PushNotification';
+import Header from '../../components/Header';
+import AuthContext from "../../context/AuthContext";
+import { CancelAllNotifications } from '../../notifications/PushNotification';
 
 const SettingsScreen = (props) => {
 
@@ -42,7 +42,7 @@ const SettingsScreen = (props) => {
     }, [props]);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
@@ -156,7 +156,7 @@ const SettingsScreen = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     checkLoggedIn();
-                    props.navigation.replace("Login");
+                    props.navigation.navigate("StackNavigator", { screen: "Login" });
                 }
             }
 

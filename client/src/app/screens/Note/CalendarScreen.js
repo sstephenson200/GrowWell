@@ -5,8 +5,8 @@ import { useFonts } from 'expo-font';
 const moment = require("moment");
 import axios from "axios";
 
-import Header from '../components/Header';
-import NoteSummary from '../components/NoteSummary';
+import Header from '../../components/Header';
+import NoteSummary from '../../components/Note/NoteSummary';
 
 const CalendarScreen = (props) => {
 
@@ -71,7 +71,7 @@ const CalendarScreen = (props) => {
     }, [selectedMonth, props]);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {

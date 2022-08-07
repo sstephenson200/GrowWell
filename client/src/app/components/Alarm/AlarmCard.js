@@ -6,7 +6,7 @@ import axios from 'axios';
 import { unescape } from 'underscore';
 import { Ionicons } from '@expo/vector-icons';
 
-import { ScheduleNotification, CancelNotification } from '../notifications/PushNotification';
+import { ScheduleNotification, CancelNotification } from '../../notifications/PushNotification';
 
 const AlarmCard = (props) => {
 

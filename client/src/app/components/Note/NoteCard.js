@@ -5,7 +5,7 @@ import axios from 'axios';
 import { unescape } from 'underscore';
 
 import ImageCarousel from './ImageCarousel';
-import ImageSelect from './SearchableImages';
+import ImageSelect from '../Plant/SearchableImages';
 
 const NoteCard = (props) => {
 

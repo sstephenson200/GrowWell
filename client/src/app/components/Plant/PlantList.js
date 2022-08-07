@@ -186,7 +186,7 @@ const PlantList = (props) => {
                                             :
                                             <Image
                                                 style={styles.image}
-                                                source={require("../assets/images/placeholder.png")}
+                                                source={require("../../assets/images/placeholder.png")}
                                             />
                                     }
                                 </View>

@@ -3,12 +3,12 @@ import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 import Modal from 'react-native-modal';
 import { useFonts } from 'expo-font';
 import axios from 'axios';
-import { create, unescape } from 'underscore';
+import { unescape } from 'underscore';
 
-import Header from '../components/Header';
-import Dropdown from "../components/Dropdown";
-import GardenGrid from '../components/GardenGrid';
-import { CancelNotification } from '../notifications/PushNotification';
+import Header from '../../components/Header';
+import Dropdown from "../../components/Dropdown";
+import GardenGrid from '../../components/Garden/GardenGrid';
+import { CancelNotification } from '../../notifications/PushNotification';
 
 const GardenScreen = (props) => {
 
@@ -88,7 +88,7 @@ const GardenScreen = (props) => {
     }, [deletedGarden, props]);
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {

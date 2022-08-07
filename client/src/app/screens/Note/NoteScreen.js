@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 
-import Header from '../components/Header';
-import NoteCard from '../components/NoteCard';
+import Header from '../../components/Header';
+import NoteCard from '../../components/Note/NoteCard';
 
 const NoteScreen = (props) => {
 
@@ -11,7 +11,7 @@ const NoteScreen = (props) => {
     let notes = props.route.params.notes;
 
     const [loaded] = useFonts({
-        Montserrat: require('../assets/fonts/Montserrat-Medium.ttf')
+        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     if (!loaded) {
