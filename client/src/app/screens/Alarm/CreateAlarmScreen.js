@@ -205,7 +205,7 @@ const CreateAlarmScreen = (props) => {
 
                 <Text style={styles.subtitle}>Plot</Text>
                 <View>
-                    <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" styling="largeDropdown" />
+                    <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" />
                 </View>
 
                 <Checkbox.Item

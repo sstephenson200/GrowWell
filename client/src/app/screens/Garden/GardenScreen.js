@@ -115,7 +115,7 @@ const GardenScreen = (props) => {
 
                 <Text style={styles.title}>Your Garden</Text>
 
-                <Dropdown gardens={gardens} selected={[selectedGarden, setSelectedGarden]} placeholder="Select Garden" styling="largeDropdown" />
+                <Dropdown gardens={gardens} selected={[selectedGarden, setSelectedGarden]} placeholder="Select Garden" />
 
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateGarden" })}>
                     <Text style={styles.buttonText}>ADD NEW GARDEN</Text>

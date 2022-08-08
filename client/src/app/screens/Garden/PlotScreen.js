@@ -205,7 +205,7 @@ const PlotScreen = (props) => {
 
                             <Text style={styles.heading}>Add Plant</Text>
 
-                            <Dropdown plants={plants} selected={[selectedPlant, setSelectedPlant]} placeholder="Select Plant" styling="largeDropdown" />
+                            <Dropdown plants={plants} selected={[selectedPlant, setSelectedPlant]} placeholder="Select Plant" />
 
                             <TouchableOpacity style={styles.button} onPress={() => addPlantToPlot(selectedPlant)}>
                                 <Text style={styles.buttonText}>ADD PLANT</Text>

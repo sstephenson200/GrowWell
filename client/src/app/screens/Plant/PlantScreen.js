@@ -207,7 +207,7 @@ const PlantScreen = (props) => {
                         : null
                 }
 
-                <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" styling="largeDropdown" />
+                <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" />
 
                 <TouchableOpacity style={styles.button} onPress={() => addPlantToPlot()}>
                     <Text style={styles.buttonText}>ADD PLANT</Text>

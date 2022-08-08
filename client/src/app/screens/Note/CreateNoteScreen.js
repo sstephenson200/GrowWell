@@ -139,7 +139,7 @@ const CreateNoteScreen = (props) => {
                 />
 
                 <Text style={styles.subtitle}>Plot</Text>
-                <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" styling="largeDropdown" />
+                <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" />
 
                 <Text style={styles.subtitle}>Description</Text>
                 <TextInput
