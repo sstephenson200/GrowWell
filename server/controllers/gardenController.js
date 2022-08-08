@@ -262,7 +262,7 @@ const updatePlotPlant = async (request, response) => {
 
     try {
         if (plant_id == undefined) {
-            await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": plant_id, "plot.$.date_planted": null } });
+            await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": null, "plot.$.date_planted": null } });
         } else {
             await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": plant_id, "plot.$.date_planted": date_planted } });
         }
