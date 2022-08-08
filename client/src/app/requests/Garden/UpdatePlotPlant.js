@@ -27,7 +27,7 @@ async function UpdatePlotPlant(selectedPlant, plot_number, garden_id) {
             return response;
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 

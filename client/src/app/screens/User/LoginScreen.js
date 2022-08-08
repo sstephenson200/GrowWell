@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
-import axios from 'axios';
+import React, { useState, useContext } from "react";
+import { Text, View, TouchableOpacity, TextInput, Image, StyleSheet } from "react-native";
+import axios from "axios";
 
 import AuthContext from "../../context/AuthContext";
 
@@ -19,7 +19,7 @@ const LoginScreen = (props) => {
         setErrorMessage("");
     }
 
-    //Function to create a new user
+    //Function to login in the user and reset JWT for auth purposes
     async function login(props) {
         try {
             const response = await axios.post("/user/login", {
@@ -38,7 +38,6 @@ const LoginScreen = (props) => {
                     props.navigation.navigate("Garden");
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -73,7 +72,7 @@ const LoginScreen = (props) => {
                 <TextInput
                     style={styles.textInput}
                     placeholder="email@example.com"
-                    keyboardType='email-address'
+                    keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -104,7 +103,7 @@ const LoginScreen = (props) => {
             <Image style={styles.logo} source={require("../../assets/images/logo.png")} />
 
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Text, View, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import axios from "axios";
+
+import Logout from "../../requests/User/Logout";
 
 const PasswordReset = (props) => {
 
@@ -13,7 +15,8 @@ const PasswordReset = (props) => {
         setErrorMessage("");
     }
 
-    //Function to create a new user
+    //Function to reset a user's password to a randomly generated password
+    //This method also triggers a password reset email being sent to the user
     async function resetPassword(props) {
         try {
             const response = await axios.put("/user/resetPassword", {
@@ -30,31 +33,19 @@ const PasswordReset = (props) => {
                     logout(props);
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    //Function to log out the user by clearing loggedIn cookies
+    //Function to log user out of account and invalidate JWT
     async function logout(props) {
-
-        try {
-            const response = await axios.get("/user/logout");
-
-            let status = response.status;
-
-            if (status == 200) {
-                if (response.data.errorMessage !== undefined) {
-                    setErrorMessage(response.data.errorMessage);
-                } else {
-                    checkLoggedIn();
-                    props.navigation.replace("Login");
-                }
-            }
-
-        } catch (error) {
-            console.log(error);
+        let error = (await Logout());
+        if (error !== undefined) {
+            setErrorMessage(error);
+        } else {
+            checkLoggedIn();
+            props.navigation.navigate("StackNavigator", { screen: "Login" });
         }
     }
 
@@ -65,7 +56,7 @@ const PasswordReset = (props) => {
             <View style={styles.form}>
                 <Text style={styles.title}>Password Reset</Text>
 
-                <Text style={styles.resetInfo}>We'll email you with your new password shortly.</Text>
+                <Text style={styles.resetInfo}>We"ll email you with your new password shortly.</Text>
 
                 {
                     errorMessage !== "" ?
@@ -93,7 +84,7 @@ const PasswordReset = (props) => {
 
         </View>
 
-    )
+    );
 }
 
 const styles = StyleSheet.create({

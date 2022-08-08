@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
-import axios from 'axios';
+import React, { useState, useContext } from "react";
+import { Text, View, ScrollView, TouchableOpacity, TextInput, Image, StyleSheet } from "react-native";
+import axios from "axios";
 
-import AuthContext from '../../context/AuthContext';
+import AuthContext from "../../context/AuthContext";
 
 const SignUpScreen = (props) => {
 
@@ -21,7 +21,7 @@ const SignUpScreen = (props) => {
         setErrorMessage("");
     }
 
-    //Function to create a new user
+    //Function to create a new user and automatically log them into their account
     async function createUser(props) {
         try {
             const response = await axios.post("/user/createUser", {
@@ -41,7 +41,6 @@ const SignUpScreen = (props) => {
                     props.navigation.navigate("StackNavigator", { screen: "CreateGarden" });
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -75,7 +74,7 @@ const SignUpScreen = (props) => {
                 <TextInput
                     style={styles.textInput}
                     placeholder="email@example.com"
-                    keyboardType='email-address'
+                    keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -109,7 +108,7 @@ const SignUpScreen = (props) => {
             <Image style={styles.logo} source={require("../../assets/images/logo.png")} />
 
         </ScrollView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

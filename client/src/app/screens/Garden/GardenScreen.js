@@ -24,7 +24,7 @@ const GardenScreen = (props) => {
         getGardens();
     }, [deletedGarden, props]);
 
-    //Show/hide modal for processing garden deleteion
+    //Show/hide modal for processing garden deletion
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     }

@@ -1,11 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import Modal from 'react-native-modal';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
+import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import Modal from "react-native-modal";
+import axios from "axios";
 
-import Header from '../../components/Header';
+import { CancelAllNotifications } from "../../notifications/PushNotification";
+
 import AuthContext from "../../context/AuthContext";
-import { CancelAllNotifications } from '../../notifications/PushNotification';
+
+import Header from "../../components/Header";
+
+import Logout from "../../requests/User/Logout";
 
 const SettingsScreen = (props) => {
 
@@ -22,12 +26,7 @@ const SettingsScreen = (props) => {
     let warning = "";
     let subwarning = "";
 
-    const toggleModal = () => {
-        setModalVisible(!modalVisible);
-        setPassword("");
-        setErrorMessage("");
-    }
-
+    //Set modal content based on login detail change type - email/password
     if (modalType == "email" || modalType == "password") {
         warning = "You are about to update your login details.";
         subwarning = "Are you sure? You will need this information to login from now on.";
@@ -40,6 +39,15 @@ const SettingsScreen = (props) => {
         getUser();
     }, [props]);
 
+    //Show/hide modal for processing user login detail changes
+    const toggleModal = () => {
+        setModalVisible(!modalVisible);
+        //Clear password from all modals on close
+        setPassword("");
+        setErrorMessage("");
+    }
+
+    //Function to get user details for use in updating user login details
     async function getUser() {
         try {
             const response = await axios.post("/user/getUser");
@@ -53,7 +61,6 @@ const SettingsScreen = (props) => {
                     setEmail(response.data.user.email);
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -76,7 +83,6 @@ const SettingsScreen = (props) => {
                     setModalVisible(false);
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -97,18 +103,18 @@ const SettingsScreen = (props) => {
                 if (response.data.errorMessage !== undefined) {
                     setErrorMessage(response.data.errorMessage);
                 } else {
+                    //Clear password modal content on close
                     setNewPassword("");
                     setNewPasswordConfirm("");
                     setModalVisible(false);
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    //Function to update a user's password
+    //Function to delete a user account
     async function deleteUser(props) {
         try {
             const response = await axios.delete("/user/deleteUser", {
@@ -128,31 +134,19 @@ const SettingsScreen = (props) => {
                     logout(props);
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    //Function to log out the user by clearing loggedIn cookies
+    //Function to log user out of account and invalidate JWT
     async function logout(props) {
-
-        try {
-            const response = await axios.get("/user/logout");
-
-            let status = response.status;
-
-            if (status == 200) {
-                if (response.data.errorMessage !== undefined) {
-                    setErrorMessage(response.data.errorMessage);
-                } else {
-                    checkLoggedIn();
-                    props.navigation.navigate("StackNavigator", { screen: "Login" });
-                }
-            }
-
-        } catch (error) {
-            console.log(error);
+        let error = (await Logout());
+        if (error !== undefined) {
+            setErrorMessage(error);
+        } else {
+            checkLoggedIn();
+            props.navigation.navigate("StackNavigator", { screen: "Login" });
         }
     }
 
@@ -217,7 +211,7 @@ const SettingsScreen = (props) => {
                 <TextInput
                     style={styles.textInput}
                     placeholder="email@example.com"
-                    keyboardType='email-address'
+                    keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -263,7 +257,7 @@ const SettingsScreen = (props) => {
                 </TouchableOpacity>
 
                 <Text style={styles.heading}>Delete Account</Text>
-                <Text style={styles.information}>We'll be sorry to see you go.</Text>
+                <Text style={styles.information}>We"ll be sorry to see you go.</Text>
 
                 <TouchableOpacity style={styles.cancelButton} onPress={() => {
                     setModalType("delete");
@@ -281,7 +275,7 @@ const SettingsScreen = (props) => {
 
             </ScrollView>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
