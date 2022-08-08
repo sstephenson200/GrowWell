@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 
-import Header from '../../components/Header';
-import NoteCard from '../../components/Note/NoteCard';
+import Header from "../../components/Header";
+import NoteCard from "../../components/Note/NoteCard";
 
 const NoteScreen = (props) => {
 
+    //Set note data passed in from Calendar Screen
     let date = props.route.params.date;
     let notes = props.route.params.notes;
 
@@ -25,7 +26,7 @@ const NoteScreen = (props) => {
                 />
             </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

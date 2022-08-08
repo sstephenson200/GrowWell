@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import axios from 'axios';
-import { unescape } from 'underscore';
+import React, { useState, useEffect } from "react";
+import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import axios from "axios";
 
-import Header from '../../components/Header';
+import Header from "../../components/Header";
 import Dropdown from "../../components/Dropdown";
-import ImageBrowser from '../../components/Note/ImageBrowser';
-import ImageCarousel from '../../components/Note/ImageCarousel';
+import ImageBrowser from "../../components/Note/ImageBrowser";
+import ImageCarousel from "../../components/Note/ImageCarousel";
+
+import GetAllGardens from "../../requests/Garden/GetAllGardens";
 
 const CreateNoteScreen = (props) => {
 
@@ -18,6 +19,10 @@ const CreateNoteScreen = (props) => {
     const [imageBrowserOpen, setImageBrowserOpen] = useState(false);
     const [photos, setPhotos] = useState([]);
 
+    useEffect(() => {
+        getPlots();
+    }, []);
+
     //Function to reset state when leaving the page
     function clearState() {
         setTitle("");
@@ -27,47 +32,19 @@ const CreateNoteScreen = (props) => {
         setPhotos([]);
     }
 
-    //Function to get garden names and plot numbers for plot selection dropdown
+    //Call GetAllGardens to fill plot selection dropdown
     async function getPlots() {
-        try {
-            const response = await axios.post("/garden/getAllGardens", { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let userGardens = response.data.gardens;
-                let plotLabels = [];
-
-                if (userGardens !== null) {
-                    userGardens.forEach((garden) => {
-                        let name = garden.name;
-                        name = unescape(name);
-                        let garden_id = garden._id;
-
-                        for (let i = 0; i < garden.plot.length; i++) {
-                            let plot_number = garden.plot[i].plot_number;
-                            let displayedPlotNumber = plot_number + 1;
-                            let label = name + ": Plot " + displayedPlotNumber;
-                            let value = garden_id + ":" + plot_number;
-                            let entry = { label: label, value: value };
-                            plotLabels.push(entry);
-                        }
-                    });
-                }
-                setPlots(plotLabels);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+        setPlots(await GetAllGardens("allPlots"));
     }
 
+    //Function to create a new note with given form data, including images
     async function createNote(props, title, description, selectedPlot) {
 
         let noteDetails = {
             "title": title
         }
 
+        //Add optional form data
         if (description !== "") {
             noteDetails.description = description;
         }
@@ -83,10 +60,12 @@ const CreateNoteScreen = (props) => {
         let formData = new FormData();
         formData.append("note", JSON.stringify(noteDetails));
 
+        //Add selected images to form data
         if (photos.length !== 0) {
             for (let i = 0; i < photos.length; i++) {
+                //Ensure provided images are valid
                 let localUri = photos[i].uri;
-                let filename = localUri.split('/').pop();
+                let filename = localUri.split("/").pop();
                 let match = /\.(\w+)$/.exec(filename);
                 let type = match ? `image/${match[1]}` : `image`;
 
@@ -101,7 +80,7 @@ const CreateNoteScreen = (props) => {
         try {
             const response = await axios.post("/note/createNote", formData, {
                 headers: {
-                    'content-type': 'multipart/form-data'
+                    "content-type": "multipart/form-data"
                 }
             });
 
@@ -115,12 +94,12 @@ const CreateNoteScreen = (props) => {
                     props.navigation.navigate("Calendar", { params: { updated: true } });
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
+    //On selection of images, close the image browser and set photos variable
     const imageBrowserCallback = (callback) => {
         callback.then((photos) => {
             setImageBrowserOpen(false);
@@ -128,10 +107,7 @@ const CreateNoteScreen = (props) => {
         });
     }
 
-    useEffect(() => {
-        getPlots();
-    }, []);
-
+    //Render image browser when requested 
     if (imageBrowserOpen) {
         return (
             <ImageBrowser
@@ -202,7 +178,7 @@ const CreateNoteScreen = (props) => {
 
             </ScrollView>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

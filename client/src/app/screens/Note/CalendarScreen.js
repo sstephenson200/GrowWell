@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet } from "react-native";
+import { Calendar } from "react-native-calendars";
 const moment = require("moment");
 import axios from "axios";
 
-import Header from '../../components/Header';
-import NoteSummary from '../../components/Note/NoteSummary';
+import Header from "../../components/Header";
+import NoteSummary from "../../components/Note/NoteSummary";
 
 const CalendarScreen = (props) => {
 
@@ -16,7 +16,17 @@ const CalendarScreen = (props) => {
 
     let now = moment(new Date()).format("YYYY-MM-DD");
 
-    // Get notes for shown month
+    useEffect(() => {
+        getNotes();
+
+        //Trigger page refresh when a note is added or removed
+        if (props.route.params !== undefined) {
+            props.route.params = undefined;
+        }
+
+    }, [selectedMonth, props]);
+
+    //Function to get notes for shown month
     async function getNotes() {
 
         let date = null;
@@ -30,7 +40,7 @@ const CalendarScreen = (props) => {
         try {
             const response = await axios.post("/note/getNotesByMonth", {
                 "date": date
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
 
             let status = response.status;
 
@@ -44,15 +54,16 @@ const CalendarScreen = (props) => {
         }
     }
 
-    //Mark dates when notes were made
+    //Function to mark dates for which notes exist
     function getMarkedDates(notes) {
 
+        //Marking colour is randomly assigned from app colour scheme
         const markColours = ["#9477B4", "#80C1E3", "#D26E8D", "#81BF63", "#E3B453"];
 
         if (notes.length !== 0) {
             let dates = {};
             for (let i = 0; i < notes.length; i++) {
-                let randomNum = Math.floor(Math.random() * 4);
+                let randomNum = Math.floor(Math.random() * 5);
                 let colour = markColours[randomNum];
                 let date = notes[i].date;
                 date = moment(date).format("YYYY-MM-DD");
@@ -61,13 +72,6 @@ const CalendarScreen = (props) => {
             setMarkedDates(dates);
         }
     }
-
-    useEffect(() => {
-        getNotes();
-        if (props.route.params !== undefined) {
-            props.route.params = undefined;
-        }
-    }, [selectedMonth, props]);
 
     return (
         <View style={styles.container}>
@@ -101,7 +105,7 @@ const CalendarScreen = (props) => {
 
             </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
