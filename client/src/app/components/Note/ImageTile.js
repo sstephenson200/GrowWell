@@ -1,16 +1,18 @@
-import React from 'react';
-import { View, Text, Dimensions, Image, TouchableHighlight, StyleSheet } from 'react-native';
+import React from "react";
+import { Dimensions, Image, TouchableHighlight } from "react-native";
 
 const { width } = Dimensions.get("window");
 
 class ImageTile extends React.PureComponent {
+
+    //Render images for use in image browser
     render() {
         let { item, index, selected, selectImage } = this.props;
         if (!item) return null;
         return (
             <TouchableHighlight
                 style={{ opacity: selected ? 0.5 : 1 }}
-                underlayColor='transparent'
+                underlayColor="transparent"
                 onPress={() => selectImage(index)}
             >
                 <Image
@@ -18,7 +20,8 @@ class ImageTile extends React.PureComponent {
                     source={{ uri: item }}
                 />
             </TouchableHighlight>
-        )
+        );
     }
 }
+
 export default ImageTile;

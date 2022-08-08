@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, FlatList, Dimensions, Platform, TouchableOpacity, StyleSheet } from 'react-native';
-import expoCameraroll from 'expo-cameraroll';
+import React from "react";
+import { View, Text, FlatList, Dimensions, Platform, TouchableOpacity, StyleSheet } from "react-native";
+import expoCameraroll from "expo-cameraroll";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 
@@ -8,6 +8,7 @@ import ImageTile from "./ImageTile";
 
 const { width } = Dimensions.get("window");
 
+//Image selection tool for use in note creation
 export default class ImageBrowser extends React.Component {
 
     constructor(props) {
@@ -22,6 +23,7 @@ export default class ImageBrowser extends React.Component {
 
     async componentDidMount() {
 
+        //Requires permission to access user device photos
         const { status: existingStatus } = await MediaLibrary.requestPermissionsAsync();
         let finalStatus = existingStatus;
 
@@ -31,13 +33,14 @@ export default class ImageBrowser extends React.Component {
         }
 
         if (finalStatus !== "granted") {
-            alert("Notification permission is required for this feature.");
+            alert("Permission is required to access your photos.");
             return;
         }
 
         this.getPhotos();
     }
 
+    //Function to select an image
     selectImage = (index) => {
         let newSelected = { ...this.state.selected };
         if (newSelected[index]) {
@@ -50,16 +53,18 @@ export default class ImageBrowser extends React.Component {
         this.setState({ selected: newSelected })
     }
 
+    //Function to load photos, 50 at a time to improve rendering
     getPhotos = () => {
-        let params = { first: 50, assetType: 'Photos' };
+        let params = { first: 50, assetType: "Photos" };
         if (this.state.after) params.after = this.state.after
-        if (Platform.OS === 'ios') params.groupTypes = 'All'
+        if (Platform.OS === "ios") params.groupTypes = "All"
         if (!this.state.has_next_page) return
         expoCameraroll
             .getPhotos(params)
             .then(this.processPhotos)
     }
 
+    //Function to process photos for use in the create note form
     processPhotos = (r) => {
         if (this.state.after === r.page_info.end_cursor) return;
         let uris = r.edges.map(i => i.node).map(i => i.image).map(i => i.uri)
@@ -70,11 +75,13 @@ export default class ImageBrowser extends React.Component {
         });
     }
 
+    //Function to strucutre image tiles based on screen size
     getItemLayout = (data, index) => {
         let length = width / 4;
         return { length, offset: length * index, index }
     }
 
+    //Function to handle photo selection
     prepareCallback() {
         let { selected, photos } = this.state;
         let selectedPhotos = photos.filter((item, index) => {
@@ -92,10 +99,11 @@ export default class ImageBrowser extends React.Component {
         this.props.callback(callbackResult)
     }
 
+    //Function to render image browser header, including exit and selection buttons
     renderHeader = () => {
         let selectedCount = Object.keys(this.state.selected).length;
-        let headerText = selectedCount + ' Selected';
-        if (selectedCount === this.props.max) headerText = headerText + ' (Max)';
+        let headerText = selectedCount + " Selected";
+        if (selectedCount === this.props.max) headerText = headerText + " (Max)";
         return (
             <View style={styles.header}>
                 <TouchableOpacity style={styles.button} onPress={() => this.props.callback(Promise.resolve([]))}>
@@ -111,6 +119,8 @@ export default class ImageBrowser extends React.Component {
             </View>
         )
     }
+
+    //Function to render an image tile per image
     renderImageTile = ({ item, index }) => {
         let selected = this.state.selected[index] ? true : false
         return (
@@ -122,6 +132,8 @@ export default class ImageBrowser extends React.Component {
             />
         )
     }
+
+    //Function to render images in rows/columns
     renderImages() {
         return (
             <FlatList
@@ -138,6 +150,7 @@ export default class ImageBrowser extends React.Component {
         )
     }
 
+    //Return completed image browser
     render() {
         return (
             <View style={styles.container}>
@@ -163,7 +176,7 @@ const styles = StyleSheet.create({
         width: width,
         justifyContent: "space-between",
         flexDirection: "row",
-        alignItems: 'center',
+        alignItems: "center",
         padding: 10,
         marginTop: 20
     },
@@ -186,7 +199,4 @@ const styles = StyleSheet.create({
     imageContainer: {
         backgroundColor: "#EFF5E4"
     }
-})
-
-
-
+});

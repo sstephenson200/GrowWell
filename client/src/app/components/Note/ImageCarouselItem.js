@@ -1,14 +1,17 @@
-import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import React from "react";
+import { Image, StyleSheet } from "react-native";
 
 const ImageCarouselItem = ({ item, index }) => {
 
     let uri = null;
     let file = null;
 
+    //Image data differs from database and image browser
     if (typeof item === "object") {
+        //Images from image browser
         file = item.uri;
     } else {
+        //Images from database
         uri = item;
     }
 

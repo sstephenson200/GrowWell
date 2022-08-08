@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 const moment = require("moment");
 
 const NoteSummary = (props) => {
@@ -7,13 +7,14 @@ const NoteSummary = (props) => {
     let date = moment(props.date).format("DD MMM YYYY");
     let noteSummaries = [];
 
+    //Initialise provided data from calendar screen
     if (props.notes.length !== 0) {
         props.notes.forEach(note => {
             let noteDate = moment(note.date).format("DD MMM YYYY");
             if (noteDate == date) {
                 noteSummaries.push(note);
             }
-        })
+        });
     }
 
     return (

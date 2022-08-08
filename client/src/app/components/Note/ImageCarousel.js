@@ -1,16 +1,18 @@
-import React from 'react';
-import { View, Dimensions } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import React from "react";
+import { View, Dimensions } from "react-native";
+import Carousel from "react-native-snap-carousel";
 
-import ImageCarouselItem from './ImageCarouselItem';
+import ImageCarouselItem from "./ImageCarouselItem";
 
-let sliderWidth = Dimensions.get('window').width * 0.45;
+//Standard carousel width for use in note cards
+let sliderWidth = Dimensions.get("window").width * 0.45;
 let itemWidth = Math.round(sliderWidth) * 0.7;
 
 const ImageCarousel = (props) => {
 
+    //Larger carousel sizing for use in create note screen
     if (props.styling !== undefined) {
-        sliderWidth = Dimensions.get('window').width;
+        sliderWidth = Dimensions.get("window").width;
         itemWidth = Math.round(sliderWidth) * 0.7;
     }
 

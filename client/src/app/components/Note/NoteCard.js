@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
 const moment = require("moment");
-import axios from 'axios';
-import { unescape } from 'underscore';
+import axios from "axios";
+import { unescape } from "underscore";
 
-import ImageCarousel from './ImageCarousel';
-import ImageSelect from '../Plant/SearchableImages';
+import ImageCarousel from "./ImageCarousel";
+import ImageSelect from "../Plant/SearchableImages";
+
+import GetGardenByID from "../../requests/Garden/GetGardenByID";
+import GetPlantByID from "../../requests/Plant/GetPlantByID";
 
 const NoteCard = (props) => {
 
@@ -13,6 +16,7 @@ const NoteCard = (props) => {
     const [plantName, setPlantName] = useState(null);
     const [notePhotos, setNotePhotos] = useState([]);
 
+    //Initialise provided data from implementing screen
     let date = moment(props.note.date).format("DD MMM YYYY");
     let title = props.note.title;
     title = unescape(title);
@@ -22,42 +26,31 @@ const NoteCard = (props) => {
     let plot_number = props.note.plot_number;
     let plant_id = props.note.plant_id;
 
+    useEffect(() => {
+        //setNotePhotos([]);
+        if (plant_id !== null) {
+            getPlant();
+        }
+        if (garden_id !== null) {
+            getGarden();
+        }
+        if (props.note.image.length > 0) {
+            setNotePhotos([]);
+            getImages();
+        }
+    }, [props]);
+
+    //Function to get garden name for use in note display
     async function getGarden() {
-        try {
-            const response = await axios.post("/garden/getGardenByID", {
-                "garden_id": garden_id
-            }, { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let name = response.data.garden.name;
-                name = unescape(name);
-
-                setGardenName(name);
-
-                if (plant_id !== null) {
-                    getPlant(plant_id);
-                }
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+        setGardenName(await (GetGardenByID(garden_id, "name")));
     }
 
-    const getPlant = async (plant_id) => {
-        try {
-            const response = await axios.post("/plant/getPlantByID", {
-                "plant_id": plant_id
-            }, { responseType: 'json' });
-            let plantName = await response.data.plant.name;
-            setPlantName(plantName);
-        } catch (error) {
-            console.error(error);
-        }
+    //Function to get plant name for use in title and icon selection
+    async function getPlant() {
+        setPlantName(await GetPlantByID(plant_id, "name"));
     }
 
+    //Function to convert note images to base64 format for rendering
     const getImages = async () => {
 
         let photos = [];
@@ -69,7 +62,8 @@ const NoteCard = (props) => {
             let id = props.note.image[i];
             let blob = await axios.post("/plant/getImageByID", {
                 image_id: id
-            }, { responseType: 'blob' });
+            }, { responseType: "blob" });
+
             let base64Image = null;
             fileReaderInstance.readAsDataURL(blob.data);
             fileReaderInstance.onload = async () => {
@@ -77,18 +71,11 @@ const NoteCard = (props) => {
                 photos.push(base64Image);
             }
         }
-        setNotePhotos(photos);
-    }
 
-    useEffect(() => {
-        setNotePhotos([]);
-        if (garden_id !== null) {
-            getGarden();
+        fileReaderInstance.onloadend = () => {
+            setNotePhotos(photos);
         }
-        if (props.note.image.length !== 0) {
-            getImages();
-        }
-    }, [props]);
+    }
 
     return (
         <View style={styles.card}>
