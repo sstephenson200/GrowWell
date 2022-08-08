@@ -1,9 +1,11 @@
-import { useContext } from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { useContext } from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-import AuthContext from '../context/AuthContext';
-import StackNavigator from './StackNavigator';
+import AuthContext from "../context/AuthContext";
+
+import StackNavigator from "./StackNavigator";
+
 import CalendarScreen from "../screens/Note/CalendarScreen";
 import CreateNoteScreen from "../screens/Note/CreateNoteScreen";
 import GardenScreen from "../screens/Garden/GardenScreen";
@@ -37,6 +39,7 @@ const getTabBarVisibility = (route, loggedIn) => {
 
 const Tab = createBottomTabNavigator();
 
+//Core screens displayed on Tab bar
 const Tabs = (route) => {
 
     const { loggedIn } = useContext(AuthContext);
@@ -125,7 +128,6 @@ const Tabs = (route) => {
             />
 
         </Tab.Navigator >
-
     );
 }
 

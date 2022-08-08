@@ -15,14 +15,12 @@ Notifications.setNotificationHandler({
 //Create Notification
 export default function Notification() {
 
-    //need to remove token when logged out
     const [pushToken, setPushToken] = useState("");
     const [notification, setNotification] = useState(false);
     const notificationListener = useRef();
     const responseListener = useRef();
 
     useEffect(() => {
-
         RegisterNotification()
             .then((token) => setPushToken(token));
 
@@ -35,9 +33,7 @@ export default function Notification() {
         return (
             Notifications.removeNotificationSubscription(notificationListener.current)
         );
-
     }, []);
-
     return null;
 }
 

@@ -1,3 +1,4 @@
+//Linking plant name to associated icon. Require cannot take dynamic file names.
 const images = {
     "Asparagus": require("./Asparagus.png"),
     "Aubergine": require("./Aubergine.png"),

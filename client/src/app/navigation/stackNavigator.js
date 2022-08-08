@@ -1,21 +1,24 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import { useContext } from 'react';
+import { createStackNavigator } from "@react-navigation/stack";
+import { useContext } from "react";
+
+import AuthContext from "../context/AuthContext";
 
 import SettingsScreen from "../screens/User/SettingsScreen";
 import PlantScreen from "../screens/Plant/PlantScreen";
 import CreateGardenScreen from "../screens/Garden/CreateGardenScreen";
 import PlotScreen from "../screens/Garden/PlotScreen";
-import NoteScreen from '../screens/Note/NoteScreen';
-import CreateAlarmScreen from '../screens/Alarm/CreateAlarmScreen';
+import NoteScreen from "../screens/Note/NoteScreen";
+import CreateAlarmScreen from "../screens/Alarm/CreateAlarmScreen";
 import LoginScreen from "../screens/User/LoginScreen";
-import SignUpScreen from '../screens/User/SignUpScreen';
-import PasswordResetScreen from '../screens/User/PasswordResetScreen';
-import AuthContext from '../context/AuthContext';
+import SignUpScreen from "../screens/User/SignUpScreen";
+import PasswordResetScreen from "../screens/User/PasswordResetScreen";
 
 const Stack = createStackNavigator();
 
+//Screens not directly displayed as Tabs
 const StackNavigator = (props) => {
 
+    //Prevent user viewing certain pages based on loggedIn state
     const { loggedIn } = useContext(AuthContext);
 
     return (

@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
-import SplashScreen from '../screens/SplashScreen';
+import SplashScreen from "../screens/SplashScreen";
 
 const AuthContext = createContext();
 
@@ -29,6 +29,7 @@ function AuthContextProvider(props) {
         checkLoggedIn();
     }, []);
 
+    //On start up, show splash screen to prevent issues with tab visibility
     if (loggedIn == null) {
         return (
             <SplashScreen />
