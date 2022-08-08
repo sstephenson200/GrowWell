@@ -26,6 +26,12 @@ router.post("/getNotesByPlot", [
         .isInt().withMessage("Plot number must be an integer value."),
 ], auth, noteController.getNotesByPlot);
 
+//Request to get all notes for a given plant_id
+router.post("/getNotesByPlant", [
+    check("plant_id")
+        .not().isEmpty().withMessage("Plant ID required."),
+], auth, noteController.getNotesByPlant);
+
 //Request to get all notes for a given user in a given month
 router.post("/getNotesByMonth", [
     check("date")

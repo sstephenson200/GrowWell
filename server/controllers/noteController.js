@@ -8,6 +8,7 @@ const { deleteImages } = require("../middleware/imageUpload");
 
 const Note = require("../models/noteModel");
 const Garden = require("../models/gardenModel");
+const Plant = require("../models/plantModel");
 
 // *** CREATE REQUESTS ***
 
@@ -141,6 +142,33 @@ const getNotesByPlot = async (request, response) => {
 
     return response.status(200).json({ notes: filteredNotes });
 }
+
+//Request to get all notes for a given plant
+const getNotesByPlant = async (request, response) => {
+
+    let user_id = request.user;
+
+    const { plant_id } = request.body;
+
+    const validationErrors = validationResult(request);
+    if (!validationErrors.isEmpty()) {
+        return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
+    }
+
+    if (!validator.checkValidId(plant_id)) {
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
+    }
+
+    const existingPlant = await Plant.findOne({ _id: plant_id });
+    if (!existingPlant) {
+        return response.status(200).json({ errorMessage: "Invalid plant ID." });
+    }
+
+    const notes = await Note.find({ "user_id": user_id, "plant_id": plant_id });
+
+    return response.status(200).json({ notes: notes });
+}
+
 
 //Request to get all notes for a given month
 const getNotesByMonth = async (request, response) => {
@@ -431,6 +459,7 @@ module.exports = {
     createNote,
     getNotes,
     getNotesByPlot,
+    getNotesByPlant,
     getNotesByMonth,
     deleteNote,
     updateTitle,
