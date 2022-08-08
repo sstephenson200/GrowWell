@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from "react";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 //Date picker to allow user to select date/time for upcoming alarms
 const DatePicker = (props) => {
@@ -17,7 +17,7 @@ const DatePicker = (props) => {
         setDate = props.date[1];
     }
 
-    const [mode, setMode] = useState('date');
+    const [mode, setMode] = useState("date");
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
@@ -32,11 +32,11 @@ const DatePicker = (props) => {
     };
 
     const showDatepicker = () => {
-        showMode('date');
+        showMode("date");
     };
 
     const showTimepicker = () => {
-        showMode('time');
+        showMode("time");
     };
 
     return (

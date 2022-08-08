@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
 const moment = require("moment");
-import axios from 'axios';
 
-import ImageSelect from '../Plant/SearchableImages';
+import ImageSelect from "../Plant/SearchableImages";
+
+import GetPlantByID from "../../requests/Plant/GetPlantByID";
 
 const PlotHistory = (props) => {
 
     const [plantName, setPlantName] = useState(null);
 
+    //Initialise parameters provided from plot screen
     let date = moment(props.plot_history.date_planted).format("MMM YYYY");
     let plant_id = props.plot_history.plant_id;
-
-    const getPlant = async () => {
-        try {
-            const response = await axios.post("/plant/getPlantByID", {
-                "plant_id": plant_id
-            }, { responseType: 'json' });
-            let plantName = await response.data.plant.name;
-            setPlantName(plantName);
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     useEffect(() => {
         getPlant();
     }, [props]);
+
+    //Function to get plant name for use in title and icon selection
+    async function getPlant() {
+        setPlantName(await GetPlantByID(plant_id, "name"));
+    }
 
     return (
         <View style={styles.currentPlant}>

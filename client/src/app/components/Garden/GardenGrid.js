@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import axios from "axios";
 
 import Plot from "./Plot";
+
+import GetGardenByID from "../../requests/Garden/GetGardenByID";
 
 const GardenGrid = (props) => {
 
@@ -14,36 +15,24 @@ const GardenGrid = (props) => {
         updated = props.updated;
     }
 
-    //Get garden data
-    async function getGardenData(garden_id) {
-        try {
-            const response = await axios.post("/garden/getGardenByID", {
-                "garden_id": garden_id
-            }, { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let garden = response.data.garden;
-                setGarden(garden);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    //Update garden data when garden_id changes
     useEffect(() => {
+        //Trigger refresh when a garden is selected
         getGardenData(garden_id);
+
+        //Trigger refresh when a garden or plot is added, removed or updated
         if (updated !== null) {
             updated = null;
         }
+
     }, [garden_id, updated]);
 
-    //Generate plot grid
-    const PlotGrid = () => {
+    //Function to get garden data
+    async function getGardenData() {
+        setGarden(await GetGardenByID(garden_id, "all"));
+    }
 
+    //Function used to generate a plot grid for garden displays
+    function PlotGrid() {
         let width = garden.size[1];
 
         return (
@@ -100,6 +89,5 @@ const styles = StyleSheet.create({
         height: 50
     }
 });
-
 
 export default GardenGrid;

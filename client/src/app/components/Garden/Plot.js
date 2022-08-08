@@ -1,34 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
-import axios from "axios";
 
 import ImageSelect from "../Plant/SearchableImages";
+
+import GetPlantByID from "../../requests/Plant/GetPlantByID";
 
 const Plot = (props) => {
 
     const [plantName, setPlantName] = useState(null);
 
+    //Initialise parameters provided from garden grid
     let plot_number = props.plot.plot_number;
     let plot_number_display = plot_number + 1;
     let plant_id = props.plot.plant_id;
-
-    // Get plant name for use in icon selection
-    async function getPlantName() {
-        try {
-            const response = await axios.post("/plant/getPlantByID", {
-                "plant_id": plant_id
-            }, { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                setPlantName(response.data.plant.name);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     useEffect(() => {
         if (plant_id !== null) {
@@ -36,6 +20,10 @@ const Plot = (props) => {
         }
     }, []);
 
+    //Function to get plant name for use in icon selection
+    async function getPlantName() {
+        setPlantName(await GetPlantByID(plant_id, "name"));
+    }
 
     return (
         <View style={styles.plot}>

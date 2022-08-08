@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Switch, StyleSheet } from 'react-native';
-import Modal from 'react-native-modal';
-import { RadioButton } from 'react-native-paper';
-import axios from 'axios';
-import { unescape } from 'underscore';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Switch, StyleSheet } from "react-native";
+import Modal from "react-native-modal";
+import { RadioButton } from "react-native-paper";
+import axios from "axios";
+import { unescape } from "underscore";
+import { Ionicons } from "@expo/vector-icons";
 
-import { ScheduleNotification, CancelNotification } from '../../notifications/PushNotification';
+import { ScheduleNotification, CancelNotification } from "../../notifications/PushNotification";
 
-import GetGardenByID from '../../requests/Garden/GetGardenByID';
+import GetGardenByID from "../../requests/Garden/GetGardenByID";
 
 const AlarmCard = (props) => {
 
@@ -32,7 +32,7 @@ const AlarmCard = (props) => {
     const [isEnabled, setIsEnabled] = useState(active_status);
     const [complete, setComplete] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [radioChecked, setRadioChecked] = useState('single');
+    const [radioChecked, setRadioChecked] = useState("single");
 
     useEffect(() => {
         if (garden_id !== undefined) {
@@ -62,7 +62,7 @@ const AlarmCard = (props) => {
 
     //Function to get garden name for alarm display
     async function getGarden() {
-        setGardenName(await (GetGardenByID(garden_id)));
+        setGardenName(await (GetGardenByID(garden_id, "name")));
     }
 
     //Function to update alarm's completion status - mark as done/done
@@ -70,7 +70,7 @@ const AlarmCard = (props) => {
         try {
             const response = await axios.put("/alarm/updateCompletionStatus", {
                 "alarm_id": alarm_id
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
 
             let status = response.status;
 
@@ -93,7 +93,7 @@ const AlarmCard = (props) => {
         try {
             const response = await axios.put("/alarm/updateActiveStatus", {
                 "alarm_id": alarm_id
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
         } catch (error) {
             console.log(error);
         }
@@ -106,7 +106,7 @@ const AlarmCard = (props) => {
                 data: {
                     "alarm_id": alarm
                 }
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
 
             //Cancel local notifications
             await CancelNotification(notification_id);
@@ -123,7 +123,7 @@ const AlarmCard = (props) => {
                 data: {
                     "parent": alarm
                 }
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
 
             let status = response.status;
 
@@ -176,7 +176,7 @@ const AlarmCard = (props) => {
                 "alarm_id": alarm_id,
                 "notification_id": notification_id
             },
-                { responseType: 'json' });
+                { responseType: "json" });
         } catch (error) {
             console.log(error);
         }
