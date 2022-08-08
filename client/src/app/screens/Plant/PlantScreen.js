@@ -41,7 +41,7 @@ const PlantScreen = (props) => {
     //Get plant data
     const getPlant = async () => {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/plant/getPlantByID", {
+            const response = await axios.post("/plant/getPlantByID", {
                 "plant_id": plant_id
             }, { responseType: 'json' });
             const plant = await response.data.plant;
@@ -66,7 +66,7 @@ const PlantScreen = (props) => {
         for (let i = 0; i < plantData.image.length; i++) {
 
             let id = plantData.image[i];
-            let blob = await axios.post("https://grow-well-server.herokuapp.com/plant/getImageByID", {
+            let blob = await axios.post("/plant/getImageByID", {
                 image_id: id
             }, { responseType: 'blob' });
             let base64Image = null;
@@ -92,7 +92,7 @@ const PlantScreen = (props) => {
     //Function to get garden names and plot numbers for plot selection dropdown
     async function getPlots() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
+            const response = await axios.post("/garden/getAllGardens", { responseType: 'json' });
 
             let status = response.status;
 
@@ -131,7 +131,7 @@ const PlantScreen = (props) => {
     async function getNotes() {
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", { responseType: 'json' });
+            const response = await axios.post("/note/getNotes", { responseType: 'json' });
 
             let status = response.status;
 
@@ -157,7 +157,7 @@ const PlantScreen = (props) => {
 
             if (garden_id !== null) {
                 try {
-                    const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
+                    const response = await axios.post("/garden/getGardenByID", {
                         "garden_id": garden_id
                     }, { responseType: 'json' });
 
@@ -191,7 +191,7 @@ const PlantScreen = (props) => {
 
             try {
 
-                let response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
+                let response = await axios.put("/garden/updatePlotPlant", {
                     "plant_id": plant_id,
                     "plot_number": plot_number,
                     "garden_id": garden_id

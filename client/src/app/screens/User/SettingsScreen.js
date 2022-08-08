@@ -42,7 +42,7 @@ const SettingsScreen = (props) => {
 
     async function getUser() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/user/getUser");
+            const response = await axios.post("/user/getUser");
 
             let status = response.status;
 
@@ -62,7 +62,7 @@ const SettingsScreen = (props) => {
     //Function to update a user's email address
     async function updateEmail() {
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/user/updateEmail", {
+            const response = await axios.put("/user/updateEmail", {
                 "email": email,
                 "password": password
             });
@@ -85,7 +85,7 @@ const SettingsScreen = (props) => {
     //Function to update a user's password
     async function updatePassword() {
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/user/updatePassword", {
+            const response = await axios.put("/user/updatePassword", {
                 "newPassword": newPassword,
                 "newPasswordVerify": newPasswordConfirm,
                 "oldPassword": password
@@ -111,7 +111,7 @@ const SettingsScreen = (props) => {
     //Function to update a user's password
     async function deleteUser(props) {
         try {
-            const response = await axios.delete("https://grow-well-server.herokuapp.com/user/deleteUser", {
+            const response = await axios.delete("/user/deleteUser", {
                 data: {
                     "password": password
                 }
@@ -138,7 +138,7 @@ const SettingsScreen = (props) => {
     async function logout(props) {
 
         try {
-            const response = await axios.get("https://grow-well-server.herokuapp.com/user/logout");
+            const response = await axios.get("/user/logout");
 
             let status = response.status;
 

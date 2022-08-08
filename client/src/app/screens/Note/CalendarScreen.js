@@ -28,7 +28,7 @@ const CalendarScreen = (props) => {
         }
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotesByMonth", {
+            const response = await axios.post("/note/getNotesByMonth", {
                 "date": date
             }, { responseType: 'json' });
 

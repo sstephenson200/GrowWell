@@ -12,7 +12,7 @@ function AuthContextProvider(props) {
     //Check if user is logged in and set loggedIn flag
     async function checkLoggedIn() {
         try {
-            const response = await axios.get("https://grow-well-server.herokuapp.com/user/checkLoggedIn");
+            const response = await axios.get("/user/checkLoggedIn");
 
             let status = response.status;
 

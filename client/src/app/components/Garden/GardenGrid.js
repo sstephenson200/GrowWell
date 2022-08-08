@@ -17,7 +17,7 @@ const GardenGrid = (props) => {
     //Get garden data
     async function getGardenData(garden_id) {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
+            const response = await axios.post("/garden/getGardenByID", {
                 "garden_id": garden_id
             }, { responseType: 'json' });
 

@@ -50,7 +50,7 @@ const AlarmCard = (props) => {
     //Function to get garden name for alarm display
     async function getGarden(garden_id) {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
+            const response = await axios.post("/garden/getGardenByID", {
                 "garden_id": garden_id
             }, { responseType: 'json' });
 
@@ -70,7 +70,7 @@ const AlarmCard = (props) => {
     //Function to update alarm's completion status
     async function updateCompletionStatus() {
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/alarm/updateCompletionStatus", {
+            const response = await axios.put("/alarm/updateCompletionStatus", {
                 "alarm_id": alarm_id
             }, { responseType: 'json' });
 
@@ -99,7 +99,7 @@ const AlarmCard = (props) => {
     //Function to update alarm's active status
     async function updateActiveStatus() {
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/alarm/updateActiveStatus", {
+            const response = await axios.put("/alarm/updateActiveStatus", {
                 "alarm_id": alarm_id
             }, { responseType: 'json' });
 
@@ -111,7 +111,7 @@ const AlarmCard = (props) => {
     //Function to delete a single alarm
     async function deleteAlarm(alarm) {
         try {
-            const response = await axios.delete("https://grow-well-server.herokuapp.com/alarm/deleteAlarm", {
+            const response = await axios.delete("/alarm/deleteAlarm", {
                 data: {
                     "alarm_id": alarm
                 }
@@ -128,7 +128,7 @@ const AlarmCard = (props) => {
     //Function to delete all recurring alarms
     async function deleteRecurringAlarms(alarm) {
         try {
-            const response = await axios.delete("https://grow-well-server.herokuapp.com/alarm/deleteAlarmsByParent", {
+            const response = await axios.delete("/alarm/deleteAlarmsByParent", {
                 data: {
                     "parent": alarm
                 }
@@ -182,7 +182,7 @@ const AlarmCard = (props) => {
         notification_id = await ScheduleNotification(title, selectedPlot, date);
 
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/alarm/updateNotificationID", {
+            const response = await axios.put("/alarm/updateNotificationID", {
                 "alarm_id": alarm_id,
                 "notification_id": notification_id
             },

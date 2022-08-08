@@ -14,6 +14,8 @@ axios.defaults.withCredentials = true;
 
 const App = () => {
 
+  axios.defaults.baseURL = "https://grow-well-server.herokuapp.com";
+
   LoadFont();
 
   return (

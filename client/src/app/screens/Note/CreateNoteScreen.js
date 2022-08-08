@@ -30,7 +30,7 @@ const CreateNoteScreen = (props) => {
     //Function to get garden names and plot numbers for plot selection dropdown
     async function getPlots() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
+            const response = await axios.post("/garden/getAllGardens", { responseType: 'json' });
 
             let status = response.status;
 
@@ -99,7 +99,7 @@ const CreateNoteScreen = (props) => {
         }
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/note/createNote", formData, {
+            const response = await axios.post("/note/createNote", formData, {
                 headers: {
                     'content-type': 'multipart/form-data'
                 }

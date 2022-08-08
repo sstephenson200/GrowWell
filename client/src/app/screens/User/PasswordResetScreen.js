@@ -16,7 +16,7 @@ const PasswordReset = (props) => {
     //Function to create a new user
     async function resetPassword(props) {
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/user/resetPassword", {
+            const response = await axios.put("/user/resetPassword", {
                 "email": email
             });
 
@@ -40,7 +40,7 @@ const PasswordReset = (props) => {
     async function logout(props) {
 
         try {
-            const response = await axios.get("https://grow-well-server.herokuapp.com/user/logout");
+            const response = await axios.get("/user/logout");
 
             let status = response.status;
 

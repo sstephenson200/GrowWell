@@ -15,7 +15,7 @@ const Plot = (props) => {
     // Get plant name for use in icon selection
     async function getPlantName() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/plant/getPlantByID", {
+            const response = await axios.post("/plant/getPlantByID", {
                 "plant_id": plant_id
             }, { responseType: 'json' });
 

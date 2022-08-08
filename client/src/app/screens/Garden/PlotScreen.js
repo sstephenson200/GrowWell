@@ -45,7 +45,7 @@ const PlotScreen = (props) => {
     // Get plant name for use in icon selection
     async function getPlantName() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/plant/getPlantByID", {
+            const response = await axios.post("/plant/getPlantByID", {
                 "plant_id": plant_id
             }, { responseType: 'json' });
 
@@ -63,7 +63,7 @@ const PlotScreen = (props) => {
     //Get all plant data
     const getPlants = async () => {
         try {
-            const response = await fetch("https://grow-well-server.herokuapp.com/plant/getAllPlants");
+            const response = await fetch("/plant/getAllPlants");
             const json = await response.json();
             let sortedPlants = json.plants.sort(sortPlants("name"));
 
@@ -91,13 +91,13 @@ const PlotScreen = (props) => {
             let previousDatePlanted = plot.date_planted;
 
             if (selectedPlant !== null) {
-                response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
+                response = await axios.put("/garden/updatePlotPlant", {
                     "plant_id": selectedPlant,
                     "plot_number": plot.plot_number,
                     "garden_id": garden._id
                 }, { responseType: 'json' });
             } else {
-                response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotPlant", {
+                response = await axios.put("/garden/updatePlotPlant", {
                     "plot_number": plot.plot_number,
                     "garden_id": garden._id
                 }, { responseType: 'json' });
@@ -129,7 +129,7 @@ const PlotScreen = (props) => {
     async function getNotes() {
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/note/getNotes", { responseType: 'json' });
+            const response = await axios.post("/note/getNotes", { responseType: 'json' });
 
             let status = response.status;
 
@@ -181,7 +181,7 @@ const PlotScreen = (props) => {
     const updatePlotHistory = async (date_planted) => {
 
         try {
-            const response = await axios.put("https://grow-well-server.herokuapp.com/garden/updatePlotHistory", {
+            const response = await axios.put("/garden/updatePlotHistory", {
                 "plant_id": plant_id,
                 "date_planted": date_planted,
                 "plot_number": plot.plot_number,

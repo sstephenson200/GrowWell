@@ -24,7 +24,7 @@ const GardenScreen = (props) => {
 
     async function getGardens() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
+            const response = await axios.post("/garden/getAllGardens", { responseType: 'json' });
 
             let status = response.status;
 
@@ -51,7 +51,7 @@ const GardenScreen = (props) => {
 
     async function deleteGarden() {
         try {
-            const response = await axios.delete("https://grow-well-server.herokuapp.com/garden/deleteGarden", {
+            const response = await axios.delete("/garden/deleteGarden", {
                 data: {
                     "garden_id": selectedGarden,
                     "password": password

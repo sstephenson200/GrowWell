@@ -22,7 +22,7 @@ const LoginScreen = (props) => {
     //Function to create a new user
     async function login(props) {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/user/login", {
+            const response = await axios.post("/user/login", {
                 "email": email,
                 "password": password
             });

@@ -14,7 +14,7 @@ const PlotHistory = (props) => {
 
     const getPlant = async () => {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/plant/getPlantByID", {
+            const response = await axios.post("/plant/getPlantByID", {
                 "plant_id": plant_id
             }, { responseType: 'json' });
             let plantName = await response.data.plant.name;

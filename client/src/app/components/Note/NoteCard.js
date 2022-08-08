@@ -24,7 +24,7 @@ const NoteCard = (props) => {
 
     async function getGarden() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getGardenByID", {
+            const response = await axios.post("/garden/getGardenByID", {
                 "garden_id": garden_id
             }, { responseType: 'json' });
 
@@ -48,7 +48,7 @@ const NoteCard = (props) => {
 
     const getPlant = async (plant_id) => {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/plant/getPlantByID", {
+            const response = await axios.post("/plant/getPlantByID", {
                 "plant_id": plant_id
             }, { responseType: 'json' });
             let plantName = await response.data.plant.name;
@@ -67,7 +67,7 @@ const NoteCard = (props) => {
         for (let i = 0; i < props.note.image.length; i++) {
 
             let id = props.note.image[i];
-            let blob = await axios.post("https://grow-well-server.herokuapp.com/plant/getImageByID", {
+            let blob = await axios.post("/plant/getImageByID", {
                 image_id: id
             }, { responseType: 'blob' });
             let base64Image = null;

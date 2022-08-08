@@ -19,7 +19,7 @@ const CreateGardenScreen = (props) => {
 
     async function createGarden(props, gardenName, length, width) {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/createGarden", {
+            const response = await axios.post("/garden/createGarden", {
                 "length": length,
                 "width": width,
                 "name": gardenName
