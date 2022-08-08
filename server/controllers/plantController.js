@@ -8,6 +8,18 @@ const { deleteImages, bucket } = require("../middleware/imageUpload");
 
 const Plant = require("../models/plantModel");
 
+//Method to sort an object
+function sortObject(props) {
+    return function (a, b) {
+        if (a[props] > b[props]) {
+            return 1;
+        } else if (a[props] < b[props]) {
+            return -1;
+        }
+        return 0;
+    }
+}
+
 // *** CREATE REQUESTS ***
 
 //Create Plant Endpoint
@@ -190,6 +202,9 @@ const createPlant = async (request, response) => {
 const getAllPlants = async (request, response) => {
 
     const plants = await Plant.find().select(["name", "image", "sow_date", "plant_date", "transplant_date", "harvest_date", "plant_type"]);
+
+    //Sort plants alphabetically by name
+    plants.sort(sortObject("name"));
 
     return response.status(200).json({ plants: plants });
 }
