@@ -17,6 +17,15 @@ router.post("/createNote", upload.array("file", 3), auth, noteController.createN
 //Request to get all notes for a given user
 router.post("/getNotes", auth, noteController.getNotes);
 
+//Request to get all notes for a given garden plot
+router.post("/getNotesByPlot", [
+    check("garden_id")
+        .not().isEmpty().withMessage("Garden ID required."),
+    check("plot_number")
+        .not().isEmpty().withMessage("Plot number required.")
+        .isInt().withMessage("Plot number must be an integer value."),
+], auth, noteController.getNotesByPlot);
+
 //Request to get all notes for a given user in a given month
 router.post("/getNotesByMonth", [
     check("date")
