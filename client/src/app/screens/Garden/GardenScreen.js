@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import Modal from 'react-native-modal';
-import axios from 'axios';
-import { unescape } from 'underscore';
+import React, { useEffect, useState } from "react";
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import Modal from "react-native-modal";
+import axios from "axios";
 
-import Header from '../../components/Header';
+import { CancelNotification } from "../../notifications/PushNotification";
+
+import Header from "../../components/Header";
 import Dropdown from "../../components/Dropdown";
-import GardenGrid from '../../components/Garden/GardenGrid';
-import { CancelNotification } from '../../notifications/PushNotification';
+import GardenGrid from "../../components/Garden/GardenGrid";
+
+import GetAllGardens from "../../requests/Garden/GetAllGardens";
 
 const GardenScreen = (props) => {
 
@@ -18,37 +20,21 @@ const GardenScreen = (props) => {
     const [deletedGarden, setDeletedGarden] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    useEffect(() => {
+        getGardens();
+    }, [deletedGarden, props]);
+
+    //Show/hide modal for processing garden deleteion
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     }
 
+    //Call GetAllGardens to fill "Select Plot" dropdown
     async function getGardens() {
-        try {
-            const response = await axios.post("/garden/getAllGardens", { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let userGardens = response.data.gardens;
-                let gardenLabels = [];
-
-                if (userGardens !== null) {
-                    userGardens.forEach((garden) => {
-                        let name = garden.name;
-                        name = unescape(name);
-                        let garden_id = garden._id;
-                        let entry = { label: name, value: garden_id };
-                        gardenLabels.push(entry);
-                    });
-                }
-                setGardens(gardenLabels);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+        setGardens(await GetAllGardens("gardenPlots"));
     }
 
+    //Request to delete the selected garden
     async function deleteGarden() {
         try {
             const response = await axios.delete("/garden/deleteGarden", {
@@ -56,7 +42,7 @@ const GardenScreen = (props) => {
                     "garden_id": selectedGarden,
                     "password": password
                 }
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
 
             let status = response.status;
 
@@ -65,26 +51,23 @@ const GardenScreen = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     if (response.data.alarms !== undefined && response.data.alarms.length !== 0) {
+                        //Cancel notifications linked to deleted garden
                         for (let i = 0; i < response.data.alarms.length; i++) {
                             let id = response.data.alarms[i].notification_id;
                             await CancelNotification(id);
                         }
                     }
+                    //Trigger page refresh
                     setModalVisible(false);
                     setPassword("");
                     setDeletedGarden(!deletedGarden);
                     setSelectedGarden(null);
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
     }
-
-    useEffect(() => {
-        getGardens();
-    }, [deletedGarden, props]);
 
     return (
         <View style={styles.container}>
@@ -163,7 +146,7 @@ const GardenScreen = (props) => {
 
             </ScrollView>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

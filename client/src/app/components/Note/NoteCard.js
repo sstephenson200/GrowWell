@@ -81,6 +81,7 @@ const NoteCard = (props) => {
     }
 
     useEffect(() => {
+        setNotePhotos([]);
         if (garden_id !== null) {
             getGarden();
         }

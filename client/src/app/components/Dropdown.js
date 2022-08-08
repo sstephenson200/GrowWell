@@ -71,12 +71,6 @@ const styles = StyleSheet.create({
         width: "90%",
         alignSelf: "center",
         margin: 10
-    },
-    smallDropdown: {
-        width: "50%",
-        marginHorizontal: 10,
-        borderColor: "grey",
-        color: "white"
     }
 });
 

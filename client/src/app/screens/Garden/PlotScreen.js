@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { unescape } from 'underscore';
+import React, { useState, useEffect } from "react";
+import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { unescape } from "underscore";
 import axios from "axios";
 
-import Header from '../../components/Header';
-import ImageSelect from '../../components/Plant/SearchableImages';
-import Dropdown from '../../components/Dropdown';
-import NoteCard from '../../components/Note/NoteCard';
-import PlotHistory from '../../components/Garden/PlotHistory';
+import Header from "../../components/Header";
+import ImageSelect from "../../components/Plant/SearchableImages";
+import Dropdown from "../../components/Dropdown";
+import NoteCard from "../../components/Note/NoteCard";
+import PlotHistory from "../../components/Garden/PlotHistory";
 
-//Method to sort plants array by name
-function sortPlants(props) {
-    return function (a, b) {
-        if (a[props] > b[props]) {
-            return 1;
-        } else if (a[props] < b[props]) {
-            return -1;
-        }
-        return 0;
-    }
-}
+import GetPlantByID from "../../requests/Plant/GetPlantByID";
+import GetAllPlants from "../../requests/Plant/GetAllPlants";
+import UpdatePlotPlant from "../../requests/Garden/UpdatePlotPlant";
 
 const PlotScreen = (props) => {
 
@@ -37,137 +29,99 @@ const PlotScreen = (props) => {
     let plot_number = plot.plot_number + 1;
     let plant_id = plot.plant_id;
 
+    useEffect(() => {
+        if (plant_id !== null) {
+            //If plot is not empty:
+            getPlantName();
+        } else {
+            //If plot is empty:
+            getPlants();
+        }
+        getNotesByPlot();
+        getPlotHistory();
+    }, [props]);
+
+    //Function to reset state when leaving the page
     function clearState() {
         setSelectedPlant(null);
         setErrorMessage("");
     }
 
-    // Get plant name for use in icon selection
+    //Function to get plant name for use in title and icon selection
     async function getPlantName() {
+        setPlantName(await GetPlantByID(plant_id, "name"));
+    }
+
+    //Function to get all plants to fill plant selection dropdown
+    async function getPlants() {
+        let plantList = (await GetAllPlants());
+        let plantLabels = [];
+
+        if (plantList !== null) {
+            plantList.forEach((plant) => {
+                let name = plant.name;
+                let id = plant._id;
+                let entry = { label: name, value: id };
+                plantLabels.push(entry);
+            });
+        }
+        setPlants(plantLabels);
+    }
+
+    //Function to add or remove a plant from a given plot
+    async function addPlantToPlot() {
+        let response = (await UpdatePlotPlant(selectedPlant, plot.plot_number, garden._id));
+
+        if (response.data.errorMessage !== undefined) {
+            setErrorMessage(response.data.errorMessage);
+        } else {
+            if (selectedPlant == null) {
+                //Add removed plant to plot history
+                await updatePlotHistory(plot.date_planted);
+            }
+            if (errorMessage == "") {
+                clearState();
+                setUpdatePlot(!updatePlot);
+                props.navigation.navigate("Garden", { updatePlot });
+            }
+        }
+    }
+
+    //Function to get notes for a given garden plot
+    async function getNotesByPlot() {
+
         try {
-            const response = await axios.post("/plant/getPlantByID", {
-                "plant_id": plant_id
-            }, { responseType: 'json' });
+            const response = await axios.post("/note/getNotesByPlot", {
+                "garden_id": garden._id,
+                "plot_number": plot.plot_number
+            }, { responseType: "json" });
 
             let status = response.status;
 
             if (status == 200) {
-                setPlantName(response.data.plant.name);
+                let noteCards = [];
+                let noteResults = response.data.notes;
+
+                if (noteResults.length !== 0) {
+                    for (let i = 0; i < noteResults.length; i++) {
+                        noteCards.push(
+                            <NoteCard key={[i]} note={noteResults[i]} />
+                        );
+                    }
+                }
+                setNotes(noteCards);
             }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    //Get all plant data
-    const getPlants = async () => {
-        try {
-            const response = await fetch("/plant/getAllPlants");
-            const json = await response.json();
-            let sortedPlants = json.plants.sort(sortPlants("name"));
-
-            let plantLabels = [];
-
-            if (sortedPlants !== null) {
-                sortedPlants.forEach((plant) => {
-                    let name = plant.name;
-                    let id = plant._id;
-                    let entry = { label: name, value: id };
-                    plantLabels.push(entry);
-                });
-            }
-            setPlants(plantLabels);
         } catch (error) {
             console.error(error);
         }
     }
 
-    //Add plant to garden plot
-    const addPlantToPlot = async (selectedPlant) => {
-
-        try {
-            let response = null;
-            let previousDatePlanted = plot.date_planted;
-
-            if (selectedPlant !== null) {
-                response = await axios.put("/garden/updatePlotPlant", {
-                    "plant_id": selectedPlant,
-                    "plot_number": plot.plot_number,
-                    "garden_id": garden._id
-                }, { responseType: 'json' });
-            } else {
-                response = await axios.put("/garden/updatePlotPlant", {
-                    "plot_number": plot.plot_number,
-                    "garden_id": garden._id
-                }, { responseType: 'json' });
-            }
-
-            let status = response.status;
-
-            if (status == 200) {
-                if (response.data.errorMessage !== undefined) {
-                    setErrorMessage(response.data.errorMessage);
-                } else {
-                    if (selectedPlant == null) {
-                        await updatePlotHistory(previousDatePlanted);
-                    }
-                    if (errorMessage == "") {
-                        clearState();
-                        setUpdatePlot(!updatePlot);
-                        props.navigation.navigate("Garden", { updatePlot });
-                    }
-                }
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    // Get notes for shown month
-    async function getNotes() {
-
-        try {
-            const response = await axios.post("/note/getNotes", { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let allNotes = response.data.notes;
-
-                filterNotes(allNotes);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    // Get notes for shown plot
-    async function filterNotes(notes) {
-
-        let filteredData = [];
-
-        for (let i = 0; i < notes.length; i++) {
-            let notePlotNumber = notes[i].plot_number;
-            let noteGardenID = notes[i].garden_id;
-
-            if (noteGardenID == garden._id && notePlotNumber == plot.plot_number) {
-                filteredData.push(
-                    <NoteCard key={[i]} note={notes[i]} />
-                )
-            }
-        }
-        setNotes(filteredData);
-    }
-
+    //Function to render all plot history entries
     function getPlotHistory() {
 
         let history = [];
 
         if (plot.plot_history.length !== 0) {
-
             for (let i = 0; i < plot.plot_history.length; i++) {
                 history.push(
                     <PlotHistory key={[i]} plot_history={plot.plot_history[i]} />
@@ -177,8 +131,8 @@ const PlotScreen = (props) => {
         setPlotHistory(history);
     }
 
-    //Add plant to garden plot history
-    const updatePlotHistory = async (date_planted) => {
+    //Function to add removed plant to plot history
+    async function updatePlotHistory(date_planted) {
 
         try {
             const response = await axios.put("/garden/updatePlotHistory", {
@@ -186,7 +140,7 @@ const PlotScreen = (props) => {
                 "date_planted": date_planted,
                 "plot_number": plot.plot_number,
                 "garden_id": garden._id
-            }, { responseType: 'json' });
+            }, { responseType: "json" });
 
             let status = response.status;
 
@@ -196,26 +150,15 @@ const PlotScreen = (props) => {
                 }
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
-
     }
-
-    useEffect(() => {
-        if (plant_id !== null) {
-            getPlantName();
-        } else {
-            getPlants();
-        }
-        getNotes();
-        getPlotHistory();
-    }, [props]);
 
     return (
         <View style={styles.container}>
             <Header navigation={props.navigation} />
 
-            <ScrollView style={styles.screen}>
+            <ScrollView style={styles.screen} contentContainerStyle={{ flexGrow: 1 }} >
 
                 <Text style={styles.title}>Plot {plot_number}</Text>
                 <Text style={styles.subtitle}>{unescape(garden.name)}</Text>
@@ -298,8 +241,8 @@ const PlotScreen = (props) => {
 
             </ScrollView>
 
-        </View>
-    )
+        </View >
+    );
 }
 
 const styles = StyleSheet.create({

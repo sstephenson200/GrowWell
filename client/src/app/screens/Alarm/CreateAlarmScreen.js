@@ -10,7 +10,7 @@ import Header from "../../components/Header";
 import DatePicker from "../../components/Alarm/DatePicker";
 import Dropdown from "../../components/Dropdown";
 
-import GetPlotsRequest from "../../requests/GetPlotsRequest";
+import GetAllGardens from "../../requests/Garden/GetAllGardens";
 
 const CreateAlarmScreen = (props) => {
 
@@ -76,9 +76,9 @@ const CreateAlarmScreen = (props) => {
         setErrorMessage("");
     }
 
-    //Call GetPlotsRequest to fill "Select Plot" dropdown
+    //Call GetAllGardens to fill plot selection dropdown
     async function getPlots() {
-        setPlots(await GetPlotsRequest());
+        setPlots(await GetAllGardens("allPlots"));
     }
 
     //Function to create a new alarm based on provided form data

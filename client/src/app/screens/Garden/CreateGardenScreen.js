@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Text, View, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import axios from "axios";
 
 const CreateGardenScreen = (props) => {
 
@@ -35,7 +35,6 @@ const CreateGardenScreen = (props) => {
                     props.navigation.navigate("Garden", { created: true });
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -83,8 +82,8 @@ const CreateGardenScreen = (props) => {
                 <View style={styles.navigationButtons}>
 
                     <TouchableOpacity style={styles.cancelButton} onPress={() => {
-                        clearState()
-                        props.navigation.navigate("Garden")
+                        clearState();
+                        props.navigation.navigate("Garden");
                     }}>
                         <Text style={styles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
