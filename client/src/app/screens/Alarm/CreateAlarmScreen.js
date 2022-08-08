@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 import axios from 'axios';
 import { unescape } from 'underscore';
 const moment = require("moment");
@@ -202,14 +201,6 @@ const CreateAlarmScreen = (props) => {
 
         getPlots();
     }, []);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>

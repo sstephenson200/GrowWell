@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 import axios from 'axios';
 import { unescape } from 'underscore';
 
@@ -132,14 +131,6 @@ const CreateNoteScreen = (props) => {
     useEffect(() => {
         getPlots();
     }, []);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     if (imageBrowserOpen) {
         return (

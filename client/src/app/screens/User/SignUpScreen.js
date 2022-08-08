@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 import axios from 'axios';
 
 import AuthContext from '../../context/AuthContext';
@@ -13,14 +12,6 @@ const SignUpScreen = (props) => {
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     //Function to reset state when leaving the page
     function clearState() {

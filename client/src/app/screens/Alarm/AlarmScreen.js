@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Agenda } from 'react-native-calendars';
-import { useFonts } from 'expo-font';
 import { unescape } from 'underscore';
 const moment = require("moment");
 import axios from "axios";
@@ -14,13 +13,24 @@ const AlarmScreen = (props) => {
     const [items, setItems] = useState({});
     const [deleteAlarm, setDeleteAlarm] = useState(null);
 
-    // Get alarms for shown month
+    useEffect(() => {
+        getAlarms();
+
+        //Trigger page refresh when an alarm is added or removed
+        if (props.route.params !== undefined) {
+            props.route.params = undefined;
+        }
+        if (deleteAlarm !== null) {
+            setDeleteAlarm(null);
+        }
+    }, [props, deleteAlarm]);
+
+    //Function to get alarms for shown month
     async function getAlarms() {
         try {
             const response = await axios.post("https://grow-well-server.herokuapp.com/alarm/getAllAlarms", { responseType: 'json' });
 
             let status = response.status;
-
             if (status == 200) {
                 generateAlarmItems(response.data.alarms);
             }
@@ -30,25 +40,7 @@ const AlarmScreen = (props) => {
         }
     }
 
-    useEffect(() => {
-        getAlarms();
-        if (props.route.params !== undefined) {
-            props.route.params = undefined;
-        }
-        if (deleteAlarm !== null) {
-            setDeleteAlarm(null);
-        }
-    }, [props, deleteAlarm]);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
-
-    //Function to add alarm data to agenda items parameter
+    //Function to add alarm data to agenda items parameter for use in alarm rendering
     function generateAlarmItems(alarms) {
 
         let alarmItems = {};
@@ -56,6 +48,7 @@ const AlarmScreen = (props) => {
 
         if (alarms.length !== 0) {
             for (let i = 0; i < alarms.length; i++) {
+                //Initialise alarm parameters
                 let alarm_id = alarms[i]._id;
                 let notificationDate = alarms[i].due_date;
                 let notification_id = alarms[i].notification_id;
@@ -81,13 +74,12 @@ const AlarmScreen = (props) => {
                 } else {
                     alarmItems[due_date] = [item];
                 }
-
             }
         }
         fillEmptyItems(alarmItems);
     }
 
-    //Function to set all dates which are not alarm due dates to [] 
+    //Function to set all dates which are not alarm due dates to [] to allow date to be shown in agenda 
     function fillEmptyItems(alarmItems) {
 
         let monthArray = getDays();
@@ -126,6 +118,7 @@ const AlarmScreen = (props) => {
         return monthArray;
     }
 
+    //Render alarm card
     function renderItem(item) {
         return (
             <AlarmCard alarm={item} deleteCard={[deleteAlarm, setDeleteAlarm]} />

@@ -8,9 +8,13 @@ import Notification from "./src/app/notifications/PushNotification";
 
 import { AuthContextProvider } from "./src/app/context/AuthContext";
 
+import LoadFont from "./src/app/assets/fonts/LoadFont";
+
 axios.defaults.withCredentials = true;
 
 const App = () => {
+
+  LoadFont();
 
   return (
     <AuthContextProvider>

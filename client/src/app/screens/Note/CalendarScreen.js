@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { useFonts } from 'expo-font';
 const moment = require("moment");
 import axios from "axios";
 
@@ -69,14 +68,6 @@ const CalendarScreen = (props) => {
             props.route.params = undefined;
         }
     }, [selectedMonth, props]);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>

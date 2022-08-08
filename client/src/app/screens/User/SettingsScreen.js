@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
-import { useFonts } from 'expo-font';
 import axios from 'axios';
 
 import Header from '../../components/Header';
@@ -40,14 +39,6 @@ const SettingsScreen = (props) => {
     useEffect(() => {
         getUser();
     }, [props]);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     async function getUser() {
         try {

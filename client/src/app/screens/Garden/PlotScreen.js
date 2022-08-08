@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
-import { select, unescape } from 'underscore';
+import { unescape } from 'underscore';
 import axios from "axios";
 
 import Header from '../../components/Header';
@@ -211,14 +210,6 @@ const PlotScreen = (props) => {
         getNotes();
         getPlotHistory();
     }, [props]);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>

@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 import axios from 'axios';
 
 const PasswordReset = (props) => {
 
     const [email, setEmail] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     //Function to reset state when leaving the page
     function clearState() {

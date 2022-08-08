@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
-import { useFonts } from 'expo-font';
 import axios from 'axios';
 import { unescape } from 'underscore';
 
@@ -86,14 +85,6 @@ const GardenScreen = (props) => {
     useEffect(() => {
         getGardens();
     }, [deletedGarden, props]);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>

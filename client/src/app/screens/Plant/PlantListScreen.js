@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 
 import Header from '../../components/Header';
 import SearchBar from '../../components/Plant/SearchBar';
@@ -11,14 +10,6 @@ const PlantListScreen = (props) => {
 
     const [query, setQuery] = useState('');
     const [filterOptions, setFilterOptions] = useState([]);
-
-    const [loaded] = useFonts({
-        Montserrat: require('../../assets/fonts/Montserrat-Medium.ttf')
-    });
-
-    if (!loaded) {
-        return null;
-    }
 
     return (
         <View style={styles.container}>
