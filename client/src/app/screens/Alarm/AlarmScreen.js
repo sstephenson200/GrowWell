@@ -122,7 +122,7 @@ const AlarmScreen = (props) => {
     //Render alarm card
     function renderItem(item) {
         return (
-            <AlarmCard alarm={item} deleteCard={[deleteAlarm, setDeleteAlarm]} />
+            <AlarmCard alarm={item} deleteCard={setDeleteAlarm} />
         );
     }
 

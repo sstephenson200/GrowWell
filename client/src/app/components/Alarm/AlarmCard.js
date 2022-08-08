@@ -8,8 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ScheduleNotification, CancelNotification } from '../../notifications/PushNotification';
 
+import GetGardenByID from '../../requests/Garden/GetGardenByID';
+
 const AlarmCard = (props) => {
 
+    //Initialise parameters provided from alarm page
     let alarm_id = props.alarm.alarm_id;
     let date = props.alarm.notificationDate;
     let notification_id = props.alarm.notification_id;
@@ -23,8 +26,7 @@ const AlarmCard = (props) => {
     let completion_status = props.alarm.completion_status;
     let active_status = props.alarm.active_status;
 
-    let deleteCard = props.deleteCard[0];
-    let setDeleteCard = props.deleteCard[1];
+    let setDeleteCard = props.deleteCard;
 
     const [gardenName, setGardenName] = useState(null);
     const [isEnabled, setIsEnabled] = useState(active_status);
@@ -32,10 +34,20 @@ const AlarmCard = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [radioChecked, setRadioChecked] = useState('single');
 
+    useEffect(() => {
+        if (garden_id !== undefined) {
+            //If alarm is linked to a specific garden plot
+            getGarden(garden_id);
+        }
+        setComplete(completion_status);
+    }, [props.alarm]);
+
+    //Turn alarm on/off by updating alarm active_status
     const toggleSwitch = () => {
         updateActiveStatus();
         setIsEnabled(previousState => !previousState);
 
+        //Cancel or schedule notifications based on active_status
         if (isEnabled) {
             CancelNotification(notification_id);
         } else {
@@ -43,31 +55,17 @@ const AlarmCard = (props) => {
         }
     }
 
+    //Show/hide modal for processing recurring alarm deletion
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     }
 
     //Function to get garden name for alarm display
-    async function getGarden(garden_id) {
-        try {
-            const response = await axios.post("/garden/getGardenByID", {
-                "garden_id": garden_id
-            }, { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let name = response.data.garden.name;
-                name = unescape(name);
-                setGardenName(name);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+    async function getGarden() {
+        setGardenName(await (GetGardenByID(garden_id)));
     }
 
-    //Function to update alarm's completion status
+    //Function to update alarm's completion status - mark as done/done
     async function updateCompletionStatus() {
         try {
             const response = await axios.put("/alarm/updateCompletionStatus", {
@@ -78,16 +76,10 @@ const AlarmCard = (props) => {
 
             if (status == 200) {
 
-                if (completion_status == true) {
-                    completion_status = false;
-                } else {
-                    completion_status = true;
-                }
-                setComplete(completion_status);
+                let markCompleted = !complete;
+                setComplete(markCompleted);
 
-                if (completion_status == true && isEnabled) {
-                    toggleSwitch();
-                } else if (completion_status == false && !isEnabled) {
+                if ((markCompleted && isEnabled) || (!markCompleted && !isEnabled)) {
                     toggleSwitch();
                 }
             }
@@ -96,13 +88,12 @@ const AlarmCard = (props) => {
         }
     }
 
-    //Function to update alarm's active status
+    //Function to update alarm's active status - on/off
     async function updateActiveStatus() {
         try {
             const response = await axios.put("/alarm/updateActiveStatus", {
                 "alarm_id": alarm_id
             }, { responseType: 'json' });
-
         } catch (error) {
             console.log(error);
         }
@@ -117,15 +108,15 @@ const AlarmCard = (props) => {
                 }
             }, { responseType: 'json' });
 
+            //Cancel local notifications
             await CancelNotification(notification_id);
             setDeleteCard(true);
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    //Function to delete all recurring alarms
+    //Function to delete all recurring alarms based on shared parent ID
     async function deleteRecurringAlarms(alarm) {
         try {
             const response = await axios.delete("/alarm/deleteAlarmsByParent", {
@@ -143,16 +134,15 @@ const AlarmCard = (props) => {
                         await CancelNotification(id);
                     }
                 }
-
+                //Trigger alarm screen refresh when alarm is removed
                 setDeleteCard(true);
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    //Function to process deletion of recurring alarms based on user selection
+    //Function to process deletion of recurring alarms based on user selection - delete single/delete all
     async function processAlarmDeletion() {
 
         if (radioChecked == "single") {
@@ -169,7 +159,7 @@ const AlarmCard = (props) => {
         setModalVisible(false);
     }
 
-    //Function to delete all recurring alarms
+    //Function to re-schedule local notifications which have previously been disabled
     async function updateNotification() {
 
         let selectedPlot = null;
@@ -187,18 +177,10 @@ const AlarmCard = (props) => {
                 "notification_id": notification_id
             },
                 { responseType: 'json' });
-
         } catch (error) {
             console.log(error);
         }
     }
-
-    useEffect(() => {
-        if (garden_id !== undefined) {
-            getGarden(garden_id);
-        }
-        setComplete(completion_status);
-    }, [props.alarm]);
 
     return (
         <View>

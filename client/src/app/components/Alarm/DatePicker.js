@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+//Date picker to allow user to select date/time for upcoming alarms
 const DatePicker = (props) => {
 
     let tomorrow = new Date()
@@ -10,6 +11,7 @@ const DatePicker = (props) => {
     let date = null;
     let setDate = null;
 
+    //Initialise datepicker date, as provided from create alarm screen 
     if (props.date !== undefined) {
         date = props.date[0];
         setDate = props.date[1];
