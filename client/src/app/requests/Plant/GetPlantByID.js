@@ -10,10 +10,9 @@ async function GetPlantByID(plant_id, requiredData) {
         let status = response.status;
 
         if (status == 200) {
-
             if (requiredData == "name") {
                 return response.data.plant.name;
-            } else {
+            } else if (requiredData == "all") {
                 return response.data.plant;
             }
         }

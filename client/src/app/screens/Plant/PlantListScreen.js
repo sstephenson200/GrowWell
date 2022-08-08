@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { Text, View, StyleSheet } from "react-native";
 
-import Header from '../../components/Header';
-import SearchBar from '../../components/Plant/SearchBar';
-import Filter from '../../components/Plant/Filter';
+import Header from "../../components/Header";
+import SearchBar from "../../components/Plant/SearchBar";
+import Filter from "../../components/Plant/Filter";
 import PlantList from "../../components/Plant/PlantList";
 
 const PlantListScreen = (props) => {
 
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState("");
     const [filterOptions, setFilterOptions] = useState([]);
 
     return (
@@ -22,7 +22,7 @@ const PlantListScreen = (props) => {
             </View>
         </View>
 
-    )
+    );
 }
 
 const styles = StyleSheet.create({

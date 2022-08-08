@@ -21,7 +21,7 @@ async function GetAllGardens(plotsType) {
 
                     let entry = null;
 
-                    if (plotsType == "allPlots") {
+                    if (plotsType == "allPlots" || plotsType == "unfilledPlots") {
                         //If all plots are being shown
                         for (let i = 0; i < garden.plot.length; i++) {
                             let plot_number = garden.plot[i].plot_number;
@@ -29,7 +29,10 @@ async function GetAllGardens(plotsType) {
                             let label = name + ": Plot " + displayedPlotNumber;
                             let value = garden_id + ":" + plot_number + ":" + label;
                             entry = { label: label, value: value };
-                            labels.push(entry);
+                            //If unfilled plots is selected, only show empty plots
+                            if ((plotsType == "unfilledPlots" && garden.plot[i].plant_id == null) || plotsType !== "unfilledPlots") {
+                                labels.push(entry);
+                            }
                         }
                     } else if (plotsType == "gardenPlots") {
                         //If plots per garden are being shown
