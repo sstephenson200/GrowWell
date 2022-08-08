@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import axios from 'axios';
-import { unescape } from 'underscore';
+import React, { useState, useEffect } from "react";
+import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import axios from "axios";
 const moment = require("moment");
-import { Checkbox } from 'react-native-paper';
+import { Checkbox } from "react-native-paper";
 
-import Header from '../../components/Header';
-import DatePicker from '../../components/Alarm/DatePicker';
-import Dropdown from "../../components/Dropdown";
 import { CancelNotification, ScheduleNotification } from "../../notifications/PushNotification";
+
+import Header from "../../components/Header";
+import DatePicker from "../../components/Alarm/DatePicker";
+import Dropdown from "../../components/Dropdown";
+
+import GetPlotsRequest from "../../requests/GetPlotsRequest";
 
 const CreateAlarmScreen = (props) => {
 
-    let tomorrow = new Date()
+    let tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     let notificationID = null;
@@ -21,6 +23,7 @@ const CreateAlarmScreen = (props) => {
     let alarmSchedule = null;
     let alarmDuration = null;
 
+    //Initialise parameters if alarm details have been passed in from plant screen
     if (props.route.params !== undefined) {
         if (props.route.params.alarmTitle !== undefined) {
             alarmTitle = props.route.params.alarmTitle
@@ -42,9 +45,29 @@ const CreateAlarmScreen = (props) => {
     const [numRepeats, setNumRepeats] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
+    useEffect(() => {
+
+        //Set parameters provided from plant screen
+        if (alarmTitle !== null) {
+            setTitle(alarmTitle);
+        }
+
+        if (alarmSchedule !== null) {
+            setChecked(true);
+            setSchedule(alarmSchedule);
+        }
+
+        if (alarmDuration !== null) {
+            setChecked(true);
+            setNumRepeats(alarmDuration);
+        }
+
+        getPlots();
+    }, []);
+
     //Function to reset state when leaving the page
     function clearState() {
-        setDate(new Date());
+        setDate(tomorrow);
         setTitle("");
         setSelectedPlot(null);
         setChecked(false);
@@ -53,42 +76,12 @@ const CreateAlarmScreen = (props) => {
         setErrorMessage("");
     }
 
-    //Function to get garden names and plot numbers for plot selection dropdown
+    //Call GetPlotsRequest to fill "Select Plot" dropdown
     async function getPlots() {
-
-        try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/garden/getAllGardens", { responseType: 'json' });
-
-            let status = response.status;
-
-            if (status == 200) {
-                let userGardens = response.data.gardens;
-                let plotLabels = [];
-
-                if (userGardens !== null) {
-                    userGardens.forEach((garden) => {
-                        let name = garden.name;
-                        name = unescape(name);
-                        let garden_id = garden._id;
-
-                        for (let i = 0; i < garden.plot.length; i++) {
-                            let plot_number = garden.plot[i].plot_number;
-                            let displayedPlotNumber = plot_number + 1;
-                            let label = name + ": Plot " + displayedPlotNumber;
-                            let value = garden_id + ":" + plot_number + ":" + label;
-                            let entry = { label: label, value: value };
-                            plotLabels.push(entry);
-                        }
-                    });
-                }
-                setPlots(plotLabels);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+        setPlots(await GetPlotsRequest());
     }
 
+    //Function to create a new alarm based on provided form data
     async function createAlarm(props, title, date, schedule, numRepeats, parent, selectedPlot) {
 
         date = moment(date).format();
@@ -122,6 +115,7 @@ const CreateAlarmScreen = (props) => {
             }
 
             if (parent == null) {
+                //If alarm is repeating, the first alarm must be classified as the parent
                 body.isParent = true;
             }
 
@@ -143,13 +137,14 @@ const CreateAlarmScreen = (props) => {
             body.plot_number = plot_number;
         }
 
+        //Link notification ID to alarm to allow for cancelling/re-adding the schedule when the alarm is on/off
         notificationID = await ScheduleNotification(title, selectedPlot, date);
         if (notificationID !== null) {
             body.notification_id = notificationID;
         }
 
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/alarm/createAlarm", body);
+            const response = await axios.post("/alarm/createAlarm", body);
 
             let status = response.status;
 
@@ -163,10 +158,11 @@ const CreateAlarmScreen = (props) => {
                     //Create repeat alarms
                     if (schedule !== null && numRepeats !== null && numRepeats > 1) {
 
+                        //Generate new alarm data
                         if (parent == null) {
                             parent = response.data.alarm._id;
                         }
-                        let newDate = moment(date).add(schedule, 'd');
+                        let newDate = moment(date).add(schedule, "d");
                         let newNumRepeats = numRepeats - 1;
                         await createAlarm(props, title, newDate, schedule, newNumRepeats, parent, selectedPlot);
                     }
@@ -177,35 +173,15 @@ const CreateAlarmScreen = (props) => {
                     props.navigation.navigate("Alarms", { params: { updated: true } });
                 }
             }
-
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(() => {
-
-        if (alarmTitle !== null) {
-            setTitle(alarmTitle);
-        }
-
-        if (alarmSchedule !== null) {
-            setChecked(true);
-            setSchedule(alarmSchedule);
-        }
-
-        if (alarmDuration !== null) {
-            setChecked(true);
-            setNumRepeats(alarmDuration);
-        }
-
-        getPlots();
-    }, []);
-
     return (
         <View style={styles.container}>
             <Header navigation={props.navigation} />
-            <ScrollView style={styles.screen}>
+            <ScrollView style={styles.screen} contentContainerStyle={{ flexGrow: 1 }}>
 
                 <Text style={styles.title}>New Alarm</Text>
 
@@ -228,10 +204,12 @@ const CreateAlarmScreen = (props) => {
                 />
 
                 <Text style={styles.subtitle}>Plot</Text>
-                <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" styling="largeDropdown" />
+                <View>
+                    <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" styling="largeDropdown" />
+                </View>
 
                 <Checkbox.Item
-                    status={checked ? 'checked' : 'unchecked'}
+                    status={checked ? "checked" : "unchecked"}
                     onPress={() => {
                         setChecked(!checked);
                     }}
@@ -286,7 +264,7 @@ const CreateAlarmScreen = (props) => {
 
             </ScrollView >
         </View >
-    )
+    );
 }
 
 const styles = StyleSheet.create({

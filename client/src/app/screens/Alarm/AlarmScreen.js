@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Agenda } from 'react-native-calendars';
-import { unescape } from 'underscore';
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Agenda } from "react-native-calendars";
+import { unescape } from "underscore";
 const moment = require("moment");
 import axios from "axios";
 
-import Header from '../../components/Header';
-import AlarmCard from '../../components/Alarm/AlarmCard';
+import Header from "../../components/Header";
+import AlarmCard from "../../components/Alarm/AlarmCard";
 
 const AlarmScreen = (props) => {
 
@@ -23,12 +23,13 @@ const AlarmScreen = (props) => {
         if (deleteAlarm !== null) {
             setDeleteAlarm(null);
         }
+
     }, [props, deleteAlarm]);
 
     //Function to get alarms for shown month
     async function getAlarms() {
         try {
-            const response = await axios.post("https://grow-well-server.herokuapp.com/alarm/getAllAlarms", { responseType: 'json' });
+            const response = await axios.post("/alarm/getAllAlarms", { responseType: "json" });
 
             let status = response.status;
             if (status == 200) {
@@ -36,7 +37,7 @@ const AlarmScreen = (props) => {
             }
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -99,8 +100,8 @@ const AlarmScreen = (props) => {
         let monthArray = [];
 
         let now = moment(new Date()).format("YYYY-MM-DD");
-        let previousMonth = moment(now).subtract(1, "month").startOf("month").format('YYYY-MM-DD');
-        let nextMonth = moment(now).add(1, "month").startOf("month").format('YYYY-MM-DD');
+        let previousMonth = moment(now).subtract(1, "month").startOf("month").format("YYYY-MM-DD");
+        let nextMonth = moment(now).add(1, "month").startOf("month").format("YYYY-MM-DD");
 
         let availableMonths = [previousMonth, now, nextMonth];
 
