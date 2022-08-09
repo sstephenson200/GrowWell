@@ -63,7 +63,7 @@ const CreateAlarmScreen = (props) => {
         }
 
         getPlots();
-    }, []);
+    }, [props]);
 
     //Function to reset state when leaving the page
     function clearState() {

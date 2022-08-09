@@ -1,6 +1,7 @@
 import Images from "../../assets/images/plant_icons/icons";
 
-function imageSelect(imageName) {
+//Function to link a plant name to its image, as defined in assets/images/plant_icons/icons
+function ImageSelect(imageName) {
 
     const images = {
         "Asparagus": Images.Asparagus,
@@ -45,4 +46,4 @@ function imageSelect(imageName) {
     return icon;
 }
 
-export default imageSelect;
+export default ImageSelect;

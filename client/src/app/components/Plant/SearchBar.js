@@ -1,13 +1,15 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Searchbar } from "react-native-paper";
 
 const SearchBar = (props) => {
 
+    //Initialise search query state for use in plant list screen
     let query = props.queryData[0];
     let setQuery = props.queryData[1];
 
-    const onChange = (entry) => {
+    //Function to update search query based on user input
+    function onChange(entry) {
         setQuery(entry);
     }
 

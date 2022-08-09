@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
+//Filter for use in plant list screen
 const Filter = (props) => {
 
+    //Initialise filter state for use in plant list screen
     let filterOptions = props.filterData[0];
     let setFilterOptions = props.filterData[1];
 
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState([
+        //Menu headings
         { label: "Plant Type", value: "plantTypeTitle", disabled: "disabled" },
         { label: "Actions", value: "actionsTitle", disabled: "disabled" },
+        //Filter options
         { label: "Vegetable", value: "Vegetable", parent: "plantTypeTitle" },
         { label: "Herb", value: "Herb", parent: "plantTypeTitle" },
         { label: "Fruit", value: "Fruit", parent: "plantTypeTitle" },

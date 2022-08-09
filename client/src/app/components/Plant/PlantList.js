@@ -1,49 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
+import axios from "axios";
 
 import ImageSelect from "./SearchableImages";
-import Infographic from "./MonthlyPlantData"
+import Infographic from "./MonthlyPlantData";
 
-//Method to sort plants array by name
-function sortPlants(props) {
-    return function (a, b) {
-        if (a[props] > b[props]) {
-            return 1;
-        } else if (a[props] < b[props]) {
-            return -1;
-        }
-        return 0;
-    }
-}
+import GetAllPlants from "../../requests/Plant/GetAllPlants";
 
 const PlantList = (props) => {
 
     const [plants, setPlants] = useState([]);
+
+    //Initialise data from plant list screen
     let searchQuery = props.searchQuery;
     let filterData = props.filterData;
 
-    const getAllPlantData = async () => {
+    useEffect(() => {
+        getAllPlantData();
+    }, []);
+
+    //Function to gather plant and image data without triggering undefined errors
+    async function getAllPlantData() {
         let plantData = await getPlants();
         getImages(plantData);
     }
 
-    //Get all plant data
-    const getPlants = async () => {
-        try {
-            const response = await axios.get("/plant/getAllPlants");
-            let sortedPlants = response.data.plants.sort(sortPlants("name"));
-
-            setPlants(sortedPlants);
-
-            return (sortedPlants);
-        } catch (error) {
-            console.error(error);
-        }
+    //Function to get all plants to fill list cards
+    async function getPlants() {
+        let plantList = (await GetAllPlants());
+        setPlants(plantList);
+        return (plantList);
     }
 
-    //Get corresponding plant images
-    const getImages = async (plantData) => {
+    //Function to convert first plant image to base64 format for rendering
+    async function getImages(plantData) {
         if (plantData.length <= 0) {
             return;
         }
@@ -55,13 +45,12 @@ const PlantList = (props) => {
         for (let i = 0; i < plantData.length; i++) {
             let blob = await axios.post("/plant/getImageByID", {
                 image_id: plantData[i].image[0]
-            }, { responseType: 'blob' });
+            }, { responseType: "blob" });
             let base64Image = null;
             fileReaderInstance.readAsDataURL(blob.data);
             fileReaderInstance.onload = async () => {
                 base64Image = fileReaderInstance.result;
                 plantData[i].photo = base64Image;
-
                 updatedPlantData.push(plantData[i]);
             }
         }
@@ -73,16 +62,12 @@ const PlantList = (props) => {
         }
     }
 
-    useEffect(() => {
-        getAllPlantData();
-    }, []);
-
-    //Function to check if a plant should be shown in search results based on a comparison of plant name and search query
+    //Function to remove plant card from render if plant data is incompatible with search and filter queries
     function showPlantInResults(plant, searchQuery, filterData) {
         let show = true;
         let plantTypes = [];
 
-        if (searchQuery !== '') {
+        if (searchQuery !== "") {
             if (!plant.name.toLowerCase().includes(searchQuery.toLowerCase())) {
                 return false;
             }
@@ -90,6 +75,7 @@ const PlantList = (props) => {
 
         if (filterData.length !== 0) {
 
+            //Allow selection of multiple plant types in filter query
             for (let i = 0; i < filterData.length; i++) {
                 if (filterData[i] == "Fruit" || filterData[i] == "Herb" || filterData[i] == "Vegetable") {
                     plantTypes.push(filterData[i]);
@@ -105,6 +91,7 @@ const PlantList = (props) => {
                             return false;
                         }
                         break;
+                    //Check if current date is in selected schedule period
                     case "Sow":
                         show = Infographic.MonthFilter(plant.sow_date);
                         break;
@@ -126,6 +113,17 @@ const PlantList = (props) => {
             }
         }
         return show;
+    }
+
+    //Function to render and give style to list cards
+    function Card(props) {
+        return (
+            <View style={styles.card}>
+                <View style={styles.cardContent}>
+                    {props.children}
+                </View>
+            </View>
+        );
     }
 
     return (
@@ -150,6 +148,7 @@ const PlantList = (props) => {
                         return null;
                     }
 
+                    //Render list card
                     return (
 
                         <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id, name: item.name, plant_type: item.plant_type, photo: item.photo } })}>
@@ -193,20 +192,10 @@ const PlantList = (props) => {
                             </Card>
                         </TouchableOpacity>
 
-                    )
+                    );
                 }}
             />
         </View >
-    );
-}
-
-function Card(props) {
-    return (
-        <View style={styles.card}>
-            <View style={styles.cardContent}>
-                {props.children}
-            </View>
-        </View>
     );
 }
 

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import React from "react";
+import { Text, View, StyleSheet } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 
-//Function to get an array of in season months
+//Function to get all months between a given start and end month
 function getMonthArray(month1, month2) {
 
     let monthArray = [];
@@ -21,7 +21,6 @@ function getMonthArray(month1, month2) {
             monthArray.push(i);
         }
     }
-
     return monthArray;
 }
 
@@ -33,6 +32,7 @@ function MonthFilter(schedule) {
         let month1 = schedule[0];
         let month2 = schedule[1];
 
+        //Get all months between schedule start and end
         let array = getMonthArray(month1, month2);
 
         let date = new Date();
@@ -42,74 +42,69 @@ function MonthFilter(schedule) {
             return true;
         }
     }
-
     return false;
 }
 
-function EmptyCircle(props) {
+//Function to generate a circle icon for use in monthly infographic display
+function Circle(props) {
+
+    //Months in inactive season are filled in grey
+    let color = "#E2E2E1";
+    if (props.color !== undefined && props.color == "filled") {
+        //Months in the active season are filled in green
+        color = "#81BF63";
+    }
 
     if (props.plantPage == true) {
+        //Large circle for plant screen
         return (
             <View style={styles.circleLarge}>
-                <FontAwesome name="circle" size={15} color="#E2E2E1" />
+                <FontAwesome name="circle" size={15} color={color} />
             </View>
         );
     } else {
+        //Smaller circle for plant list screen cards
         return (
             <View style={styles.circle}>
-                <FontAwesome name="circle" size={10} color="#E2E2E1" />
+                <FontAwesome name="circle" size={10} color={color} />
             </View>
         );
     }
 }
 
-function FilledCircle(props) {
-
-    if (props.plantPage == true) {
-        return (
-            <View style={styles.circleLarge}>
-                <FontAwesome name="circle" size={15} color="#81BF63" />
-            </View>
-        );
-    } else {
-        return (
-            <View style={styles.circle}>
-                <FontAwesome name="circle" size={10} color="#81BF63" />
-            </View>
-        );
-    }
-}
-
-//Function to generate and fill month circles for monthly infographics
+//Function to generate circle icons based on provided month array
 function generateCircles(monthArray, plantPage) {
     let monthCircles = [];
 
     for (let i = 1; i < 13; i++) {
         if (monthArray.includes(i)) {
+            //Produce filled circles for active months
             monthCircles.push(
-                <FilledCircle key={"circle_" + i} plantPage={plantPage} />
+                <Circle key={"circle_" + i} plantPage={plantPage} color={"filled"} />
             );
         } else {
+            //Produce empty circles for inactive months
             monthCircles.push(
-                <EmptyCircle key={"circle_" + i} plantPage={plantPage} />
+                <Circle key={"emptyCircle_" + i} plantPage={plantPage} />
             );
         }
     }
-
     return monthCircles;
 }
 
-//Function to generate monthly labels
-const InfographicLabels = (props) => {
+//Function to generate month labels for monthly infographic display
+function InfographicLabels(props) {
     const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
     let labels = [];
 
     for (let i = 0; i < months.length; i++) {
         if (props.plantPage == true) {
+            //Large label for plant screen
             labels.push(
                 <Text key={"label_" + i} style={styles.labelTextLarge}>{months[i]}</Text>
             );
         } else {
+            //Smaller label for plant list screen cards
             labels.push(
                 <Text key={"label_" + i} style={styles.labelText}>{months[i]}</Text>
             );
@@ -131,7 +126,8 @@ const InfographicLabels = (props) => {
     }
 }
 
-const GeneralInfographic = (props) => {
+//Function to render the monthly infographic based on provided styling guides
+function GeneralInfographic(props) {
 
     let month1 = props.schedule[0];
     let month2 = props.schedule[1];
@@ -139,12 +135,14 @@ const GeneralInfographic = (props) => {
     let array = getMonthArray(month1, month2);
 
     if (props.plantPage == true) {
+        //Produce larger infographic for plant screen
         return (
             <View style={styles.monthCirclesLarge}>
                 {generateCircles(array, props.plantPage)}
             </View>
         );
     } else {
+        //Produce smaller infographic for plant list screen cards
         return (
             <View style={styles.monthCircles}>
                 {generateCircles(array, props.plantPage)}
@@ -153,13 +151,16 @@ const GeneralInfographic = (props) => {
     }
 }
 
-const PlantListInfographic = (props) => {
+//Function to render the monthly infographic for use in the plant list screen cards  
+function PlantListInfographic(props) {
 
-    if (props.plantPage == undefined) {
-        props.plantPage = false;
+    let plantPage = false;
+    if (props.plantPage !== undefined) {
+        plantPage = true;
     }
 
     if (props.sow.length !== 0) {
+        //If sowing schedule is available, show monthly infographic for sow_schedule
         return (
             <View style={styles.monthInfographic}>
                 <InfographicLabels plantPage={props.plantPage} />
@@ -167,6 +168,7 @@ const PlantListInfographic = (props) => {
             </View>
         );
     } else {
+        //If sowing schedule is unavailable, show monthly infographic for plant_dates
         return (
             <View style={styles.monthInfographic}>
                 <InfographicLabels plantPage={props.plantPage} />
