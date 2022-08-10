@@ -9,6 +9,12 @@ import AuthContext from "../../context/AuthContext";
 
 import Header from "../../components/Header";
 
+import ContainerStyles from "../../styles/ContainerStyles";
+import ModalStyles from "../../styles/ModalStyles";
+import FontStyles from "../../styles/FontStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
+
 import Logout from "../../requests/User/Logout";
 
 const SettingsScreen = (props) => {
@@ -151,42 +157,42 @@ const SettingsScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
-            <ScrollView style={styles.screen}>
+            <ScrollView style={ContainerStyles.screen}>
 
                 <Modal
                     isVisible={modalVisible}
                     backdropOpacity={0.5}
                     onBackdropPress={toggleModal}
-                    style={styles.modal}
+                    style={ModalStyles.modal}
                 >
                     <View>
 
-                        <Text style={styles.warning}>{warning}</Text>
-                        <Text style={styles.subwarning}>{subwarning}</Text>
+                        <Text style={FontStyles.modalWarning}>{warning}</Text>
+                        <Text style={FontStyles.textCenter}>{subwarning}</Text>
 
                         {
                             errorMessage !== "" ?
-                                <Text style={styles.error}>{errorMessage}</Text>
+                                <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                                 : null
                         }
 
-                        <Text style={styles.subtitle}>Password</Text>
+                        <Text style={FontStyles.subtitle}>Password</Text>
                         <TextInput
-                            style={styles.textInput}
+                            style={InputStyles.textInput}
                             secureTextEntry={true}
                             placeholder="Password"
                             value={password}
                             onChangeText={setPassword}
                         />
 
-                        <View style={styles.navigationButtons}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
-                                <Text style={styles.buttonText}>CANCEL</Text>
+                        <View style={ButtonStyles.modalButtonContainer}>
+                            <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={toggleModal}>
+                                <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.cancelButton} onPress={() => {
+                            <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
                                 if (modalType == "email") {
                                     updateEmail();
                                 } else if (modalType == "password") {
@@ -195,82 +201,80 @@ const SettingsScreen = (props) => {
                                     deleteUser(props);
                                 }
                             }}>
-                                <Text style={styles.buttonText}>CONFIRM</Text>
+                                <Text style={ButtonStyles.buttonText}>CONFIRM</Text>
                             </TouchableOpacity>
                         </View>
 
                     </View>
                 </Modal>
 
-                <Text style={styles.title}>Settings</Text>
+                <Text style={FontStyles.pageTitle}>Settings</Text>
 
                 <Text style={styles.heading}>Change Your Email</Text>
                 <Text style={styles.information}>Make sure we can stay in touch.</Text>
 
-                <Text style={styles.subtitle}>Email</Text>
+                <Text style={FontStyles.subtitle}>Email</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="email@example.com"
                     keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={() => {
+                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => {
                     setModalType("email");
                     setModalVisible(true);
                 }} >
-                    <Text style={styles.buttonText}>SAVE</Text>
+                    <Text style={ButtonStyles.buttonText}>SAVE</Text>
                 </TouchableOpacity>
 
                 <Text style={styles.heading}>Change Your Password</Text>
 
-                <View style={styles.signUpOption}>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "PasswordReset" })}>
-                        <Text style={styles.signUpLink}>Forgot your password?</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "PasswordReset" })}>
+                    <Text style={FontStyles.formLink}>Forgot your password?</Text>
+                </TouchableOpacity>
 
-                <Text style={styles.subtitle}>New Password</Text>
+                <Text style={FontStyles.subtitle}>New Password</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     secureTextEntry={true}
                     placeholder="Password"
                     value={newPassword}
                     onChangeText={setNewPassword}
                 />
 
-                <Text style={styles.subtitle}>Confirm Password</Text>
+                <Text style={FontStyles.subtitle}>Confirm Password</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     secureTextEntry={true}
                     placeholder="Password"
                     value={newPasswordConfirm}
                     onChangeText={setNewPasswordConfirm}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={() => {
+                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => {
                     setModalType("password");
                     setModalVisible(true);
                 }}>
-                    <Text style={styles.buttonText}>SAVE</Text>
+                    <Text style={ButtonStyles.buttonText}>SAVE</Text>
                 </TouchableOpacity>
 
                 <Text style={styles.heading}>Delete Account</Text>
                 <Text style={styles.information}>We"ll be sorry to see you go.</Text>
 
-                <TouchableOpacity style={styles.cancelButton} onPress={() => {
+                <TouchableOpacity style={ButtonStyles.largeWarningButton} onPress={() => {
                     setModalType("delete");
                     setModalVisible(true);
                 }}>
-                    <Text style={styles.buttonText}>DELETE</Text>
+                    <Text style={ButtonStyles.buttonText}>DELETE</Text>
                 </TouchableOpacity>
 
                 <Text style={styles.heading}>Log Out</Text>
                 <Text style={styles.information}>See you soon!</Text>
 
-                <TouchableOpacity style={styles.button} onPress={() => logout(props)}>
-                    <Text style={styles.buttonText}>LOG OUT</Text>
+                <TouchableOpacity style={[ButtonStyles.largeButton, { marginBottom: 25 }]} onPress={() => logout(props)}>
+                    <Text style={ButtonStyles.buttonText}>LOG OUT</Text>
                 </TouchableOpacity>
 
             </ScrollView>
@@ -279,61 +283,6 @@ const SettingsScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        paddingBottom: 85
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4"
-    },
-    modal: {
-        alignSelf: "stretch",
-        flex: 0,
-        justifyContent: "center",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        height: "40%",
-        backgroundColor: "white"
-    },
-    warning: {
-        textAlign: "center",
-        marginHorizontal: 10,
-        fontSize: 20,
-        fontWeight: "bold",
-        color: "red"
-    },
-    subwarning: {
-        textAlign: "center",
-        marginHorizontal: 10,
-        fontSize: 15
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 35,
-        fontFamily: "Montserrat",
-        paddingTop: 15,
-        paddingBottom: 10
-    },
-    signUpText: {
-        paddingHorizontal: 2.5,
-        fontSize: 15,
-        textAlign: "center"
-    },
-    signUpLink: {
-        paddingHorizontal: 2.5,
-        fontSize: 15,
-        color: "#9477B4",
-        marginLeft: 20
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
     heading: {
         fontSize: 28,
         marginLeft: 20,
@@ -342,51 +291,6 @@ const styles = StyleSheet.create({
     information: {
         marginLeft: 20,
         marginBottom: 5
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginVertical: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginTop: 30
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 150,
-        borderRadius: 8,
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10,
-    },
-    cancelButton: {
-        backgroundColor: "red",
-        height: 40,
-        width: 150,
-        borderRadius: 8,
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 18
     }
 });
 

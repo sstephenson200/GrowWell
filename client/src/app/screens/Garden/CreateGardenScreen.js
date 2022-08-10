@@ -49,7 +49,7 @@ const CreateGardenScreen = (props) => {
 
         <View style={ContainerStyles.formScreen}>
 
-            <View style={ContainerStyles.form}>
+            <View style={[ContainerStyles.form, { marginTop: "15%" }]}>
                 <Text style={FontStyles.pageTitle}>Create Your</Text>
                 <Text style={FontStyles.pageTitle}>Garden</Text>
 

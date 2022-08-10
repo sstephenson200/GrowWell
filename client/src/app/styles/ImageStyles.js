@@ -12,6 +12,11 @@ const ImageStyles = StyleSheet.create({
     iconLabel: {
         fontSize: 20,
         paddingLeft: 7
+    },
+    loginLogo: {
+        width: 100,
+        height: 100,
+        marginVertical: 10
     }
 });
 

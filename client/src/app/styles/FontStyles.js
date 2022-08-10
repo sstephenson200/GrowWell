@@ -23,6 +23,17 @@ const FontStyles = StyleSheet.create({
         textAlign: "center",
         marginVertical: 5
     },
+    //App titles
+    appTitle: {
+        fontSize: 65,
+        fontFamily: "Montserrat",
+        color: "white"
+    },
+    appSubtitle: {
+        fontSize: 30,
+        fontFamily: "Montserrat",
+        color: "white"
+    },
     //Centered text
     textCenter: {
         textAlign: "center"
@@ -43,6 +54,18 @@ const FontStyles = StyleSheet.create({
         fontSize: 20,
         textAlign: "center",
         fontWeight: "bold",
+    },
+    //Form text and links
+    formText: {
+        paddingHorizontal: 2.5,
+        fontSize: 15,
+        textAlign: "center"
+    },
+    formLink: {
+        paddingHorizontal: 2.5,
+        fontSize: 15,
+        color: "#9477B4",
+        textAlign: "center"
     },
 });
 

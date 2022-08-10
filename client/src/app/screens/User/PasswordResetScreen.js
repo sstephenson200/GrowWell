@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import axios from "axios";
 
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
+
 import Logout from "../../requests/User/Logout";
 
 const PasswordReset = (props) => {
@@ -51,31 +56,31 @@ const PasswordReset = (props) => {
 
     return (
 
-        <View style={styles.screen}>
+        <View style={[ContainerStyles.formScreen, { justifyContent: "center" }]}>
 
-            <View style={styles.form}>
-                <Text style={styles.title}>Password Reset</Text>
+            <View style={ContainerStyles.form}>
+                <Text style={FontStyles.pageTitle}>Password Reset</Text>
 
-                <Text style={styles.resetInfo}>We"ll email you with your new password shortly.</Text>
+                <Text style={styles.resetInfo}>We'll email you with your new password shortly.</Text>
 
                 {
                     errorMessage !== "" ?
-                        <Text style={styles.error}>{errorMessage}</Text>
+                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
-                <Text style={styles.subtitle}>Email</Text>
+                <Text style={FontStyles.subtitle}>Email</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="example@email.com"
                     value={email}
                     onChangeText={setEmail}
                 />
 
-                <View style={styles.navigationButtons}>
+                <View style={ContainerStyles.centered}>
 
-                    <TouchableOpacity style={styles.button} onPress={async () => await resetPassword(props)}>
-                        <Text style={styles.buttonText}>RESET PASSWORD</Text>
+                    <TouchableOpacity style={ButtonStyles.largeButton} onPress={async () => await resetPassword(props)}>
+                        <Text style={ButtonStyles.buttonText}>RESET PASSWORD</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -88,69 +93,11 @@ const PasswordReset = (props) => {
 }
 
 const styles = StyleSheet.create({
-    screen: {
-        height: "100%",
-        backgroundColor: "#81BF63",
-        justifyContent: "center"
-    },
-    form: {
-        height: 300,
-        width: "80%",
-        alignSelf: "center",
-        backgroundColor: "#EFF5E4",
-        borderRadius: 30,
-        borderWidth: 1,
-        borderColor: "grey"
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 35,
-        fontFamily: "Montserrat",
-        paddingTop: 15,
-        paddingBottom: 10
-    },
     resetInfo: {
         fontSize: 15,
         paddingVertical: 10,
         textAlign: "center",
         paddingHorizontal: 10
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginVertical: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    navigationButtons: {
-        alignSelf: "center",
-        marginTop: 10
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 150,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
     }
 });
 

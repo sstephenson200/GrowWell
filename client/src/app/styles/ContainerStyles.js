@@ -29,8 +29,8 @@ const ContainerStyles = StyleSheet.create({
         borderRadius: 30,
         borderWidth: 1,
         borderColor: "grey",
-        marginTop: "15%",
-        paddingVertical: "5%"
+        paddingVertical: "5%",
+        marginBottom: "10%"
     },
     //Flex box layouts
     dualRow: {
@@ -55,7 +55,7 @@ const ContainerStyles = StyleSheet.create({
     },
     HERB: {
         backgroundColor: "#81BF63"
-    },
+    }
 });
 
 export default ContainerStyles;

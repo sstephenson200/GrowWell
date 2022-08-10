@@ -1,8 +1,14 @@
 import React, { useState, useContext } from "react";
-import { Text, View, TouchableOpacity, TextInput, Image, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, TextInput, Image, ScrollView } from "react-native";
 import axios from "axios";
 
 import AuthContext from "../../context/AuthContext";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import ImageStyles from "../../styles/ImageStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 const LoginScreen = (props) => {
 
@@ -45,162 +51,64 @@ const LoginScreen = (props) => {
 
     return (
 
-        <View style={styles.screen}>
+        <ScrollView style={ContainerStyles.formScreen}>
 
-            <View style={styles.appTitle}>
-                <Text style={styles.appMainTitle}>Grow Well</Text>
-                <Text style={styles.appSubtitle}>GARDEN MANAGER</Text>
+            <View style={[ContainerStyles.centered, { paddingTop: "8%" }]}>
+                <Text style={FontStyles.appTitle}>Grow Well</Text>
+                <Text style={FontStyles.appSubtitle}>GARDEN MANAGER</Text>
+                <Image style={ImageStyles.loginLogo} source={require("../../assets/images/logo.png")} />
             </View>
 
-            <View style={styles.form}>
-                <Text style={styles.title}>Login</Text>
+            <View style={ContainerStyles.form}>
+                <Text style={FontStyles.pageTitle}>Login</Text>
 
-                <View style={styles.signUpOption}>
-                    <Text style={styles.signUpText}>Don't have an account?</Text>
+                <View style={ContainerStyles.centered}>
+                    <Text style={FontStyles.formText}>Don't have an account?</Text>
                     <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "SignUp" })}>
-                        <Text style={styles.signUpLink}>Sign Up</Text>
+                        <Text style={FontStyles.formLink}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
 
                 {
                     errorMessage !== "" ?
-                        <Text style={styles.error}>{errorMessage}</Text>
+                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
-                <Text style={styles.subtitle}>Email</Text>
+                <Text style={FontStyles.subtitle}>Email</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="email@example.com"
                     keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
 
-                <Text style={styles.subtitle}>Password</Text>
+                <Text style={FontStyles.subtitle}>Password</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="Password"
                     secureTextEntry={true}
                     value={password}
                     onChangeText={setPassword}
                 />
 
-                <View style={styles.navigationButtons}>
-                    <TouchableOpacity style={styles.button} onPress={async () => await login(props)}>
-                        <Text style={styles.buttonText}>LOGIN</Text>
+                <View style={ContainerStyles.centered}>
+                    <TouchableOpacity style={ButtonStyles.largeButton} onPress={async () => await login(props)}>
+                        <Text style={ButtonStyles.buttonText}>LOGIN</Text>
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.signUpOption}>
+                <View style={ContainerStyles.centered}>
                     <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "PasswordReset" })}>
-                        <Text style={styles.signUpLink}>Forgot your password?</Text>
+                        <Text style={FontStyles.formLink}>Forgot your password?</Text>
                     </TouchableOpacity>
                 </View>
 
             </View>
 
-            <Image style={styles.logo} source={require("../../assets/images/logo.png")} />
-
-        </View>
+        </ScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-    screen: {
-        height: "100%",
-        backgroundColor: "#81BF63",
-        justifyContent: "center"
-    },
-    appTitle: {
-        paddingVertical: 35
-    },
-    appMainTitle: {
-        textAlign: "center",
-        fontSize: 65,
-        fontFamily: "Montserrat",
-        color: "white"
-    },
-    appSubtitle: {
-        textAlign: "center",
-        fontSize: 30,
-        fontFamily: "Montserrat",
-        color: "white"
-    },
-    form: {
-        height: 450,
-        width: "80%",
-        alignSelf: "center",
-        backgroundColor: "#EFF5E4",
-        borderRadius: 30,
-        borderWidth: 1,
-        borderColor: "grey"
-    },
-    signUpOption: {
-        paddingTop: 5,
-        alignSelf: "center"
-    },
-    signUpText: {
-        paddingHorizontal: 2.5,
-        fontSize: 15,
-        textAlign: "center"
-    },
-    signUpLink: {
-        paddingHorizontal: 2.5,
-        fontSize: 15,
-        color: "#9477B4",
-        textAlign: "center"
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 35,
-        fontFamily: "Montserrat",
-        paddingTop: 15,
-        paddingBottom: 10
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginVertical: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    navigationButtons: {
-        alignSelf: "center",
-        marginTop: 10
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
-    },
-    logo: {
-        alignSelf: "center",
-        width: 100,
-        height: 100,
-        marginVertical: 35
-    }
-});
 
 export default LoginScreen;

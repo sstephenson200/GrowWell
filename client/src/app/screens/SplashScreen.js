@@ -5,7 +5,7 @@ const SplashScreen = () => {
 
     useEffect(() => {
         //Set timer to allow auth methods time to complete before app render
-        const timer = setTimeout(() => { }, 2000);
+        const timer = setTimeout(() => { }, 1500);
         return () => clearTimeout(timer);
     }, []);
 
