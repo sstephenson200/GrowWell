@@ -5,6 +5,10 @@ const ImageStyles = StyleSheet.create({
         width: 30,
         height: 30
     },
+    largeIcon: {
+        width: 50,
+        height: 50
+    },
     iconLabel: {
         fontSize: 20,
         paddingLeft: 7

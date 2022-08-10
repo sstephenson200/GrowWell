@@ -9,6 +9,11 @@ import CareRequirementsTable from "../../components/Plant/CareRequirementsTable"
 import Infographic from "../../components/Plant/MonthlyPlantData";
 import NoteCard from "../../components/Note/NoteCard";
 
+import ContainerStyles from "../../styles/ContainerStyles";
+import ImageStyles from "../../styles/ImageStyles";
+import FontStyles from "../../styles/FontStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
+
 import GetPlantByID from "../../requests/Plant/GetPlantByID";
 import GetAllGardens from "../../requests/Garden/GetAllGardens";
 import UpdatePlotPlant from "../../requests/Garden/UpdatePlotPlant";
@@ -24,7 +29,6 @@ const PlantScreen = (props) => {
     const [plant, setPlant] = useState([]);
     const [notes, setNotes] = useState([]);
     const [plots, setPlots] = useState([]);
-    const [plantPhotos, setPlantPhotos] = useState([]);
     const [photo2, setPhoto2] = useState(null);
     const [photo3, setPhoto3] = useState(null);
     const [selectedPlot, setSelectedPlot] = useState(null);
@@ -147,11 +151,11 @@ const PlantScreen = (props) => {
 
     return (
 
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
 
             <Header navigation={props.navigation} />
 
-            <ScrollView style={styles.screen}>
+            <ScrollView style={[ContainerStyles.screen, { paddingTop: 0 }]} contentContainerStyle={{ flexGrow: 1 }}>
 
                 <ImageBackground
                     style={styles.backgroundImage}
@@ -160,14 +164,14 @@ const PlantScreen = (props) => {
                 >
                     <View style={styles.title}>
                         <Image
-                            style={styles.icon}
+                            style={ImageStyles.largeIcon}
                             source={ImageSelect({ name })}
                         />
                         <Text style={styles.titleText}>{name}</Text>
                     </View>
 
-                    <View style={styles[plant_type]}>
-                        <Text style={styles.plantType}>{plant_type}</Text>
+                    <View style={[styles.plantType, ContainerStyles[plant_type]]}>
+                        <Text style={styles.plantTypeText}>{plant_type}</Text>
                     </View>
 
                 </ImageBackground>
@@ -176,7 +180,7 @@ const PlantScreen = (props) => {
 
                 {
                     plant.photo !== undefined && plant.photo[1] !== null && plant.photo[2] !== null ?
-                        <View style={styles.plantPhotos}>
+                        <View style={[ContainerStyles.dualColumn, ContainerStyles.centered]}>
                             <Image
                                 style={styles.photo}
                                 source={{ uri: photo2 }}
@@ -187,7 +191,7 @@ const PlantScreen = (props) => {
                             />
                         </View>
                         :
-                        <View style={styles.plantPhotos}>
+                        <View style={[ContainerStyles.dualColumn, ContainerStyles.centered]}>
                             <Image
                                 style={styles.photo}
                                 source={require("../../assets/images/placeholder.png")}
@@ -199,69 +203,73 @@ const PlantScreen = (props) => {
                         </View>
                 }
 
-                <Text style={styles.subtitle}>Add To Garden</Text>
+                <Text style={FontStyles.subtitleStyled}>Add To Garden</Text>
 
                 {
                     errorMessage !== "" ?
-                        <Text style={styles.error}>{errorMessage}</Text>
+                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
                 <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" />
 
-                <TouchableOpacity style={styles.button} onPress={() => addPlantToPlot()}>
-                    <Text style={styles.buttonText}>ADD PLANT</Text>
+                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => addPlantToPlot()}>
+                    <Text style={ButtonStyles.buttonText}>ADD PLANT</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.subtitle}>Seasonal Data</Text>
+                <View style={{ paddingVertical: 10 }}>
 
-                <Infographic.InfographicLabels plantPage={true} />
+                    <Text style={FontStyles.subtitleStyled}>Seasonal Data</Text>
 
-                {
-                    plant.sow_date !== undefined && plant.sow_date.length !== 0 ?
+                    <Infographic.InfographicLabels plantPage={true} />
 
-                        <View style={styles.monthInfographic}>
-                            <Text style={styles.seasonalTitle}>Sow</Text>
-                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.sow_date} plantPage={true} />
-                        </View>
+                    {
+                        plant.sow_date !== undefined && plant.sow_date.length !== 0 ?
 
-                        : null
-                }
+                            <View style={ContainerStyles.dualColumn}>
+                                <Text style={styles.seasonalTitle}>Sow</Text>
+                                <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.sow_date} plantPage={true} />
+                            </View>
 
-                {
-                    plant.plant_date !== undefined && plant.plant_date.length !== 0 ?
+                            : null
+                    }
 
-                        <View style={styles.monthInfographic}>
-                            <Text style={styles.seasonalTitle}>Plant</Text>
-                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.plant_date} plantPage={true} />
-                        </View>
+                    {
+                        plant.plant_date !== undefined && plant.plant_date.length !== 0 ?
 
-                        : null
-                }
+                            <View style={ContainerStyles.dualColumn}>
+                                <Text style={styles.seasonalTitle}>Plant</Text>
+                                <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.plant_date} plantPage={true} />
+                            </View>
 
-                {
-                    plant.transplant_date !== undefined && plant.transplant_date.length !== 0 ?
+                            : null
+                    }
 
-                        <View style={styles.monthInfographic}>
-                            <Text style={styles.seasonalTitle}>Transplant</Text>
-                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.transplant_date} plantPage={true} />
-                        </View>
+                    {
+                        plant.transplant_date !== undefined && plant.transplant_date.length !== 0 ?
 
-                        : null
-                }
+                            <View style={ContainerStyles.dualColumn}>
+                                <Text style={styles.seasonalTitle}>Transplant</Text>
+                                <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.transplant_date} plantPage={true} />
+                            </View>
 
-                {
-                    plant.harvest_date !== undefined && plant.harvest_date.length !== 0 ?
+                            : null
+                    }
 
-                        <View style={styles.monthInfographic}>
-                            <Text style={styles.seasonalTitle}>Harvest</Text>
-                            <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.harvest_date} plantPage={true} />
-                        </View>
+                    {
+                        plant.harvest_date !== undefined && plant.harvest_date.length !== 0 ?
 
-                        : null
-                }
+                            <View style={ContainerStyles.dualColumn}>
+                                <Text style={styles.seasonalTitle}>Harvest</Text>
+                                <Infographic.GeneralInfographic style={styles.infographic} schedule={plant.harvest_date} plantPage={true} />
+                            </View>
 
-                <Text style={styles.subtitle}>Care Requirements</Text>
+                            : null
+                    }
+
+                </View>
+
+                <Text style={FontStyles.subtitleStyled}>Care Requirements</Text>
 
                 <CareRequirementsTable
                     navigation={props.navigation}
@@ -286,9 +294,9 @@ const PlantScreen = (props) => {
                 {
                     notes.length !== 0 ?
                         <View>
-                            <Text style={styles.cardsTitle}>{plant.name} Notes</Text>
+                            <Text style={FontStyles.subtitleStyled}>{plant.name} Notes</Text>
 
-                            <View style={styles.cards}>
+                            <View style={{ paddingVertical: 10 }}>
                                 {notes}
                             </View>
 
@@ -304,15 +312,6 @@ const PlantScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        marginBottom: 85
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4",
-    },
     backgroundImage: {
         height: 150,
         alignSelf: "stretch"
@@ -331,38 +330,15 @@ const styles = StyleSheet.create({
         textShadowColor: "black",
         textShadowRadius: 10
     },
-    icon: {
-        width: 50,
-        height: 50
-    },
-    VEG: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 100,
-        borderRadius: 15,
-        alignItems: "center",
-        alignSelf: "center",
-        marginBottom: 30
-    },
-    FRUIT: {
-        backgroundColor: "#80C1E3",
-        height: 40,
-        width: 100,
-        borderRadius: 15,
-        alignItems: "center",
-        alignSelf: "center",
-        marginBottom: 30
-    },
-    HERB: {
-        backgroundColor: "#81BF63",
-        height: 40,
-        width: 100,
-        borderRadius: 15,
-        alignItems: "center",
-        alignSelf: "center",
-        marginBottom: 30
-    },
     plantType: {
+        height: 40,
+        width: 100,
+        borderRadius: 15,
+        alignItems: "center",
+        alignSelf: "center",
+        marginBottom: 30
+    },
+    plantTypeText: {
         color: "white",
         fontSize: 30
     },
@@ -372,16 +348,6 @@ const styles = StyleSheet.create({
         textAlign: "justify",
         fontSize: 15
     },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    plantPhotos: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center"
-    },
     photo: {
         height: 180,
         width: 180,
@@ -390,31 +356,6 @@ const styles = StyleSheet.create({
         borderWidth: 5,
         margin: 8
     },
-    subtitle: {
-        fontSize: 25,
-        fontFamily: "Montserrat",
-        color: "black",
-        paddingLeft: 10,
-        paddingTop: 15
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 35,
-        width: 115,
-        borderRadius: 8,
-        alignItems: "center",
-        alignSelf: "center",
-        justifyContent: "center"
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 18
-    },
-    monthInfographic: {
-        marginTop: 5,
-        flexDirection: "row",
-        flex: 2
-    },
     seasonalTitle: {
         fontSize: 15,
         paddingHorizontal: 10,
@@ -422,15 +363,6 @@ const styles = StyleSheet.create({
     },
     infographic: {
         paddingLeft: 10
-    },
-    cardsTitle: {
-        fontSize: 25,
-        fontFamily: "Montserrat",
-        color: "black",
-        paddingLeft: 10
-    },
-    cards: {
-        paddingVertical: 10
     }
 });
 

@@ -45,7 +45,17 @@ const ContainerStyles = StyleSheet.create({
     centered: {
         alignItems: "center",
         justifyContent: "center"
-    }
+    },
+    //Plant types background colours
+    VEG: {
+        backgroundColor: "#9477B4"
+    },
+    FRUIT: {
+        backgroundColor: "#80C1E3"
+    },
+    HERB: {
+        backgroundColor: "#81BF63"
+    },
 });
 
 export default ContainerStyles;
