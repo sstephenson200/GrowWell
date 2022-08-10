@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 const ButtonStyles = StyleSheet.create({
-    //Text
+    //Button text
     buttonText: {
         color: "white",
         fontSize: 18,
@@ -14,13 +14,6 @@ const ButtonStyles = StyleSheet.create({
         justifyContent: "center",
         marginVertical: 10,
         paddingBottom: 20
-    },
-    formButtonContainer: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginVertical: 10,
-        paddingBottom: 55
     },
     modalButtonContainer: {
         flexDirection: "row",

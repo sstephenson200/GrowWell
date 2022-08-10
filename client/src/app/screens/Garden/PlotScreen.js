@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { unescape } from "underscore";
 import axios from "axios";
 
@@ -184,7 +184,7 @@ const PlotScreen = (props) => {
                                                 style={ImageStyles.icon}
                                                 source={ImageSelect({ name: plantName })}
                                             />
-                                            <Text style={ImageStyles.iconLabel}>{plantName}</Text>
+                                            <Text style={styles.iconLabel}>{plantName}</Text>
                                         </View>
                                     </View>
 
@@ -254,5 +254,12 @@ const PlotScreen = (props) => {
         </View >
     );
 }
+
+const styles = StyleSheet.create({
+    iconLabel: {
+        fontSize: 20,
+        paddingLeft: 7
+    }
+});
 
 export default PlotScreen;

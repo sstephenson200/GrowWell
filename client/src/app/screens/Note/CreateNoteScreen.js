@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, ScrollView, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import axios from "axios";
 
 import Header from "../../components/Header";
@@ -148,7 +148,7 @@ const CreateNoteScreen = (props) => {
 
                 <Text style={FontStyles.subtitle}>Description</Text>
                 <TextInput
-                    style={InputStyles.textInputLarge}
+                    style={[InputStyles.textInput, styles.textInputLarge]}
                     multiline={true}
                     numberOfLines={3}
                     placeholder="Your description..."
@@ -185,5 +185,11 @@ const CreateNoteScreen = (props) => {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    textInputLarge: {
+        height: 60
+    }
+});
 
 export default CreateNoteScreen;

@@ -13,17 +13,6 @@ const InputStyles = StyleSheet.create({
         borderRadius: 12,
         alignSelf: "center"
     },
-    textInputLarge: {
-        width: "90%",
-        height: 60,
-        margin: 8,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
     //Dropdown menus and search bars
     userSelect: {
         width: "90%",

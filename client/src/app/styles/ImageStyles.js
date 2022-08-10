@@ -9,10 +9,6 @@ const ImageStyles = StyleSheet.create({
         width: 50,
         height: 50
     },
-    iconLabel: {
-        fontSize: 20,
-        paddingLeft: 7
-    },
     loginLogo: {
         width: 100,
         height: 100,
