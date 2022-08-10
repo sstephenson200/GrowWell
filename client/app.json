@@ -11,6 +11,7 @@
     "android": {
       "package": "com.GrowWell",
       "versionCode": 1,
+      "softwareKeyboardLayoutMode": "pan",
       "permissions": [
         "READ_EXTERNAL_STORAGE"
       ]
