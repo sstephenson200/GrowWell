@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
 import DropDownPicker from "react-native-dropdown-picker";
+
+import InputStyles from '../styles/InputStyles';
 
 //Dropdown is used in multiple locations to list plots gardens and plants.
 const Dropdown = (props) => {
@@ -41,7 +42,7 @@ const Dropdown = (props) => {
 
     return (
         <DropDownPicker
-            style={styles.dropdown}
+            style={InputStyles.userSelect}
             listMode="SCROLLVIEW"
             placeholder={props.placeholder}
             open={open}
@@ -53,13 +54,5 @@ const Dropdown = (props) => {
         />
     );
 }
-
-const styles = StyleSheet.create({
-    dropdown: {
-        width: "90%",
-        alignSelf: "center",
-        margin: 10
-    }
-});
 
 export default Dropdown;

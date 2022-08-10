@@ -2,6 +2,8 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
+import ContainerStyles from "../../styles/ContainerStyles";
+
 //Function to get all months between a given start and end month
 function getMonthArray(month1, month2) {
 
@@ -162,7 +164,7 @@ function PlantListInfographic(props) {
     if (props.sow.length !== 0) {
         //If sowing schedule is available, show monthly infographic for sow_schedule
         return (
-            <View style={styles.monthInfographic}>
+            <View style={[ContainerStyles.dualRow, styles.monthInfographic]}>
                 <InfographicLabels plantPage={props.plantPage} />
                 <GeneralInfographic schedule={props.sow} plantPage={props.plantPage} />
             </View>
@@ -170,7 +172,7 @@ function PlantListInfographic(props) {
     } else {
         //If sowing schedule is unavailable, show monthly infographic for plant_dates
         return (
-            <View style={styles.monthInfographic}>
+            <View style={[ContainerStyles.dualRow, styles.monthInfographic]}>
                 <InfographicLabels plantPage={props.plantPage} />
                 <GeneralInfographic schedule={props.plant} plantPage={props.plantPage} />
             </View>
@@ -180,9 +182,7 @@ function PlantListInfographic(props) {
 
 const styles = StyleSheet.create({
     monthInfographic: {
-        marginTop: 15,
-        flexDirection: "column",
-        flex: 2
+        marginTop: 15
     },
     monthLabels: {
         flexDirection: "row",

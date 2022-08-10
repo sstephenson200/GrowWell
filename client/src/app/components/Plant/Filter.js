@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+
+import InputStyles from "../../styles/InputStyles";
 
 //Filter for use in plant list screen
 const Filter = (props) => {
@@ -26,7 +27,7 @@ const Filter = (props) => {
 
     return (
         <DropDownPicker
-            style={styles.filter}
+            style={InputStyles.userSelect}
             listMode="SCROLLVIEW"
             placeholder="Filter Plants"
             mode="BADGE"
@@ -42,16 +43,5 @@ const Filter = (props) => {
         />
     );
 }
-
-const styles = StyleSheet.create({
-    filter: {
-        width: "90%",
-        alignSelf: "center",
-        marginTop: 10,
-        borderRadius: 15,
-        elevation: 5,
-        borderColor: "#EFF5E4"
-    }
-});
 
 export default Filter;

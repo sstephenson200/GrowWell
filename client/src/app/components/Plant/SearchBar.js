@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
+
+import InputStyles from "../../styles/InputStyles";
 
 const SearchBar = (props) => {
 
@@ -15,22 +16,12 @@ const SearchBar = (props) => {
 
     return (
         <Searchbar
-            style={styles.searchBar}
+            style={InputStyles.userSelect}
             placeholder="Search"
             onChangeText={onChange}
             value={query}
         />
     );
 }
-
-const styles = StyleSheet.create({
-    searchBar: {
-        width: "90%",
-        alignSelf: "center",
-        marginTop: 10,
-        borderRadius: 15,
-        elevation: 5
-    }
-});
 
 export default SearchBar;

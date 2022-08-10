@@ -5,6 +5,10 @@ import axios from "axios";
 import ImageSelect from "./SearchableImages";
 import Infographic from "./MonthlyPlantData";
 
+import CardStyles from "../../styles/CardStyles";
+import ContainerStyles from "../../styles/ContainerStyles";
+import ImageStyles from "../../styles/ImageStyles";
+
 import GetAllPlants from "../../requests/Plant/GetAllPlants";
 
 const PlantList = (props) => {
@@ -118,8 +122,8 @@ const PlantList = (props) => {
     //Function to render and give style to list cards
     function Card(props) {
         return (
-            <View style={styles.card}>
-                <View style={styles.cardContent}>
+            <View style={CardStyles.card}>
+                <View style={[CardStyles.cardContent, ContainerStyles.dualColumn]}>
                     {props.children}
                 </View>
             </View>
@@ -128,6 +132,7 @@ const PlantList = (props) => {
 
     return (
 
+        // <View style={[ContainerStyles.screen, { flex: 1 }]}>
         <View style={styles.container}>
 
             <FlatList
@@ -154,21 +159,21 @@ const PlantList = (props) => {
                         <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id, name: item.name, plant_type: item.plant_type, photo: item.photo } })}>
                             <Card>
 
-                                <View style={styles.plantData}>
+                                <View style={ContainerStyles.dualRow}>
 
-                                    <View style={styles.cardHeader}>
+                                    <View style={ContainerStyles.dualColumn}>
                                         <Image
-                                            style={styles.icon}
+                                            style={ImageStyles.largeIcon}
                                             source={ImageSelect({ name })}
                                         />
                                         <Text style={styles.plantName}>{item.name}</Text>
                                     </View>
 
-                                    <View style={styles.graphics}>
+                                    <View style={ContainerStyles.centered}>
                                         <Infographic.PlantListInfographic sow={item.sow_date} plant={item.plant_date} />
 
-                                        <View style={styles[plant_type]}>
-                                            <Text style={styles.plantType}>{plant_type}</Text>
+                                        <View style={[styles.plantType, ContainerStyles[plant_type]]}>
+                                            <Text style={styles.plantTypeText}>{plant_type}</Text>
                                         </View>
                                     </View>
 
@@ -204,36 +209,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         flex: 1
     },
-    card: {
-        alignSelf: "stretch",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        backgroundColor: "white"
-    },
-    cardContent: {
-        marginHorizontal: 18,
-        marginVertical: 20,
-        flexDirection: "row",
-        flex: 2
-    },
-    plantData: {
-        flexDirection: "column",
-        flex: 2
-    },
-    cardHeader: {
-        flexDirection: "row",
-        flex: 2
-    },
-    graphics: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    icon: {
-        width: 40,
-        height: 40
-    },
     plantName: {
         fontSize: 25,
         paddingLeft: 7,
@@ -244,28 +219,13 @@ const styles = StyleSheet.create({
         height: 125,
         borderRadius: 20
     },
-    VEG: {
-        backgroundColor: "#9477B4",
-        height: 25,
-        width: 50,
-        borderRadius: 5,
-        alignItems: "center"
-    },
-    FRUIT: {
-        backgroundColor: "#80C1E3",
-        height: 25,
-        width: 50,
-        borderRadius: 5,
-        alignItems: "center"
-    },
-    HERB: {
-        backgroundColor: "#81BF63",
-        height: 25,
-        width: 60,
-        borderRadius: 5,
-        alignItems: "center"
-    },
     plantType: {
+        height: 25,
+        width: 50,
+        borderRadius: 5,
+        alignItems: "center"
+    },
+    plantTypeText: {
         color: "white",
         fontSize: 15
     }
