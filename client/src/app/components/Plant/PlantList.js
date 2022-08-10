@@ -132,7 +132,6 @@ const PlantList = (props) => {
 
     return (
 
-        // <View style={[ContainerStyles.screen, { flex: 1 }]}>
         <View style={styles.container}>
 
             <FlatList
