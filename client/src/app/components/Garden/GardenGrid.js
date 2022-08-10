@@ -77,16 +77,6 @@ const styles = StyleSheet.create({
         height: 80,
         backgroundColor: "#9B711A",
         margin: 1
-    },
-    plotLabel: {
-        color: "white",
-        fontSize: 15,
-        marginTop: 2,
-        marginLeft: 2
-    },
-    icon: {
-        width: 50,
-        height: 50
     }
 });
 

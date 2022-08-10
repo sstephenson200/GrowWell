@@ -4,6 +4,9 @@ const moment = require("moment");
 
 import ImageSelect from "../Plant/SearchableImages";
 
+import ContainerStyles from "../../styles/ContainerStyles";
+import ImageStyles from "../../styles/ImageStyles";
+
 import GetPlantByID from "../../requests/Plant/GetPlantByID";
 
 const PlotHistory = (props) => {
@@ -24,11 +27,11 @@ const PlotHistory = (props) => {
     }
 
     return (
-        <View style={styles.currentPlant}>
+        <View style={[ContainerStyles.dualColumn, { marginVertical: 10 }]}>
 
-            <View style={styles.plantTitle}>
+            <View style={[ContainerStyles.dualColumn, styles.plantTitle]}>
                 <Image
-                    style={styles.icon}
+                    style={ImageStyles.icon}
                     source={ImageSelect({ name: plantName })}
                 />
                 <Text style={styles.plantName}>{plantName}</Text>
@@ -41,20 +44,9 @@ const PlotHistory = (props) => {
 }
 
 const styles = StyleSheet.create({
-    currentPlant: {
-        flexDirection: "row",
-        flex: 2,
-        marginVertical: 10
-    },
     plantTitle: {
-        flexDirection: "row",
-        flex: 2,
         alignItems: "flex-start",
         marginLeft: 20
-    },
-    icon: {
-        width: 30,
-        height: 30
     },
     plantName: {
         fontSize: 20,

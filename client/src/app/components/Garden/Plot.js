@@ -3,6 +3,9 @@ import { Text, View, StyleSheet, Image } from "react-native";
 
 import ImageSelect from "../Plant/SearchableImages";
 
+import ImageStyles from "../../styles/ImageStyles";
+import ContainerStyles from "../../styles/ContainerStyles";
+
 import GetPlantByID from "../../requests/Plant/GetPlantByID";
 
 const Plot = (props) => {
@@ -32,7 +35,7 @@ const Plot = (props) => {
             {
                 plantName !== null ?
                     <Image
-                        style={styles.icon}
+                        style={[ImageStyles.largeIcon, { alignSelf: "center" }]}
                         source={ImageSelect({ name: plantName })}
                     />
                     : null
@@ -54,12 +57,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginTop: 2,
         marginLeft: 2
-    },
-    icon: {
-        width: 50,
-        height: 50,
-        alignSelf: "center",
-        justifyContent: "center"
     }
 });
 
