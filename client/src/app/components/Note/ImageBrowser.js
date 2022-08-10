@@ -6,6 +6,9 @@ import * as MediaLibrary from "expo-media-library";
 
 import ImageTile from "./ImageTile";
 
+import ButtonStyles from "../../styles/ButtonStyles";
+import ContainerStyles from "../../styles/ContainerStyles";
+
 const { width } = Dimensions.get("window");
 
 //Image selection tool for use in note creation
@@ -106,14 +109,14 @@ export default class ImageBrowser extends React.Component {
         if (selectedCount === this.props.max) headerText = headerText + " (Max)";
         return (
             <View style={styles.header}>
-                <TouchableOpacity style={styles.button} onPress={() => this.props.callback(Promise.resolve([]))}>
-                    <Text style={styles.buttonText}>EXIT</Text>
+                <TouchableOpacity style={ButtonStyles.smallButton} onPress={() => this.props.callback(Promise.resolve([]))}>
+                    <Text style={ButtonStyles.buttonText}>EXIT</Text>
                 </TouchableOpacity>
 
                 <Text style={styles.headerText}>{headerText}</Text>
 
-                <TouchableOpacity style={styles.button} onPress={() => this.prepareCallback()}>
-                    <Text style={styles.buttonText}>DONE</Text>
+                <TouchableOpacity style={ButtonStyles.smallButton} onPress={() => this.prepareCallback()}>
+                    <Text style={ButtonStyles.buttonText}>DONE</Text>
                 </TouchableOpacity>
 
             </View>
@@ -153,7 +156,7 @@ export default class ImageBrowser extends React.Component {
     //Return completed image browser
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[ContainerStyles.container, { backgroundColor: "#81BF63" }]}>
                 {this.renderHeader()}
                 <View style={styles.imageContainer}>
                     {this.renderImages()}
@@ -164,20 +167,13 @@ export default class ImageBrowser extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        marginBottom: 180,
-        backgroundColor: "#81BF63",
-    },
     header: {
         height: 85,
         backgroundColor: "#81BF63",
-        width: width,
+        width: "100%",
         justifyContent: "space-between",
         flexDirection: "row",
         alignItems: "center",
-        padding: 10,
         marginTop: 20
     },
     headerText: {
@@ -197,6 +193,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     imageContainer: {
-        backgroundColor: "#EFF5E4"
+        backgroundColor: "#EFF5E4",
+        paddingBottom: 15
     }
 });

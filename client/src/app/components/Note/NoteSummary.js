@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 const moment = require("moment");
 
+import CardStyles from "../../styles/CardStyles";
+import FontStyles from "../../styles/FontStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
+
 const NoteSummary = (props) => {
 
     let date = moment(props.date).format("DD MMM YYYY");
@@ -18,9 +22,9 @@ const NoteSummary = (props) => {
     }
 
     return (
-        <View style={styles.card}>
-            <View style={styles.cardContent}>
-                <Text style={styles.date}>{date}</Text>
+        <View style={CardStyles.card}>
+            <View style={CardStyles.cardContent}>
+                <Text style={FontStyles.boldHeader}>{date}</Text>
                 {
                     noteSummaries.length !== 0 ?
 
@@ -34,8 +38,8 @@ const NoteSummary = (props) => {
                                 }}
                             />
 
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Note", params: { date: date, notes: noteSummaries } })}                            >
-                                <Text style={styles.buttonText}>VIEW</Text>
+                            <TouchableOpacity style={[ButtonStyles.smallButton, { alignSelf: "center" }]} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Note", params: { date: date, notes: noteSummaries } })}                            >
+                                <Text style={ButtonStyles.buttonText}>VIEW</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -49,38 +53,8 @@ const NoteSummary = (props) => {
 }
 
 const styles = StyleSheet.create({
-    card: {
-        alignSelf: "stretch",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        backgroundColor: "white"
-    },
-    cardContent: {
-        marginHorizontal: 18,
-        marginVertical: 20
-    },
-    date: {
-        fontSize: 18,
-        fontWeight: "bold"
-    },
     noteTitles: {
         marginVertical: 1
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 80,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        alignSelf: "center",
-        marginVertical: 5
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
     }
 });
 

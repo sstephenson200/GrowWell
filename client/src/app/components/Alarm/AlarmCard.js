@@ -226,7 +226,7 @@ const AlarmCard = (props) => {
                 <View style={[ContainerStyles.dualColumn, CardStyles.cardContent]}>
 
                     <View>
-                        <Text style={styles.time}>{time}</Text>
+                        <Text style={FontStyles.boldHeader}>{time}</Text>
                         <Text>{title}</Text>
 
                         {
@@ -279,10 +279,6 @@ const AlarmCard = (props) => {
 }
 
 const styles = StyleSheet.create({
-    time: {
-        fontSize: 15,
-        fontWeight: "bold"
-    },
     iconControl: {
         alignItems: "center",
         justifyContent: "flex-start"

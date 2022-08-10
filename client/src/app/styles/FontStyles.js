@@ -23,6 +23,10 @@ const FontStyles = StyleSheet.create({
         textAlign: "center",
         marginVertical: 5
     },
+    boldHeader: {
+        fontSize: 15,
+        fontWeight: "bold"
+    },
     //App titles
     appTitle: {
         fontSize: 65,

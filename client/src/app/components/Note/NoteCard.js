@@ -7,8 +7,12 @@ import { unescape } from "underscore";
 import ImageCarousel from "./ImageCarousel";
 import ImageSelect from "../Plant/SearchableImages";
 
+import CardStyles from "../../styles/CardStyles";
+import ContainerStyles from "../../styles/ContainerStyles";
+
 import GetGardenByID from "../../requests/Garden/GetGardenByID";
 import GetPlantByID from "../../requests/Plant/GetPlantByID";
+import FontStyles from "../../styles/FontStyles";
 
 const NoteCard = (props) => {
 
@@ -78,24 +82,24 @@ const NoteCard = (props) => {
     }
 
     return (
-        <View style={styles.card}>
+        <View style={CardStyles.card}>
 
             {
                 notePhotos.length == 0 ?
-                    <View style={styles.cardContent}>
+                    <View style={CardStyles.cardContent}>
 
-                        <View style={styles.cardHeader}>
-                            <Text style={styles.noteTitle}>{title}</Text>
+                        <View style={[ContainerStyles.dualColumn, styles.headerText]}>
+                            <Text style={FontStyles.boldHeader}>{title}</Text>
                             <Text style={styles.headerText}>{date}</Text>
                         </View>
 
                         {
                             garden_id !== null ?
-                                <View style={styles.cardHeader}>
+                                <View style={ContainerStyles.dualColumn}>
                                     <Text style={styles.headerText}>{gardenName}, Plot {plot_number + 1}</Text>
 
                                     {plantName !== null ?
-                                        <View style={styles.plant}>
+                                        <View style={ContainerStyles.dualColumn}>
                                             <Text style={styles.headerText}>{plantName} </Text>
                                             <Image
                                                 style={styles.icon}
@@ -118,10 +122,10 @@ const NoteCard = (props) => {
                     </View>
                     :
                     <View>
-                        <View style={styles.cardContentWithImage}>
+                        <View style={[ContainerStyles.dualColumn, styles.cardContentWithImage]}>
 
                             <View style={styles.noteData}>
-                                <Text style={styles.noteTitle}>{title}</Text>
+                                <Text style={FontStyles.boldHeader}>{title}</Text>
                                 <Text>{date}</Text>
 
                                 {
@@ -130,8 +134,8 @@ const NoteCard = (props) => {
                                             <Text style={styles.spacing}>{gardenName}, Plot {plot_number + 1}</Text>
 
                                             {plantName !== null ?
-                                                <View style={[styles.plant, styles.spacing]}>
-                                                    <Text>{plantName}</Text>
+                                                <View style={ContainerStyles.dualColumn}>
+                                                    <Text style={styles.headerText}>{plantName}</Text>
                                                     <Image
                                                         style={styles.icon}
                                                         source={ImageSelect({ name: plantName })}
@@ -167,37 +171,14 @@ const NoteCard = (props) => {
 }
 
 const styles = StyleSheet.create({
-    card: {
-        alignSelf: "stretch",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        backgroundColor: "white"
-    },
-    cardContent: {
-        marginHorizontal: 18,
-        marginVertical: 20,
-        alignItems: "center"
-    },
     cardContentWithImage: {
         marginHorizontal: 18,
         marginVertical: 20,
-        flexDirection: "row",
-        flex: 2,
         justifyContent: "space-between"
-    },
-    cardHeader: {
-        flexDirection: "row",
-        flex: 2,
     },
     headerText: {
         marginHorizontal: 20,
         marginVertical: 2
-    },
-    plant: {
-        flexDirection: "row",
-        flex: 2
     },
     icon: {
         width: 25,
@@ -205,10 +186,6 @@ const styles = StyleSheet.create({
     },
     noteData: {
         width: "50%"
-    },
-    noteTitle: {
-        fontSize: 15,
-        fontWeight: "bold"
     },
     carousel: {
         alignContent: "flex-end"
