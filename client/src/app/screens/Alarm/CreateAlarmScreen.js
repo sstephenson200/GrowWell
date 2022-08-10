@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import axios from "axios";
 const moment = require("moment");
 import { Checkbox } from "react-native-paper";
@@ -9,6 +9,11 @@ import { CancelNotification, ScheduleNotification } from "../../notifications/Pu
 import Header from "../../components/Header";
 import DatePicker from "../../components/Alarm/DatePicker";
 import Dropdown from "../../components/Dropdown";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 import GetAllGardens from "../../requests/Garden/GetAllGardens";
 
@@ -179,31 +184,31 @@ const CreateAlarmScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
-            <ScrollView style={styles.screen} contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView style={ContainerStyles.screen} contentContainerStyle={{ flexGrow: 1 }}>
 
-                <Text style={styles.title}>New Alarm</Text>
+                <Text style={FontStyles.pageTitle}>New Alarm</Text>
 
                 {
                     errorMessage !== "" ?
-                        <Text style={styles.error}>{errorMessage}</Text>
+                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
                 <DatePicker date={[date, setDate]} />
 
-                <Text style={styles.subtitle}>Due: {moment(date).format("MMMM Do YYYY, h:mm A")}</Text>
+                <Text style={FontStyles.subtitle}>Due: {moment(date).format("MMMM Do YYYY, h:mm A")}</Text>
 
-                <Text style={styles.subtitle}>Title</Text>
+                <Text style={FontStyles.subtitle}>Title</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="Your Title"
                     value={title}
                     onChangeText={setTitle}
                 />
 
-                <Text style={styles.subtitle}>Plot</Text>
+                <Text style={FontStyles.subtitle}>Plot</Text>
                 <View>
                     <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" />
                 </View>
@@ -222,19 +227,19 @@ const CreateAlarmScreen = (props) => {
                 {
                     checked ?
 
-                        <View style={styles.customRepeat}>
-                            <Text style={styles.subtitle}>Days Between Repeats</Text>
+                        <View style={ContainerStyles.dualRow}>
+                            <Text style={FontStyles.subtitle}>Days Between Repeats</Text>
                             <TextInput
-                                style={styles.textInput}
+                                style={InputStyles.textInput}
                                 placeholder="3"
                                 keyboardType="numeric"
                                 value={schedule}
                                 onChangeText={setSchedule}
                             />
 
-                            <Text style={styles.subtitle}>Number of Repeats</Text>
+                            <Text style={FontStyles.subtitle}>Number of Repeats</Text>
                             <TextInput
-                                style={styles.textInput}
+                                style={InputStyles.textInput}
                                 placeholder="5"
                                 keyboardType="numeric"
                                 value={numRepeats}
@@ -245,19 +250,19 @@ const CreateAlarmScreen = (props) => {
                         : null
                 }
 
-                <View style={styles.navigationButtons}>
+                <View style={ButtonStyles.buttonContainer}>
 
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => {
+                    <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
                         clearState();
                         props.navigation.navigate("Alarms");
                     }}>
-                        <Text style={styles.buttonText}>CANCEL</Text>
+                        <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={async () => {
+                    <TouchableOpacity style={ButtonStyles.smallButton} onPress={async () => {
                         await createAlarm(props, title, date, schedule, numRepeats, null, selectedPlot);
                     }} >
-                        <Text style={styles.buttonText}>SAVE</Text>
+                        <Text style={ButtonStyles.buttonText}>SAVE</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -266,77 +271,5 @@ const CreateAlarmScreen = (props) => {
         </View >
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        marginBottom: 85
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4"
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 40,
-        fontFamily: "Montserrat",
-        paddingTop: 10
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginTop: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        margin: 8,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    customRepeat: {
-        flexDirection: "column",
-        flex: 2
-    },
-    navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginTop: 5,
-        marginBottom: 10
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 45,
-        width: 110,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
-        height: 45,
-        width: 110,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
-    }
-});
 
 export default CreateAlarmScreen;

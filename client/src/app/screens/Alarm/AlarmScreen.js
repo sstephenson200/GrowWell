@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { unescape } from "underscore";
 const moment = require("moment");
@@ -7,6 +7,10 @@ import axios from "axios";
 
 import Header from "../../components/Header";
 import AlarmCard from "../../components/Alarm/AlarmCard";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 const AlarmScreen = (props) => {
 
@@ -127,14 +131,14 @@ const AlarmScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.container}>
             <Header navigation={props.navigation} />
-            <View style={styles.screen}>
+            <View style={ContainerStyles.screen}>
 
-                <Text style={styles.title}>Your Alarms</Text>
+                <Text style={FontStyles.pageTitle}>Your Alarms</Text>
 
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm" })}>
-                    <Text style={styles.buttonText}>ADD NEW ALARM</Text>
+                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm" })}>
+                    <Text style={ButtonStyles.buttonText}>ADD NEW ALARM</Text>
                 </TouchableOpacity>
 
                 <Agenda
@@ -157,38 +161,5 @@ const AlarmScreen = (props) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        marginBottom: 170,
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4",
-        paddingBottom: 10
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 40,
-        fontFamily: "Montserrat",
-        paddingTop: 10
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 200,
-        borderRadius: 8,
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 18
-    }
-});
 
 export default AlarmScreen;
