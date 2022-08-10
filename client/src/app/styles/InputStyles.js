@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 const InputStyles = StyleSheet.create({
+    //Text input boxes
     textInput: {
         width: "90%",
         height: 45,

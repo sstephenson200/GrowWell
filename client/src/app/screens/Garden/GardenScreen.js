@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import Modal from "react-native-modal";
 import axios from "axios";
 
@@ -8,6 +8,12 @@ import { CancelNotification } from "../../notifications/PushNotification";
 import Header from "../../components/Header";
 import Dropdown from "../../components/Dropdown";
 import GardenGrid from "../../components/Garden/GardenGrid";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import ModalStyles from "../../styles/ModalStyles";
+import FontStyles from "../../styles/FontStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 import GetAllGardens from "../../requests/Garden/GetAllGardens";
 
@@ -70,61 +76,61 @@ const GardenScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
-            <ScrollView style={styles.screen} contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView style={ContainerStyles.screen} contentContainerStyle={{ flexGrow: 1 }}>
 
                 <Modal
                     isVisible={modalVisible}
                     backdropOpacity={0.5}
                     onBackdropPress={toggleModal}
-                    style={styles.modal}
+                    style={ModalStyles.modal}
                 >
                     <View>
 
-                        <Text style={styles.warning}>You are about to delete this garden.</Text>
-                        <Text style={styles.subwarning}>Are you sure? This will remove all related notes and alarms.</Text>
+                        <Text style={FontStyles.modalWarning}>You are about to delete this garden.</Text>
+                        <Text style={FontStyles.textCenter}>Are you sure? This will remove all related notes and alarms.</Text>
 
                         {
                             errorMessage !== "" ?
-                                <Text style={styles.error}>{errorMessage}</Text>
+                                <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                                 : null
                         }
 
-                        <Text style={styles.subtitle}>Password</Text>
+                        <Text style={FontStyles.subtitle}>Password</Text>
                         <TextInput
-                            style={styles.textInput}
+                            style={InputStyles.textInput}
                             secureTextEntry={true}
                             placeholder="Password"
                             value={password}
                             onChangeText={setPassword}
                         />
 
-                        <View style={styles.navigationButtons}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
-                                <Text style={styles.buttonText}>CANCEL</Text>
+                        <View style={ButtonStyles.modalButtonContainer}>
+                            <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={toggleModal}>
+                                <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.cancelButton} onPress={deleteGarden}>
-                                <Text style={styles.buttonText}>DELETE</Text>
+                            <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={deleteGarden}>
+                                <Text style={ButtonStyles.buttonText}>DELETE</Text>
                             </TouchableOpacity>
                         </View>
 
                     </View>
                 </Modal>
 
-                <Text style={styles.title}>Your Garden</Text>
+                <Text style={FontStyles.pageTitle}>Your Garden</Text>
 
                 <Dropdown gardens={gardens} selected={[selectedGarden, setSelectedGarden]} placeholder="Select Garden" />
 
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateGarden" })}>
-                    <Text style={styles.buttonText}>ADD NEW GARDEN</Text>
+                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateGarden" })}>
+                    <Text style={ButtonStyles.buttonText}>ADD NEW GARDEN</Text>
                 </TouchableOpacity>
 
                 {
                     selectedGarden !== null ?
 
-                        <View style={styles.grid}>
+                        <View style={[ContainerStyles.centered, { marginBottom: 10 }]}>
                             <ScrollView horizontal={true}>
                                 {
                                     props.route.params !== undefined && props.route.params.updatePlot !== undefined ?
@@ -135,127 +141,18 @@ const GardenScreen = (props) => {
                             </ScrollView>
 
                             <View>
-                                <TouchableOpacity style={styles.deleteButton} onPress={toggleModal}>
-                                    <Text style={styles.buttonText}>DELETE GARDEN</Text>
+                                <TouchableOpacity style={ButtonStyles.largeWarningButton} onPress={toggleModal}>
+                                    <Text style={ButtonStyles.buttonText}>DELETE GARDEN</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
 
-                        : <Text style={styles.text}>Garden not selected</Text>
+                        : <Text style={FontStyles.largeTextCenter}>Garden not selected</Text>
                 }
 
-            </ScrollView>
-        </View>
+            </ScrollView >
+        </View >
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between"
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4",
-        marginTop: 10
-    },
-    modal: {
-        alignSelf: "stretch",
-        flex: 0,
-        justifyContent: "center",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        height: "40%",
-        backgroundColor: "white"
-    },
-    warning: {
-        textAlign: "center",
-        marginHorizontal: 10,
-        fontSize: 20,
-        fontWeight: "bold",
-        color: "red"
-    },
-    subwarning: {
-        textAlign: "center",
-        marginHorizontal: 10,
-        fontSize: 15
-    },
-    navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginTop: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 15
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 40,
-        fontFamily: "Montserrat"
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginVertical: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center",
-        marginBottom: 20
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 200,
-        borderRadius: 8,
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 18
-    },
-    grid: {
-        alignItems: "center",
-        marginBottom: 85
-    },
-    deleteButton: {
-        backgroundColor: "red",
-        height: 40,
-        width: 200,
-        borderRadius: 8,
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 15
-    },
-    text: {
-        textAlign: "center",
-        fontSize: 20
-    }
-});
 
 export default GardenScreen;

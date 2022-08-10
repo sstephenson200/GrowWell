@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, TextInput } from "react-native";
 import axios from "axios";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 const CreateGardenScreen = (props) => {
 
@@ -42,134 +47,63 @@ const CreateGardenScreen = (props) => {
 
     return (
 
-        <View style={styles.screen}>
+        <View style={ContainerStyles.formScreen}>
 
-            <View style={styles.form}>
-                <Text style={styles.title}>Create Garden</Text>
+            <View style={ContainerStyles.form}>
+                <Text style={FontStyles.pageTitle}>Create Your</Text>
+                <Text style={FontStyles.pageTitle}>Garden</Text>
 
                 {
                     errorMessage !== "" ?
-                        <Text style={styles.error}>{errorMessage}</Text>
+                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
-                <Text style={styles.subtitle}>Garden Name</Text>
+                <Text style={FontStyles.subtitle}>Garden Name</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="Your Garden"
                     value={name}
                     onChangeText={setName}
                 />
 
-                <Text style={styles.subtitle}>Width</Text>
+                <Text style={FontStyles.subtitle}>Width</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="Width (m)"
                     keyboardType="numeric"
                     value={width}
                     onChangeText={setWidth}
                 />
 
-                <Text style={styles.subtitle}>Length</Text>
+                <Text style={FontStyles.subtitle}>Length</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="Length (m)"
                     keyboardType="numeric"
                     value={length}
                     onChangeText={setLength}
                 />
 
-                <View style={styles.navigationButtons}>
+                <View style={ButtonStyles.formButtonContainer}>
 
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => {
+                    <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
                         clearState();
                         props.navigation.navigate("Garden");
                     }}>
-                        <Text style={styles.buttonText}>CANCEL</Text>
+                        <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={async () => await createGarden(props, name, length, width)}>
-                        <Text style={styles.buttonText}>CREATE</Text>
+                    <TouchableOpacity style={ButtonStyles.smallButton} onPress={async () => await createGarden(props, name, length, width)}>
+                        <Text style={ButtonStyles.buttonText}>CREATE</Text>
                     </TouchableOpacity>
 
                 </View>
 
             </View>
 
-        </View>
+        </View >
     );
 }
-
-const styles = StyleSheet.create({
-    screen: {
-        height: "100%",
-        backgroundColor: "#81BF63",
-        justifyContent: "center"
-    },
-    form: {
-        height: 450,
-        width: "80%",
-        alignSelf: "center",
-        backgroundColor: "#EFF5E4",
-        borderRadius: 30,
-        borderWidth: 1,
-        borderColor: "grey"
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 35,
-        fontFamily: "Montserrat",
-        paddingTop: 15,
-        paddingBottom: 10
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginVertical: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginTop: 10
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
-    }
-});
 
 export default CreateGardenScreen;

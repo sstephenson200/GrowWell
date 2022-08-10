@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
 import { unescape } from "underscore";
 import axios from "axios";
 
@@ -8,6 +8,11 @@ import ImageSelect from "../../components/Plant/SearchableImages";
 import Dropdown from "../../components/Dropdown";
 import NoteCard from "../../components/Note/NoteCard";
 import PlotHistory from "../../components/Garden/PlotHistory";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import ImageStyles from "../../styles/ImageStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 import GetPlantByID from "../../requests/Plant/GetPlantByID";
 import GetAllPlants from "../../requests/Plant/GetAllPlants";
@@ -155,43 +160,47 @@ const PlotScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
 
-            <ScrollView style={styles.screen} contentContainerStyle={{ flexGrow: 1 }} >
+            <ScrollView style={ContainerStyles.screen} contentContainerStyle={{ flexGrow: 1 }} >
 
-                <Text style={styles.title}>Plot {plot_number}</Text>
-                <Text style={styles.subtitle}>{unescape(garden.name)}</Text>
+                <Text style={FontStyles.pageTitle}>Plot {plot_number}</Text>
+                <Text style={FontStyles.subtitleStyledCenter}>{unescape(garden.name)}</Text>
 
                 {
                     plant_id !== null ?
 
-                        <View style={{ flexDirection: "column", flex: 2 }}>
+                        <View>
 
-                            <View style={styles.currentPlant}>
+                            <View style={ContainerStyles.dualRow}>
 
-                                <View style={styles.titledData}>
-                                    <Text style={styles.subtitle}>Growing</Text>
-                                    <View style={styles.plantTitle}>
-                                        <Image
-                                            style={styles.icon}
-                                            source={ImageSelect({ name: plantName })}
-                                        />
-                                        <Text style={styles.plantName}>{plantName}</Text>
+                                <View style={[ContainerStyles.dualColumn, { marginBottom: 10 }]}>
+
+                                    <View style={ContainerStyles.dualRow}>
+                                        <Text style={FontStyles.subtitleStyledCenter}>Growing</Text>
+                                        <View style={[ContainerStyles.dualColumn, ContainerStyles.centered]}>
+                                            <Image
+                                                style={ImageStyles.icon}
+                                                source={ImageSelect({ name: plantName })}
+                                            />
+                                            <Text style={ImageStyles.iconLabel}>{plantName}</Text>
+                                        </View>
                                     </View>
-                                </View>
 
 
-                                <View style={styles.titledData}>
-                                    <Text style={styles.subtitle}>Date Planted</Text>
-                                    <Text style={styles.date}>{new Date(plot.date_planted).toLocaleDateString("en-UK")}</Text>
+                                    <View style={ContainerStyles.dualRow}>
+                                        <Text style={FontStyles.subtitleStyledCenter}>Date Planted</Text>
+                                        <Text style={FontStyles.largeTextCenter}>{new Date(plot.date_planted).toLocaleDateString("en-UK")}</Text>
+                                    </View>
+
                                 </View>
+
+                                <TouchableOpacity style={ButtonStyles.largeWarningButton} onPress={() => addPlantToPlot(null)}>
+                                    <Text style={ButtonStyles.buttonText}>REMOVE PLANT</Text>
+                                </TouchableOpacity>
 
                             </View>
-
-                            <TouchableOpacity style={styles.deleteButton} onPress={() => addPlantToPlot(null)}>
-                                <Text style={styles.buttonText}>REMOVE PLANT</Text>
-                            </TouchableOpacity>
 
                         </View>
 
@@ -199,26 +208,27 @@ const PlotScreen = (props) => {
 
                             {
                                 errorMessage !== "" ?
-                                    <Text style={styles.error}>{errorMessage}</Text>
+                                    <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                                     : null
                             }
 
-                            <Text style={styles.heading}>Add Plant</Text>
+                            <Text style={FontStyles.subtitleStyled}>Add Plant</Text>
 
                             <Dropdown plants={plants} selected={[selectedPlant, setSelectedPlant]} placeholder="Select Plant" />
 
-                            <TouchableOpacity style={styles.button} onPress={() => addPlantToPlot(selectedPlant)}>
-                                <Text style={styles.buttonText}>ADD PLANT</Text>
+                            <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => addPlantToPlot(selectedPlant)}>
+                                <Text style={ButtonStyles.buttonText}>ADD PLANT</Text>
                             </TouchableOpacity>
+
                         </View>
                 }
 
                 {
                     notes.length !== 0 ?
                         <View>
-                            <Text style={styles.cardsTitle}>Plot {plot_number} Notes</Text>
+                            <Text style={FontStyles.subtitleStyled}>Plot {plot_number} Notes</Text>
 
-                            <View style={styles.cards}>
+                            <View style={{ paddingVertical: 10 }}>
                                 {notes}
                             </View>
 
@@ -229,9 +239,9 @@ const PlotScreen = (props) => {
                 {
                     plotHistory.length !== 0 ?
                         <View>
-                            <Text style={styles.cardsTitle}>Grown Previously</Text>
+                            <Text style={FontStyles.subtitleStyled}>Grown Previously</Text>
 
-                            <View>
+                            <View style={{ paddingVertical: 10 }}>
                                 {plotHistory}
                             </View>
 
@@ -244,101 +254,5 @@ const PlotScreen = (props) => {
         </View >
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        marginBottom: 85
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4",
-        marginTop: 10
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 40,
-        fontFamily: "Montserrat"
-    },
-    subtitle: {
-        fontSize: 25,
-        textAlign: "center",
-        fontFamily: "Montserrat"
-    },
-    heading: {
-        fontSize: 25,
-        fontFamily: "Montserrat",
-        marginLeft: 10,
-        marginTop: 10
-    },
-    currentPlant: {
-        flexDirection: "row",
-        flex: 2,
-        marginTop: 10,
-        justifyContent: "center"
-    },
-    titledData: {
-        flexDirection: "column",
-        flex: 2
-    },
-    plantTitle: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        margin: 5
-    },
-    icon: {
-        width: 30,
-        height: 30
-    },
-    plantName: {
-        fontSize: 20,
-        paddingLeft: 7
-    },
-    date: {
-        textAlign: "center",
-        fontSize: 20,
-        margin: 5
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 50,
-        width: 130,
-        borderRadius: 8,
-        alignItems: "center",
-        alignSelf: "center",
-        justifyContent: "center",
-        marginTop: 10
-    },
-    deleteButton: {
-        backgroundColor: "red",
-        height: 50,
-        width: 150,
-        borderRadius: 8,
-        alignItems: "center",
-        alignSelf: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 18
-    },
-    cardsTitle: {
-        fontSize: 25,
-        fontFamily: "Montserrat",
-        color: "black",
-        paddingLeft: 10
-    },
-    cards: {
-        paddingVertical: 10
-    }
-});
 
 export default PlotScreen;
