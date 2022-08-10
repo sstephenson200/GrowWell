@@ -21,7 +21,7 @@ const ContainerStyles = StyleSheet.create({
         backgroundColor: "#81BF63",
         paddingVertical: 10,
     },
-    //Form
+    //Forms
     form: {
         width: "80%",
         alignSelf: "center",

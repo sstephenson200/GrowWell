@@ -8,6 +8,12 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { ScheduleNotification, CancelNotification } from "../../notifications/PushNotification";
 
+import ModalStyles from "../../styles/ModalStyles";
+import FontStyles from "../../styles/FontStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
+import CardStyles from "../../styles/CardStyles";
+import ContainerStyles from "../../styles/ContainerStyles";
+
 import GetGardenByID from "../../requests/Garden/GetGardenByID";
 
 const AlarmCard = (props) => {
@@ -189,11 +195,11 @@ const AlarmCard = (props) => {
                 isVisible={modalVisible}
                 backdropOpacity={0.5}
                 onBackdropPress={toggleModal}
-                style={styles.modal}
+                style={ModalStyles.modal}
             >
                 <View>
 
-                    <Text style={styles.warning}>This is a recurring alarm. Please select:</Text>
+                    <Text style={FontStyles.modalWarning}>This is a recurring alarm. Please select:</Text>
 
                     <RadioButton.Group
                         onValueChange={(value) => setRadioChecked(value)}
@@ -203,21 +209,21 @@ const AlarmCard = (props) => {
                         <RadioButton.Item label="Delete all related alarms" value="multiple" />
                     </RadioButton.Group>
 
-                    <View style={styles.navigationButtons}>
-                        <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
-                            <Text style={styles.buttonText}>CANCEL</Text>
+                    <View style={ButtonStyles.modalButtonContainer}>
+                        <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={toggleModal}>
+                            <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.cancelButton} onPress={processAlarmDeletion}>
-                            <Text style={styles.buttonText}>DELETE</Text>
+                        <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={processAlarmDeletion}>
+                            <Text style={ButtonStyles.buttonText}>DELETE</Text>
                         </TouchableOpacity>
                     </View>
 
                 </View>
             </Modal>
 
-            <View style={styles.card}>
-                <View style={styles.cardContent}>
+            <View style={CardStyles.card}>
+                <View style={[ContainerStyles.dualColumn, CardStyles.cardContent]}>
 
                     <View>
                         <Text style={styles.time}>{time}</Text>
@@ -231,14 +237,14 @@ const AlarmCard = (props) => {
                     </View>
 
                     <View>
-                        <View style={styles.iconControl}>
+                        <View style={[ContainerStyles.dualColumn, styles.iconControl]}>
 
                             <TouchableOpacity style={styles.icon}>
                                 {
                                     isParent == true || parent !== null ?
-                                        <Ionicons name="ios-trash-outline" size={26} color="red" onPress={toggleModal} />
+                                        <Ionicons name="ios-trash-outline" size={30} color="red" onPress={toggleModal} />
                                         :
-                                        <Ionicons name="ios-trash-outline" size={26} color="red" onPress={() => {
+                                        <Ionicons name="ios-trash-outline" size={30} color="red" onPress={() => {
                                             deleteAlarm(alarm_id);
                                         }} />
                                 }
@@ -256,11 +262,11 @@ const AlarmCard = (props) => {
                         {
                             complete ?
                                 <TouchableOpacity onPress={() => updateCompletionStatus()} >
-                                    <Text style={styles.done}>Done <Ionicons name="checkmark-circle-outline" size={18} color="grey" /></Text>
+                                    <Text style={[styles.completionStatusText, styles.done]}>Done <Ionicons name="checkmark-circle-outline" size={20} color="grey" /></Text>
                                 </TouchableOpacity>
                                 :
                                 <TouchableOpacity onPress={() => updateCompletionStatus()} >
-                                    <Text style={styles.markAsDone}>Mark as done <Ionicons name="checkmark-circle-outline" size={18} color="green" /></Text>
+                                    <Text style={[styles.completionStatusText, styles.markAsDone]}>Mark as done <Ionicons name="checkmark-circle-outline" size={20} color="green" /></Text>
                                 </TouchableOpacity>
                         }
 
@@ -273,81 +279,27 @@ const AlarmCard = (props) => {
 }
 
 const styles = StyleSheet.create({
-    modal: {
-        alignSelf: "stretch",
-        flex: 0,
-        justifyContent: "center",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        height: "40%",
-        backgroundColor: "white"
-    },
-    warning: {
-        textAlign: "center",
-        marginHorizontal: 10,
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "red"
-    },
-    navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginTop: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
-        height: 40,
-        width: 100,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
-    },
-    card: {
-        alignSelf: "stretch",
-        borderRadius: 15,
-        elevation: 5,
-        marginHorizontal: 15,
-        marginVertical: 8,
-        backgroundColor: "white"
-    },
-    cardContent: {
-        marginHorizontal: 18,
-        marginVertical: 20,
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "space-between"
-    },
     time: {
         fontSize: 15,
         fontWeight: "bold"
     },
     iconControl: {
-        flexDirection: "row",
-        flex: 2,
-        alignSelf: "flex-end",
         alignItems: "center",
         justifyContent: "flex-start"
     },
     icon: {
         marginRight: 8
     },
-    markAsDone: {
-        color: "green",
+    completionStatusText: {
         alignItems: "center",
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
+        fontSize: 15
+    },
+    markAsDone: {
+        color: "green"
     },
     done: {
-        color: "grey",
-        alignItems: "center",
-        justifyContent: "flex-end"
+        color: "grey"
     }
 });
 

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+
+import ButtonStyles from "../../styles/ButtonStyles";
 
 //Date picker to allow user to select date/time for upcoming alarms
 const DatePicker = (props) => {
@@ -40,17 +42,15 @@ const DatePicker = (props) => {
     };
 
     return (
-        <View style={styles.datePicker}>
+        <View style={{ margin: 5 }}>
 
-            <View style={styles.selectButtons}>
-                <TouchableOpacity style={styles.button} onPress={showDatepicker}>
-                    <Text style={styles.buttonText}>SELECT DATE</Text>
-                </TouchableOpacity>
+            <TouchableOpacity style={ButtonStyles.largeButton} onPress={showDatepicker}>
+                <Text style={ButtonStyles.buttonText}>SELECT DATE</Text>
+            </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={showTimepicker}>
-                    <Text style={styles.buttonText}>SELECT TIME</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={ButtonStyles.largeButton} onPress={showTimepicker}>
+                <Text style={ButtonStyles.buttonText}>SELECT TIME</Text>
+            </TouchableOpacity>
 
             {show && (
                 <DateTimePicker
@@ -65,31 +65,5 @@ const DatePicker = (props) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    datePicker: {
-        marginTop: 10,
-        marginBottom: 10
-    },
-    selectButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginTop: 5
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 45,
-        width: 120,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
-    }
-});
 
 export default DatePicker;
