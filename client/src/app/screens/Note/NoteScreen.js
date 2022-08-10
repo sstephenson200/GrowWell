@@ -1,8 +1,11 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList } from "react-native";
 
 import Header from "../../components/Header";
 import NoteCard from "../../components/Note/NoteCard";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
 
 const NoteScreen = (props) => {
 
@@ -11,10 +14,10 @@ const NoteScreen = (props) => {
     let notes = props.route.params.notes;
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.container}>
             <Header navigation={props.navigation} />
-            <View style={styles.screen}>
-                <Text style={styles.title}>{date}</Text>
+            <View style={ContainerStyles.screen}>
+                <Text style={FontStyles.pageTitle}>{date}</Text>
 
                 <FlatList
                     data={notes}
@@ -28,24 +31,5 @@ const NoteScreen = (props) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between"
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4",
-        paddingBottom: 180
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 35,
-        fontFamily: "Montserrat",
-        paddingTop: 15,
-        paddingBottom: 10
-    }
-});
 
 export default NoteScreen;

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 const moment = require("moment");
 import axios from "axios";
 
 import Header from "../../components/Header";
 import NoteSummary from "../../components/Note/NoteSummary";
+
+import ContainerStyles from "../../styles/ContainerStyles";
 
 const CalendarScreen = (props) => {
 
@@ -76,7 +78,7 @@ const CalendarScreen = (props) => {
     return (
         <View style={styles.container}>
             <Header navigation={props.navigation} />
-            <View style={styles.screen}>
+            <ScrollView style={ContainerStyles.screen}>
 
                 <Calendar
                     style={styles.calendar}
@@ -103,7 +105,7 @@ const CalendarScreen = (props) => {
                         : <NoteSummary date={selectedDay} notes={notes} navigation={props.navigation} />
                 }
 
-            </View>
+            </ScrollView>
         </View>
     );
 }
@@ -113,15 +115,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "space-between"
     },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4",
-        justifyContent: "center",
-        paddingBottom: 200
-    },
     calendar: {
-        marginTop: 5,
-        marginBottom: 20
+        marginVertical: 5
     }
 });
 

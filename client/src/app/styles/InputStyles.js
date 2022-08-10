@@ -12,7 +12,18 @@ const InputStyles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 12,
         alignSelf: "center"
-    }
+    },
+    textInputLarge: {
+        width: "90%",
+        height: 60,
+        margin: 8,
+        padding: 10,
+        backgroundColor: "white",
+        borderColor: "grey",
+        borderWidth: 1,
+        borderRadius: 12,
+        alignSelf: "center"
+    },
 });
 
 export default InputStyles;

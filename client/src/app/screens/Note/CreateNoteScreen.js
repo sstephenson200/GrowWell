@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, ScrollView, View, TextInput, TouchableOpacity } from "react-native";
 import axios from "axios";
 
 import Header from "../../components/Header";
 import Dropdown from "../../components/Dropdown";
 import ImageBrowser from "../../components/Note/ImageBrowser";
 import ImageCarousel from "../../components/Note/ImageCarousel";
+
+import ContainerStyles from "../../styles/ContainerStyles";
+import FontStyles from "../../styles/FontStyles";
+import InputStyles from "../../styles/InputStyles";
+import ButtonStyles from "../../styles/ButtonStyles";
 
 import GetAllGardens from "../../requests/Garden/GetAllGardens";
 
@@ -118,32 +123,32 @@ const CreateNoteScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
-            <ScrollView style={styles.screen}>
+            <ScrollView style={ContainerStyles.screen}>
 
-                <Text style={styles.title}>New Note</Text>
+                <Text style={FontStyles.pageTitle}>New Note</Text>
 
                 {
                     errorMessage !== "" ?
-                        <Text style={styles.error}>{errorMessage}</Text>
+                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
-                <Text style={styles.subtitle}>Title</Text>
+                <Text style={FontStyles.subtitle}>Title</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={InputStyles.textInput}
                     placeholder="Your Title"
                     value={title}
                     onChangeText={setTitle}
                 />
 
-                <Text style={styles.subtitle}>Plot</Text>
+                <Text style={FontStyles.subtitle}>Plot</Text>
                 <Dropdown plots={plots} selected={[selectedPlot, setSelectedPlot]} placeholder="Select Plot" />
 
-                <Text style={styles.subtitle}>Description</Text>
+                <Text style={FontStyles.subtitle}>Description</Text>
                 <TextInput
-                    style={styles.textInputLarge}
+                    style={InputStyles.textInputLarge}
                     multiline={true}
                     numberOfLines={3}
                     placeholder="Your description..."
@@ -151,27 +156,27 @@ const CreateNoteScreen = (props) => {
                     onChangeText={setDescription}
                 />
 
-                <TouchableOpacity style={styles.addPhotosButton} onPress={() => setImageBrowserOpen(true)}>
-                    <Text style={styles.buttonText}>ADD PHOTOS</Text>
+                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => setImageBrowserOpen(true)}>
+                    <Text style={ButtonStyles.buttonText}>ADD PHOTOS</Text>
                 </TouchableOpacity>
 
                 {
                     photos.length !== 0 ?
-                        <ImageCarousel style={styles.carousel} data={photos} styling="large" />
+                        <ImageCarousel style={[ContainerStyles.centered, { marginVertical: 20 }]} data={photos} styling="large" />
                         : null
                 }
 
-                <View style={styles.navigationButtons}>
+                <View style={ButtonStyles.buttonContainer}>
 
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => {
+                    <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
                         clearState();
                         props.navigation.navigate("Calendar");
                     }}>
-                        <Text style={styles.buttonText}>CANCEL</Text>
+                        <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={async () => await createNote(props, title, description, selectedPlot)}>
-                        <Text style={styles.buttonText}>SAVE</Text>
+                    <TouchableOpacity style={ButtonStyles.smallButton} onPress={async () => await createNote(props, title, description, selectedPlot)}>
+                        <Text style={ButtonStyles.buttonText}>SAVE</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -180,97 +185,5 @@ const CreateNoteScreen = (props) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
-        marginBottom: 85
-    },
-    screen: {
-        height: "100%",
-        backgroundColor: "#EFF5E4"
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 40,
-        fontFamily: "Montserrat",
-        paddingTop: 10
-    },
-    error: {
-        color: "red",
-        textAlign: "center",
-        fontWeight: "bold"
-    },
-    subtitle: {
-        fontSize: 22,
-        marginLeft: 20,
-        marginTop: 10
-    },
-    textInput: {
-        width: "90%",
-        height: 45,
-        margin: 8,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    textInputLarge: {
-        width: "90%",
-        height: 60,
-        margin: 8,
-        padding: 10,
-        backgroundColor: "white",
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 12,
-        alignSelf: "center"
-    },
-    addPhotosButton: {
-        backgroundColor: "#9477B4",
-        height: 45,
-        width: 130,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        alignSelf: "center",
-        marginVertical: 15
-    },
-    carousel: {
-        alignItems: "center",
-        marginVertical: 10,
-    },
-    navigationButtons: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginVertical: 15
-    },
-    button: {
-        backgroundColor: "#9477B4",
-        height: 45,
-        width: 110,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 10
-    },
-    cancelButton: {
-        backgroundColor: "red",
-        height: 45,
-        width: 110,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 10
-    },
-    buttonText: {
-        color: "white",
-        fontSize: 16
-    }
-});
 
 export default CreateNoteScreen;
