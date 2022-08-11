@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { unescape } from "underscore";
 import axios from "axios";
@@ -161,7 +161,7 @@ const PlotScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
 
             <ScrollView style={ContainerStyles.screen} contentContainerStyle={{ flexGrow: 1 }} >
@@ -252,7 +252,7 @@ const PlotScreen = (props) => {
 
             </ScrollView>
 
-        </View >
+        </SafeAreaView >
     );
 }
 

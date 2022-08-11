@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import Modal from "react-native-modal";
 import axios from "axios";
 
@@ -76,7 +76,7 @@ const GardenScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
             <ScrollView style={ContainerStyles.screen} contentContainerStyle={{ flexGrow: 1 }}>
 
@@ -151,7 +151,7 @@ const GardenScreen = (props) => {
                 }
 
             </ScrollView >
-        </View >
+        </SafeAreaView >
     );
 }
 

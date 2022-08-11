@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, SafeAreaView, Text, FlatList } from "react-native";
 
 import Header from "../../components/Header";
 import NoteCard from "../../components/Note/NoteCard";
@@ -14,7 +14,7 @@ const NoteScreen = (props) => {
     let notes = props.route.params.notes;
 
     return (
-        <View style={ContainerStyles.container}>
+        <SafeAreaView style={ContainerStyles.container}>
             <Header navigation={props.navigation} />
             <View style={ContainerStyles.screen}>
                 <Text style={FontStyles.pageTitle}>{date}</Text>
@@ -28,7 +28,7 @@ const NoteScreen = (props) => {
                     }}
                 />
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

@@ -1,6 +1,7 @@
 import { useContext } from "react";
+import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import AuthContext from "../context/AuthContext";
@@ -77,8 +78,10 @@ const Tabs = (route) => {
                 options={{
                     tabBarIcon: () => {
                         return (
-                            <FontAwesome name="calendar" size={hp("5.5%")} color="white" />
-                        )
+                            <View style={{ height: hp("5%"), width: hp("5%") }}>
+                                <FontAwesome name="calendar" size={wp("7%")} color="white" />
+                            </View>
+                        );
                     },
                     headerShown: false
                 }}
@@ -89,7 +92,11 @@ const Tabs = (route) => {
                 component={CreateNoteScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <FontAwesome name="book" size={hp("5.5%")} color="white" />
+                        return (
+                            <View style={{ height: hp("5%"), width: hp("5%") }}>
+                                <FontAwesome name="book" size={wp("7%")} color="white" />
+                            </View>
+                        );
                     },
                     headerShown: false
                 }}
@@ -100,7 +107,11 @@ const Tabs = (route) => {
                 component={GardenScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <FontAwesome name="home" size={hp("5.5%")} color="white" />
+                        return (
+                            <View style={{ height: hp("5%"), width: hp("5%") }}>
+                                <FontAwesome name="home" size={wp("7%")} color="white" />
+                            </View>
+                        );
                     },
                     headerShown: false
                 }}
@@ -111,7 +122,11 @@ const Tabs = (route) => {
                 component={AlarmScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <Ionicons name="ios-alarm" size={hp("5.5%")} color="white" />
+                        return (
+                            <View style={{ height: hp("5%"), width: hp("5%") }}>
+                                <Ionicons name="ios-alarm" size={wp("7%")} color="white" />
+                            </View>
+                        );
                     },
                     headerShown: false
                 }}
@@ -122,7 +137,11 @@ const Tabs = (route) => {
                 component={PlantListScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <Ionicons name="leaf" size={hp("5.5%")} color="white" />
+                        return (
+                            <View style={{ height: hp("5%"), width: hp("5%") }}>
+                                <Ionicons name="leaf" size={wp("7%")} color="white" />
+                            </View>
+                        );
                     },
                     headerShown: false
                 }}

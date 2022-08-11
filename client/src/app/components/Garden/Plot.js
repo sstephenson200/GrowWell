@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 import ImageSelect from "../Plant/SearchableImages";
 
 import ImageStyles from "../../styles/ImageStyles";
-import ContainerStyles from "../../styles/ContainerStyles";
 
 import GetPlantByID from "../../requests/Plant/GetPlantByID";
 
@@ -47,14 +47,14 @@ const Plot = (props) => {
 
 const styles = StyleSheet.create({
     plot: {
-        width: 80,
-        height: 80,
+        width: wp("23%"),
+        height: wp("23%"),
         backgroundColor: "#7D590C",
         margin: 1
     },
     plotLabel: {
         color: "white",
-        fontSize: 15,
+        fontSize: hp("2.5%"),
         marginTop: 2,
         marginLeft: 2
     }

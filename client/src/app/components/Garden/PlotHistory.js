@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 const moment = require("moment");
 
 import ImageSelect from "../Plant/SearchableImages";
@@ -49,12 +50,12 @@ const styles = StyleSheet.create({
         marginLeft: 20
     },
     plantName: {
-        fontSize: 20,
+        fontSize: hp("3%"),
         paddingLeft: 7
     },
     date: {
         textAlign: "center",
-        fontSize: 20,
+        fontSize: hp("3%"),
         marginRight: 20
     }
 });

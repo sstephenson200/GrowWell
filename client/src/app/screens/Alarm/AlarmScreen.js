@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { unescape } from "underscore";
 const moment = require("moment");
@@ -131,7 +131,7 @@ const AlarmScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.container}>
+        <SafeAreaView style={ContainerStyles.container}>
             <Header navigation={props.navigation} />
             <View style={ContainerStyles.screen}>
 
@@ -158,7 +158,7 @@ const AlarmScreen = (props) => {
                 />
 
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

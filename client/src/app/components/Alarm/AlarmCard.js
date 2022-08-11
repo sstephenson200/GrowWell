@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Switch, StyleSheet } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Modal from "react-native-modal";
 import { RadioButton } from "react-native-paper";
 import axios from "axios";
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     completionStatusText: {
         alignItems: "center",
         justifyContent: "flex-end",
-        fontSize: 15
+        fontSize: hp("2%")
     },
     markAsDone: {
         color: "green"

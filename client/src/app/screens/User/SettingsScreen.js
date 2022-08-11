@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Modal from "react-native-modal";
 import axios from "axios";
@@ -162,7 +162,7 @@ const SettingsScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
             <ScrollView style={ContainerStyles.screen}>
 
@@ -283,7 +283,7 @@ const SettingsScreen = (props) => {
                 </TouchableOpacity>
 
             </ScrollView>
-        </View >
+        </SafeAreaView >
     );
 }
 

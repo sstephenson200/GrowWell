@@ -6,23 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="45ec4dc8-370a-4ef5-a943-a75b5fb45684" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Alarm/AlarmCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Alarm/AlarmCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Garden/GardenGrid.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Garden/GardenGrid.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Garden/Plot.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Garden/Plot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Garden/PlotHistory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Garden/PlotHistory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Note/ImageBrowser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Note/ImageBrowser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Note/ImageCarouselItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Note/ImageCarouselItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Note/NoteCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Note/NoteCard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/components/Note/NoteSummary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Note/NoteSummary.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/screens/Garden/CreateGardenScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Garden/CreateGardenScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Plant/CareRequirementsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Plant/CareRequirementsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Plant/MonthlyPlantData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Plant/MonthlyPlantData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Plant/PlantList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Plant/PlantList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/navigation/tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/navigation/tabs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Alarm/AlarmScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Alarm/AlarmScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Alarm/CreateAlarmScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Alarm/CreateAlarmScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Garden/GardenScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Garden/GardenScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/screens/Garden/PlotScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Garden/PlotScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/screens/Note/CalendarScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Note/CalendarScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/screens/Note/CreateNoteScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Note/CreateNoteScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Note/NoteScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Note/NoteScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/screens/Plant/PlantListScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Plant/PlantListScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/screens/Plant/PlantScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Plant/PlantScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/screens/SplashScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/SplashScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/screens/User/PasswordResetScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/User/PasswordResetScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/screens/User/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/User/SettingsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/styles/ButtonStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/ButtonStyles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/styles/ContainerStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/ContainerStyles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/styles/FontStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/FontStyles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/styles/ImageStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/ImageStyles.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/styles/InputStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/InputStyles.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

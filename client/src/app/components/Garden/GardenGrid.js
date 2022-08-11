@@ -71,12 +71,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         alignItems: "center",
         paddingVertical: 10
-    },
-    plot: {
-        width: 80,
-        height: 80,
-        backgroundColor: "#9B711A",
-        margin: 1
     }
 });
 

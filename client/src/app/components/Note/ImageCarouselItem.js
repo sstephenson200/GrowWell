@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 const ImageCarouselItem = ({ item, index }) => {
 
@@ -36,13 +37,13 @@ const ImageCarouselItem = ({ item, index }) => {
 
 const styles = StyleSheet.create({
     image: {
-        width: 125,
-        height: 125,
+        width: wp("32%"),
+        height: wp("32%"),
         borderRadius: 20
     },
     largeImage: {
-        width: 200,
-        height: 200,
+        width: wp("60%"),
+        height: wp("60%"),
         borderRadius: 20
     }
 });

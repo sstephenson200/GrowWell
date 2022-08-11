@@ -17,8 +17,9 @@ const InputStyles = StyleSheet.create({
     //Dropdown menus and search bars
     userSelect: {
         width: wp("90%"),
+        height: hp("7%"),
         alignSelf: "center",
-        marginTop: 10,
+        marginVertical: 10,
         borderRadius: 15,
         elevation: 5,
         borderColor: "#EFF5E4"

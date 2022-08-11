@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 const moment = require("moment");
 import axios from "axios";
@@ -76,7 +76,7 @@ const CalendarScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
             <ScrollView style={ContainerStyles.screen}>
 
@@ -106,7 +106,7 @@ const CalendarScreen = (props) => {
                 }
 
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
 

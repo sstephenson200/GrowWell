@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, ScrollView, View, SafeAreaView, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 
@@ -124,7 +124,7 @@ const CreateNoteScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
             <ScrollView style={ContainerStyles.screen}>
 
@@ -183,7 +183,7 @@ const CreateNoteScreen = (props) => {
                 </View>
 
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
 

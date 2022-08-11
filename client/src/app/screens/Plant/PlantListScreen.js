@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, SafeAreaView } from "react-native";
 
 import Header from "../../components/Header";
 import SearchBar from "../../components/Plant/SearchBar";
@@ -15,7 +15,7 @@ const PlantListScreen = (props) => {
     const [filterOptions, setFilterOptions] = useState([]);
 
     return (
-        <View style={ContainerStyles.container}>
+        <SafeAreaView style={ContainerStyles.container}>
             <Header navigation={props.navigation} />
             <View style={ContainerStyles.screen}>
                 <Text style={FontStyles.pageTitle}>Plants</Text>
@@ -23,7 +23,7 @@ const PlantListScreen = (props) => {
                 <Filter filterData={[filterOptions, setFilterOptions]} />
                 <PlantList navigation={props.navigation} searchQuery={query} filterData={filterOptions} />
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

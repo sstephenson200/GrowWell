@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 const moment = require("moment");
@@ -185,7 +185,7 @@ const CreateAlarmScreen = (props) => {
     }
 
     return (
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
             <ScrollView style={ContainerStyles.screen} contentContainerStyle={{ flexGrow: 1 }}>
 
@@ -269,7 +269,7 @@ const CreateAlarmScreen = (props) => {
                 </View>
 
             </ScrollView >
-        </View >
+        </SafeAreaView >
     );
 }
 

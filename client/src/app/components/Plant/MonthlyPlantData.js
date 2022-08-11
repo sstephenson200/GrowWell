@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { FontAwesome } from "@expo/vector-icons";
 
 import ContainerStyles from "../../styles/ContainerStyles";
@@ -61,14 +62,14 @@ function Circle(props) {
         //Large circle for plant screen
         return (
             <View style={styles.circleLarge}>
-                <FontAwesome name="circle" size={15} color={color} />
+                <FontAwesome name="circle" size={hp("2%")} color={color} />
             </View>
         );
     } else {
         //Smaller circle for plant list screen cards
         return (
             <View style={styles.circle}>
-                <FontAwesome name="circle" size={10} color={color} />
+                <FontAwesome name="circle" size={hp("1.35%")} color={color} />
             </View>
         );
     }
@@ -182,44 +183,43 @@ function PlantListInfographic(props) {
 
 const styles = StyleSheet.create({
     monthInfographic: {
-        marginTop: 15
+        marginTop: hp("2%")
     },
     monthLabels: {
         flexDirection: "row",
         flex: 12,
-        marginBottom: 10
+        marginBottom: hp("1.5%")
     },
     monthLabelsLarge: {
         flexDirection: "row",
         flex: 12,
-        marginTop: 5,
-        marginBottom: 5,
-        marginLeft: 100
+        marginVertical: hp("1%"),
+        marginLeft: wp("25%")
     },
     labelText: {
-        marginHorizontal: 3.5,
-        fontSize: 12
+        marginHorizontal: wp("0.88%"),
+        fontSize: wp("3%")
     },
     labelTextLarge: {
-        marginHorizontal: 7,
-        fontSize: 14
+        marginHorizontal: wp("1.875%"),
+        fontSize: wp("3.5%")
     },
     monthCircles: {
         flexDirection: "row",
         flex: 12,
-        marginBottom: 20,
-        maringLeft: 10
+        marginBottom: wp("5%"),
+        marginLeft: wp("0.88%")
     },
     monthCirclesLarge: {
         flexDirection: "row",
         flex: 12,
-        marginBottom: 4
+        marginBottom: hp("2%")
     },
     circle: {
-        marginHorizontal: 3
+        marginHorizontal: wp("0.785%"),
     },
     circleLarge: {
-        marginHorizontal: 5
+        marginHorizontal: wp("1.25%"),
     }
 });
 

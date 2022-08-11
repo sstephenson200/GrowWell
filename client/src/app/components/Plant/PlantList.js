@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 
 import ImageSelect from "./SearchableImages";
@@ -209,24 +210,24 @@ const styles = StyleSheet.create({
         flex: 1
     },
     plantName: {
-        fontSize: 25,
+        fontSize: wp("6.5%"),
         paddingLeft: 7,
         fontWeight: "bold"
     },
     image: {
-        width: 125,
-        height: 125,
+        width: wp("32%"),
+        height: wp("32%"),
         borderRadius: 20
     },
     plantType: {
-        height: 25,
-        width: 50,
+        height: hp("4%"),
+        width: wp("25%"),
         borderRadius: 5,
         alignItems: "center"
     },
     plantTypeText: {
         color: "white",
-        fontSize: 15
+        fontSize: hp("2.5%")
     }
 });
 

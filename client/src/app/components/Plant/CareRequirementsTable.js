@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DataTable } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -93,7 +94,7 @@ function formatSchedules(props, scheduleTitle, array) {
             <DataTable.Cell>
                 {arrayString}
                 <TouchableOpacity style={styles.icon}>
-                    <Ionicons name="ios-alarm" size={22} color="black" onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm", params: { alarmTitle: alarmTitle, alarmSchedule: alarmSchedule, alarmDuration: alarmDuration } })} />
+                    <Ionicons name="ios-alarm" size={hp("4%")} color="black" onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm", params: { alarmTitle: alarmTitle, alarmSchedule: alarmSchedule, alarmDuration: alarmDuration } })} />
                 </TouchableOpacity>
             </DataTable.Cell>
         </View>
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
     row: {
-        width: 180,
+        width: wp("46%"),
         justifyContent: "center"
     },
     icon: {

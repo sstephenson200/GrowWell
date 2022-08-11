@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TouchableOpacity, StyleSheet } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 
@@ -152,7 +152,7 @@ const PlantScreen = (props) => {
 
     return (
 
-        <View style={ContainerStyles.containerScroll}>
+        <SafeAreaView style={ContainerStyles.containerScroll}>
 
             <Header navigation={props.navigation} />
 
@@ -307,14 +307,14 @@ const PlantScreen = (props) => {
 
             </ScrollView >
 
-        </View>
+        </SafeAreaView>
 
     );
 }
 
 const styles = StyleSheet.create({
     backgroundImage: {
-        height: hp("20%"),
+        height: hp("25%"),
         alignSelf: "stretch"
     },
     title: {

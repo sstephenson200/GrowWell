@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, FlatList, Dimensions, Platform, TouchableOpacity, StyleSheet } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import expoCameraroll from "expo-cameraroll";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
@@ -168,7 +169,7 @@ export default class ImageBrowser extends React.Component {
 
 const styles = StyleSheet.create({
     header: {
-        height: 85,
+        height: hp("11%"),
         backgroundColor: "#81BF63",
         width: "100%",
         justifyContent: "space-between",
@@ -181,8 +182,8 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "#9477B4",
-        height: 45,
-        width: 110,
+        height: hp("7%"),
+        width: wp("30%"),
         borderRadius: 8,
         alignItems: "center",
         justifyContent: "center",
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16
+        fontSize: wp("5%")
     },
     imageContainer: {
         backgroundColor: "#EFF5E4",

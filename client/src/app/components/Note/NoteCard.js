@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 const moment = require("moment");
 import axios from "axios";
 import { unescape } from "underscore";
@@ -15,6 +16,8 @@ import GetPlantByID from "../../requests/Plant/GetPlantByID";
 import FontStyles from "../../styles/FontStyles";
 
 const NoteCard = (props) => {
+
+    let width = Dimensions.get("window");
 
     const [gardenName, setGardenName] = useState(null);
     const [plantName, setPlantName] = useState(null);
@@ -95,7 +98,7 @@ const NoteCard = (props) => {
 
                         {
                             garden_id !== null ?
-                                <View style={ContainerStyles.dualColumn}>
+                                <View style={width > 640 ? ContainerStyles.dualColumn : null}>
                                     <Text style={styles.headerText}>{gardenName}, Plot {plot_number + 1}</Text>
 
                                     {plantName !== null ?
@@ -181,8 +184,8 @@ const styles = StyleSheet.create({
         marginVertical: 2
     },
     icon: {
-        width: 25,
-        height: 25
+        width: wp("7.5%"),
+        height: wp("7.5%")
     },
     noteData: {
         width: "50%"
@@ -197,7 +200,8 @@ const styles = StyleSheet.create({
         textAlign: "justify",
         alignSelf: "center",
         marginHorizontal: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        fontSize: wp("4%")
     }
 });
 
