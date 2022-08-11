@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import axios from "axios";
 
 import ContainerStyles from "../../styles/ContainerStyles";
@@ -47,7 +47,7 @@ const CreateGardenScreen = (props) => {
 
     return (
 
-        <View style={ContainerStyles.formScreen}>
+        <ScrollView style={ContainerStyles.formScreen}>
 
             <View style={[ContainerStyles.form, { marginTop: "15%" }]}>
                 <Text style={FontStyles.pageTitle}>Create Your</Text>
@@ -85,7 +85,7 @@ const CreateGardenScreen = (props) => {
                     onChangeText={setLength}
                 />
 
-                <View style={styles.buttonContainer}>
+                <View style={ButtonStyles.buttonContainer}>
 
                     <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
                         clearState();
@@ -102,18 +102,8 @@ const CreateGardenScreen = (props) => {
 
             </View>
 
-        </View >
+        </ScrollView >
     );
 }
-
-const styles = StyleSheet.create({
-    buttonContainer: {
-        flexDirection: "row",
-        flex: 2,
-        justifyContent: "center",
-        marginVertical: 10,
-        paddingBottom: 55
-    }
-});
 
 export default CreateGardenScreen;

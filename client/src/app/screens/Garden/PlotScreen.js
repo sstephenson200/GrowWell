@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { unescape } from "underscore";
 import axios from "axios";
 
@@ -257,7 +258,7 @@ const PlotScreen = (props) => {
 
 const styles = StyleSheet.create({
     iconLabel: {
-        fontSize: 20,
+        fontSize: hp("3%"),
         paddingLeft: 7
     }
 });

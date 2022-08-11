@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 const moment = require("moment");
 import { Checkbox } from "react-native-paper";
@@ -221,7 +222,7 @@ const CreateAlarmScreen = (props) => {
                     color={"#80C1E3"}
                     label="Repeat Alarm"
                     position="trailing"
-                    labelStyle={{ fontSize: 22, marginLeft: 5 }}
+                    labelStyle={{ fontSize: hp("3%"), marginLeft: 5 }}
                 />
 
                 {

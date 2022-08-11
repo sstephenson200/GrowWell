@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { View, Image, StyleSheet } from "react-native";
 
 const SplashScreen = () => {
@@ -25,8 +26,8 @@ const styles = StyleSheet.create({
     },
     logo: {
         alignSelf: "center",
-        width: 150,
-        height: 150
+        height: wp("45%"),
+        width: wp("45%")
     }
 });
 

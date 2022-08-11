@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 
 import ContainerStyles from "../../styles/ContainerStyles";
@@ -94,7 +95,7 @@ const PasswordReset = (props) => {
 
 const styles = StyleSheet.create({
     resetInfo: {
-        fontSize: 15,
+        fontSize: hp("2%"),
         paddingVertical: 10,
         textAlign: "center",
         paddingHorizontal: 10

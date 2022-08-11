@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const InputStyles = StyleSheet.create({
     //Text input boxes
     textInput: {
         width: "90%",
-        height: 45,
+        height: hp("7%"),
         margin: 8,
         padding: 10,
         backgroundColor: "white",
@@ -15,7 +16,7 @@ const InputStyles = StyleSheet.create({
     },
     //Dropdown menus and search bars
     userSelect: {
-        width: "90%",
+        width: wp("90%"),
         alignSelf: "center",
         marginTop: 10,
         borderRadius: 15,

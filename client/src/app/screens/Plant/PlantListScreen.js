@@ -24,7 +24,6 @@ const PlantListScreen = (props) => {
                 <PlantList navigation={props.navigation} searchQuery={query} filterData={filterOptions} />
             </View>
         </View>
-
     );
 }
 

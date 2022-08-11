@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45ec4dc8-370a-4ef5-a943-a75b5fb45684" name="Changes" comment="" />
+    <list default="true" id="45ec4dc8-370a-4ef5-a943-a75b5fb45684" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Note/NoteSummary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Note/NoteSummary.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Garden/CreateGardenScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Garden/CreateGardenScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Garden/PlotScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Garden/PlotScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Note/CalendarScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Note/CalendarScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Note/CreateNoteScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Note/CreateNoteScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Plant/PlantListScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Plant/PlantListScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/Plant/PlantScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/Plant/PlantScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/SplashScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/SplashScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/User/PasswordResetScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/User/PasswordResetScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/User/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/User/SettingsScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/ButtonStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/ButtonStyles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/ContainerStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/ContainerStyles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/FontStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/FontStyles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/ImageStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/ImageStyles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/InputStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/InputStyles.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,8 +43,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="cidr.known.project.marker" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../client" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="emulator" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

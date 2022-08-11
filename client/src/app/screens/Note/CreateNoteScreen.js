@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, ScrollView, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 
 import Header from "../../components/Header";
@@ -188,7 +189,7 @@ const CreateNoteScreen = (props) => {
 
 const styles = StyleSheet.create({
     textInputLarge: {
-        height: 60
+        height: hp("8.5%")
     }
 });
 

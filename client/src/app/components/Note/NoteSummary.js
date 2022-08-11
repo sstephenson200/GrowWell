@@ -22,7 +22,7 @@ const NoteSummary = (props) => {
     }
 
     return (
-        <View style={CardStyles.card}>
+        <View style={[CardStyles.card, { marginBottom: 20 }]}>
             <View style={CardStyles.cardContent}>
                 <Text style={FontStyles.boldHeader}>{date}</Text>
                 {

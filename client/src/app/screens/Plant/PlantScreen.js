@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, StyleSheet } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 
 import Header from "../../components/Header";
@@ -313,7 +314,7 @@ const PlantScreen = (props) => {
 
 const styles = StyleSheet.create({
     backgroundImage: {
-        height: 150,
+        height: hp("20%"),
         alignSelf: "stretch"
     },
     title: {
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
         paddingTop: 15
     },
     titleText: {
-        fontSize: 40,
+        fontSize: hp("6%"),
         fontFamily: "Montserrat",
         color: "white",
         paddingLeft: 10,
@@ -331,35 +332,36 @@ const styles = StyleSheet.create({
         textShadowRadius: 10
     },
     plantType: {
-        height: 40,
-        width: 100,
+        height: hp("5%"),
+        width: wp("25%"),
         borderRadius: 15,
         alignItems: "center",
+        justifyContent: "center",
         alignSelf: "center",
         marginBottom: 30
     },
     plantTypeText: {
         color: "white",
-        fontSize: 30
+        fontSize: hp("3%")
     },
     description: {
         paddingTop: 10,
         paddingHorizontal: 10,
         textAlign: "justify",
-        fontSize: 15
+        fontSize: hp("2%")
     },
     photo: {
-        height: 180,
-        width: 180,
+        height: wp("45%"),
+        width: wp("45%"),
         borderRadius: 20,
         borderColor: "white",
         borderWidth: 5,
         margin: 8
     },
     seasonalTitle: {
-        fontSize: 15,
+        fontSize: hp("2%"),
         paddingHorizontal: 10,
-        width: 100
+        width: wp("25%"),
     },
     infographic: {
         paddingLeft: 10

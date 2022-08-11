@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, View, ScrollView, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Modal from "react-native-modal";
 import axios from "axios";
 
@@ -146,13 +147,17 @@ const SettingsScreen = (props) => {
     }
 
     //Function to log user out of account and invalidate JWT
-    async function logout(props) {
+    async function logout(props, reset) {
         let error = (await Logout());
         if (error !== undefined) {
             setErrorMessage(error);
         } else {
             checkLoggedIn();
-            props.navigation.navigate("StackNavigator", { screen: "Login" });
+            if (reset !== undefined) {
+                props.navigation.navigate("StackNavigator", { screen: "PasswordReset" });
+            } else {
+                props.navigation.navigate("StackNavigator", { screen: "Login" });
+            }
         }
     }
 
@@ -231,7 +236,7 @@ const SettingsScreen = (props) => {
 
                 <Text style={styles.heading}>Change Your Password</Text>
 
-                <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "PasswordReset" })}>
+                <TouchableOpacity onPress={() => logout(props, true)} >
                     <Text style={FontStyles.formLink}>Forgot your password?</Text>
                 </TouchableOpacity>
 
@@ -278,13 +283,13 @@ const SettingsScreen = (props) => {
                 </TouchableOpacity>
 
             </ScrollView>
-        </View>
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
     heading: {
-        fontSize: 28,
+        fontSize: hp("3%"),
         marginLeft: 20,
         marginVertical: 5
     },

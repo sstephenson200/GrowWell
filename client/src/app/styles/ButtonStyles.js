@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const ButtonStyles = StyleSheet.create({
     //Button text
     buttonText: {
         color: "white",
-        fontSize: 18,
+        fontSize: wp("5%"),
         textAlign: "center"
     },
     //Navigation button containers
@@ -19,13 +20,13 @@ const ButtonStyles = StyleSheet.create({
         flexDirection: "row",
         flex: 2,
         justifyContent: "center",
-        paddingBottom: 60
+        paddingBottom: hp("10%")
     },
     //Standard navigation buttons
     largeButton: {
         backgroundColor: "#9477B4",
-        height: 45,
-        width: 200,
+        height: hp("7%"),
+        width: wp("50%"),
         borderRadius: 10,
         alignSelf: "center",
         justifyContent: "center",
@@ -33,8 +34,8 @@ const ButtonStyles = StyleSheet.create({
     },
     smallButton: {
         backgroundColor: "#9477B4",
-        height: 45,
-        width: 120,
+        height: hp("7%"),
+        width: wp("30%"),
         borderRadius: 10,
         justifyContent: "center",
         margin: 10
@@ -42,16 +43,16 @@ const ButtonStyles = StyleSheet.create({
     //Red warning buttons
     smallWarningButton: {
         backgroundColor: "red",
-        height: 45,
-        width: 120,
+        height: hp("7%"),
+        width: wp("30%"),
         borderRadius: 10,
         justifyContent: "center",
         margin: 10
     },
     largeWarningButton: {
         backgroundColor: "red",
-        height: 45,
-        width: 200,
+        height: hp("7%"),
+        width: wp("50%"),
         borderRadius: 10,
         alignSelf: "center",
         justifyContent: "center",

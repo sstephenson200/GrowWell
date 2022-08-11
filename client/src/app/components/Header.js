@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Ionicons } from "@expo/vector-icons";
 
 const Header = (props) => {
@@ -12,7 +13,7 @@ const Header = (props) => {
                 style={styles.icon}
                 onPress={() => props.navigation.navigate("StackNavigator", { screen: "Settings" })}
             >
-                <Ionicons name="settings-sharp" size={40} color="white" />
+                <Ionicons name="settings-sharp" size={hp("5.5%")} color="white" />
             </TouchableOpacity>
 
         </View>
@@ -22,7 +23,7 @@ const Header = (props) => {
 const styles = StyleSheet.create({
     headerBar: {
         width: "100%",
-        height: 85,
+        height: hp("11%"),
         backgroundColor: "#81BF63",
         justifyContent: "space-between",
         flexDirection: "row",
@@ -30,12 +31,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     logo: {
-        width: 55,
-        height: 55,
-        marginTop: 25
+        height: hp("7%"),
+        width: hp("7%"),
+        marginTop: hp("3.5%")
     },
     icon: {
-        marginTop: 30
+        marginTop: hp("4%")
     }
 });
 

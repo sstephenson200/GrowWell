@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import AuthContext from "../context/AuthContext";
@@ -31,7 +32,7 @@ const getTabBarVisibility = (route, loggedIn) => {
     return {
         position: "absolute",
         width: "100%",
-        height: 85,
+        height: hp("11%"),
         paddingHorizontal: 10,
         backgroundColor: "#81BF63"
     };
@@ -76,7 +77,7 @@ const Tabs = (route) => {
                 options={{
                     tabBarIcon: () => {
                         return (
-                            <FontAwesome name="calendar" size={40} color="white" />
+                            <FontAwesome name="calendar" size={hp("5.5%")} color="white" />
                         )
                     },
                     headerShown: false
@@ -88,7 +89,7 @@ const Tabs = (route) => {
                 component={CreateNoteScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <FontAwesome name="book" size={40} color="white" />
+                        return <FontAwesome name="book" size={hp("5.5%")} color="white" />
                     },
                     headerShown: false
                 }}
@@ -99,7 +100,7 @@ const Tabs = (route) => {
                 component={GardenScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <FontAwesome name="home" size={40} color="white" />
+                        return <FontAwesome name="home" size={hp("5.5%")} color="white" />
                     },
                     headerShown: false
                 }}
@@ -110,7 +111,7 @@ const Tabs = (route) => {
                 component={AlarmScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <Ionicons name="ios-alarm" size={40} color="white" />
+                        return <Ionicons name="ios-alarm" size={hp("5.5%")} color="white" />
                     },
                     headerShown: false
                 }}
@@ -121,7 +122,7 @@ const Tabs = (route) => {
                 component={PlantListScreen}
                 options={{
                     tabBarIcon: () => {
-                        return <Ionicons name="leaf" size={40} color="white" />
+                        return <Ionicons name="leaf" size={hp("5.5%")} color="white" />
                     },
                     headerShown: false
                 }}

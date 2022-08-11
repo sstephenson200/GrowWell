@@ -76,7 +76,7 @@ const CalendarScreen = (props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={ContainerStyles.containerScroll}>
             <Header navigation={props.navigation} />
             <ScrollView style={ContainerStyles.screen}>
 
@@ -111,10 +111,6 @@ const CalendarScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "space-between"
-    },
     calendar: {
         marginVertical: 5
     }
