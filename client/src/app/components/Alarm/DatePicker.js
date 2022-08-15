@@ -7,9 +7,6 @@ import ButtonStyles from "../../styles/ButtonStyles";
 //Date picker to allow user to select date/time for upcoming alarms
 const DatePicker = (props) => {
 
-    let tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
     let date = null;
     let setDate = null;
 

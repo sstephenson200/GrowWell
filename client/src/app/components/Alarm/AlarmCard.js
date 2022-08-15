@@ -243,7 +243,7 @@ const AlarmCard = (props) => {
                             <TouchableOpacity style={styles.icon}>
                                 {
                                     isParent == true || parent !== null ?
-                                        <Ionicons name="ios-trash-outline" size={30} color="red" onPress={toggleModal} />
+                                        <Ionicons testID="deleteRecurringAlarms" name="ios-trash-outline" size={30} color="red" onPress={toggleModal} />
                                         :
                                         <Ionicons name="ios-trash-outline" size={30} color="red" onPress={() => {
                                             deleteAlarm(alarm_id);
@@ -252,6 +252,7 @@ const AlarmCard = (props) => {
                             </TouchableOpacity>
 
                             <Switch
+                                testID="alarmSwitch"
                                 trackColor={{ false: "#767577", true: "#80C1E3" }}
                                 thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
                                 onValueChange={toggleSwitch}
@@ -262,11 +263,11 @@ const AlarmCard = (props) => {
 
                         {
                             complete ?
-                                <TouchableOpacity onPress={() => updateCompletionStatus()} >
+                                <TouchableOpacity testID="alarmSetComplete" onPress={() => updateCompletionStatus()} >
                                     <Text style={[styles.completionStatusText, styles.done]}>Done <Ionicons name="checkmark-circle-outline" size={20} color="grey" /></Text>
                                 </TouchableOpacity>
                                 :
-                                <TouchableOpacity onPress={() => updateCompletionStatus()} >
+                                <TouchableOpacity testID="alarmSetComplete" onPress={() => updateCompletionStatus()} >
                                     <Text style={[styles.completionStatusText, styles.markAsDone]}>Mark as done <Ionicons name="checkmark-circle-outline" size={20} color="green" /></Text>
                                 </TouchableOpacity>
                         }
