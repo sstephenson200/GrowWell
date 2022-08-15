@@ -32,11 +32,11 @@ describe("<AlarmCard />", () => {
 
         let alarm = { completion_status: true }
 
-        const resp = {
+        const response = {
             status: 200
         };
 
-        axios.put.mockResolvedValue(resp);
+        axios.put.mockResolvedValue(response);
 
         let expectedResult = "Done ";
         let tree = create(<AlarmCard alarm={alarm} />);

@@ -42,8 +42,8 @@ const GardenGrid = (props) => {
                 renderItem={({ item }) => {
 
                     return (
-                        <View>
-                            <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plot", params: { plot: item, garden: garden } })}>
+                        <View testID="plot">
+                            <TouchableOpacity testID={`plotLink${item.plot_number}`} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plot", params: { plot: item, garden: garden } })}>
                                 <Plot plot={item} />
                             </TouchableOpacity>
                         </View >
