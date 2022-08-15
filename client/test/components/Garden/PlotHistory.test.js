@@ -30,38 +30,27 @@ describe("<PlotHistory />", () => {
     });
 
     it("renders a plant icon image", async () => {
-        let expectedChildren = 2;
-        let expectedType = "Image";
 
         let tree;
         await act(async () => {
             tree = create(<PlotHistory plot_history={plotHistory} />);
         });
 
-        let actualChildren = tree.toJSON().children[0].children.length;
-        let actualType = tree.toJSON().children[0].children[0].type;
-
-        expect(actualChildren).toEqual(expectedChildren);
-        expect(actualType).toEqual(expectedType);
+        let actualResult = tree.root.findByProps({ testID: "plantIcon" }).props;
+        expect(actualResult).toBeTruthy();
     });
 
     it("renders the plant name", async () => {
-        let expectedChildren = 2;
-        let expectedType = "Text";
-        let expectedPlantName = response.data.plant.name;
+
+        let expectedResult = response.data.plant.name;
 
         let tree;
         await act(async () => {
             tree = create(<PlotHistory plot_history={plotHistory} />);
         });
 
-        let actualChildren = tree.toJSON().children[0].children.length;
-        let actualType = tree.toJSON().children[0].children[1].type;
-        let actualPlantName = tree.toJSON().children[0].children[1].children[0];
-
-        expect(actualChildren).toEqual(expectedChildren);
-        expect(actualType).toEqual(expectedType);
-        expect(actualPlantName).toEqual(expectedPlantName);
+        let actualResult = tree.root.findByProps({ testID: "plantName" }).props.children;
+        expect(actualResult).toEqual(expectedResult);
     });
 
     it("renders the date in MMM YYYY format", async () => {
@@ -70,7 +59,7 @@ describe("<PlotHistory />", () => {
         await act(async () => {
             tree = create(<PlotHistory plot_history={plotHistory} />);
         })
-        let actualResult = tree.toJSON().children[1].children[0];
+        let actualResult = tree.root.findByProps({ testID: "date" }).props.children;
         expect(actualResult).toEqual(expectedResult);
     });
 

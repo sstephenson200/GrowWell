@@ -32,13 +32,14 @@ const PlotHistory = (props) => {
 
             <View style={[ContainerStyles.dualColumn, styles.plantTitle]}>
                 <Image
+                    testID="plantIcon"
                     style={ImageStyles.icon}
                     source={ImageSelect({ name: plantName })}
                 />
-                <Text style={styles.plantName}>{plantName}</Text>
+                <Text testID="plantName" style={styles.plantName}>{plantName}</Text>
             </View>
 
-            <Text style={styles.date}>{date}</Text>
+            <Text testID="date" style={styles.date}>{date}</Text>
 
         </View>
     );

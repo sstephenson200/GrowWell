@@ -31,10 +31,11 @@ const Plot = (props) => {
     return (
         <View style={styles.plot}>
 
-            <Text style={styles.plotLabel}>{plot_number_display}</Text>
+            <Text testID="plotLabel" style={styles.plotLabel}>{plot_number_display}</Text>
             {
                 plantName !== null ?
                     <Image
+                        testID="plantIcon"
                         style={[ImageStyles.largeIcon, { alignSelf: "center" }]}
                         source={ImageSelect({ name: plantName })}
                     />

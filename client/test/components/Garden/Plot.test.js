@@ -35,24 +35,19 @@ describe("<Plot />", () => {
         await act(async () => {
             tree = create(<Plot plot={plot} />);
         });
-        let actualResult = Number(tree.toJSON().children[0].children[0]);
+        let actualResult = tree.root.findByProps({ testID: "plotLabel" }).props.children;
         expect(actualResult).toEqual(expectedResult);
     });
 
     it("renders a plant icon image for filled plots", async () => {
-        let expectedChildren = 2;
-        let expectedType = "Image";
 
         let tree;
         await act(async () => {
             tree = create(<Plot plot={plot} />);
         });
 
-        let actualChildren = tree.toJSON().children.length;
-        let actualType = tree.toJSON().children[1].type;
-
-        expect(actualChildren).toEqual(expectedChildren);
-        expect(actualType).toEqual(expectedType);
+        let actualResult = tree.root.findByProps({ testID: "plantIcon" }).props;
+        expect(actualResult).toBeTruthy();
     });
 
     it("does not render a plant icon image for empty plots", async () => {
@@ -62,14 +57,15 @@ describe("<Plot />", () => {
             plant_id: null
         }
 
-        let expectedChildren = 1;
+        let expectedResult = 0;
         let tree;
         await act(async () => {
             tree = create(<Plot plot={plot} />);
         });
 
-        let actualChildren = tree.toJSON().children.length;
-        expect(actualChildren).toEqual(expectedChildren);
+        let actualResult = tree.root.findAll(n => n.props.testID === "plantIcon" && n.type === "Image").length;
+
+        expect(actualResult).toEqual(expectedResult);
     });
 
 });

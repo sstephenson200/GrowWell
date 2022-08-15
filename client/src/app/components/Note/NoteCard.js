@@ -28,7 +28,9 @@ const NoteCard = (props) => {
     let title = props.note.title;
     title = unescape(title);
     let description = props.note.description;
-    description = unescape(description);
+    if (description !== null) {
+        description = unescape(description);
+    }
     let garden_id = props.note.garden_id;
     let plot_number = props.note.plot_number;
     let plant_id = props.note.plant_id;
@@ -99,12 +101,13 @@ const NoteCard = (props) => {
                         {
                             garden_id !== null ?
                                 <View style={width > 640 ? ContainerStyles.dualColumn : null}>
-                                    <Text style={styles.headerText}>{gardenName}, Plot {plot_number + 1}</Text>
+                                    <Text testID="gardenLabel" style={styles.headerText}>{gardenName}, Plot {plot_number + 1}</Text>
 
                                     {plantName !== null ?
-                                        <View style={ContainerStyles.dualColumn}>
-                                            <Text style={styles.headerText}>{plantName} </Text>
+                                        <View testID="plantLabel" style={ContainerStyles.dualColumn}>
+                                            <Text testID="plantName" style={styles.headerText}>{plantName} </Text>
                                             <Image
+                                                testID="plantIcon"
                                                 style={styles.icon}
                                                 source={ImageSelect({ name: plantName })}
                                             />
@@ -118,7 +121,7 @@ const NoteCard = (props) => {
 
                         {
                             description !== null ?
-                                <Text style={styles.description}>{description}</Text>
+                                <Text testID="description" style={styles.description}>{description}</Text>
                                 : null
                         }
 
@@ -134,12 +137,13 @@ const NoteCard = (props) => {
                                 {
                                     garden_id !== null ?
                                         <View>
-                                            <Text style={styles.spacing}>{gardenName}, Plot {plot_number + 1}</Text>
+                                            <Text testID="gardenLabel" style={styles.spacing}>{gardenName}, Plot {plot_number + 1}</Text>
 
                                             {plantName !== null ?
-                                                <View style={ContainerStyles.dualColumn}>
-                                                    <Text style={styles.headerText}>{plantName}</Text>
+                                                <View testID="plantLabel" style={ContainerStyles.dualColumn}>
+                                                    <Text testID="plantName" style={styles.headerText}>{plantName}</Text>
                                                     <Image
+                                                        testID="plantIcon"
                                                         style={styles.icon}
                                                         source={ImageSelect({ name: plantName })}
                                                     />
@@ -153,7 +157,7 @@ const NoteCard = (props) => {
 
                             </View>
 
-                            <ImageCarousel style={styles.carousel} data={notePhotos} />
+                            <ImageCarousel testID="imageCarousel" style={styles.carousel} data={notePhotos} />
 
                         </View>
 

@@ -20,7 +20,7 @@ const NoteSummary = (props) => {
             if (noteDate == date) {
                 noteData.push(note);
                 noteSummaries.push(
-                    <Text key={"noteSummary_" + [key]} style={styles.noteTitles}>{note.title}</Text>);
+                    <Text testID={`noteTitle${key}`} key={"noteSummary_" + [key]} style={styles.noteTitles}>{note.title}</Text>);
                 key++;
             }
         });
@@ -36,13 +36,13 @@ const NoteSummary = (props) => {
                         <View>
                             {noteSummaries}
 
-                            <TouchableOpacity style={[ButtonStyles.smallButton, { alignSelf: "center" }]} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Note", params: { date: date, notes: noteData } })}>
+                            <TouchableOpacity testID="noteLink" style={[ButtonStyles.smallButton, { alignSelf: "center" }]} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Note", params: { date: date, notes: noteData } })}>
                                 <Text style={ButtonStyles.buttonText}>VIEW</Text>
                             </TouchableOpacity>
 
                         </View>
 
-                        : <Text>You have no entries for this date</Text>
+                        : <Text testID="noNotesMessage" >You have no entries for this date</Text>
                 }
             </View>
         </View>

@@ -11,12 +11,12 @@ describe("<AuthContextProvider />", () => {
 
     it('Shows Splash Screen before LoggedIn is initialised', async () => {
 
-        const resp = {
+        const response = {
             status: 200,
             data: null
         };
 
-        axios.get.mockResolvedValue(resp);
+        axios.get.mockResolvedValue(response);
 
         let expectedResult = create(<SplashScreen />).toJSON();
         let tree;
@@ -32,12 +32,12 @@ describe("<AuthContextProvider />", () => {
 
     it('Shows AuthContextProvider children when LoggedIn is initialised', async () => {
 
-        const resp = {
+        const response = {
             status: 200,
             data: true
         };
 
-        axios.get.mockResolvedValue(resp);
+        axios.get.mockResolvedValue(response);
 
         let children = "created";
 
