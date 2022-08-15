@@ -3,7 +3,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 import InputStyles from '../styles/InputStyles';
 
-//Dropdown is used in multiple locations to list plots gardens and plants.
+//Dropdown is used in multiple locations to list plots, gardens and plants.
 const Dropdown = (props) => {
 
     let value = null;
@@ -42,6 +42,7 @@ const Dropdown = (props) => {
 
     return (
         <DropDownPicker
+            testID="dropdown"
             style={InputStyles.userSelect}
             listMode="SCROLLVIEW"
             placeholder={props.placeholder}

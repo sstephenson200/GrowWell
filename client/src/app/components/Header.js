@@ -10,6 +10,7 @@ const Header = (props) => {
             <Image style={styles.logo} source={require("../assets/images/logo.png")} />
 
             <TouchableOpacity
+                testID="settingsLink"
                 style={styles.icon}
                 onPress={() => props.navigation.navigate("StackNavigator", { screen: "Settings" })}
             >
