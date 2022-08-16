@@ -104,19 +104,19 @@ function InfographicLabels(props) {
         if (props.plantPage == true) {
             //Large label for plant screen
             labels.push(
-                <Text key={"label_" + i} style={styles.labelTextLarge}>{months[i]}</Text>
+                <Text testID={`label${i}`} key={"label_" + i} style={styles.labelTextLarge}>{months[i]}</Text>
             );
         } else {
             //Smaller label for plant list screen cards
             labels.push(
-                <Text key={"label_" + i} style={styles.labelText}>{months[i]}</Text>
+                <Text testID={`label${i}`} style={styles.labelText}>{months[i]}</Text>
             );
         }
     }
 
     if (props.plantPage == true) {
         return (
-            <View style={styles.monthLabelsLarge}>
+            <View testID="largeLabels" style={styles.monthLabelsLarge}>
                 {labels}
             </View>
         );
@@ -140,7 +140,7 @@ function GeneralInfographic(props) {
     if (props.plantPage == true) {
         //Produce larger infographic for plant screen
         return (
-            <View style={styles.monthCirclesLarge}>
+            <View testID="infographic" style={styles.monthCirclesLarge}>
                 {generateCircles(array, props.plantPage)}
             </View>
         );

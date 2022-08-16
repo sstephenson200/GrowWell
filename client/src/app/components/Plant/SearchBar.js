@@ -16,6 +16,7 @@ const SearchBar = (props) => {
 
     return (
         <Searchbar
+            testID="searchbar"
             style={InputStyles.userSelect}
             placeholder="Search"
             onChangeText={onChange}

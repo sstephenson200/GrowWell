@@ -27,6 +27,7 @@ const Filter = (props) => {
 
     return (
         <DropDownPicker
+            testID="filter"
             style={InputStyles.userSelect}
             listMode="SCROLLVIEW"
             placeholder="Filter Plants"

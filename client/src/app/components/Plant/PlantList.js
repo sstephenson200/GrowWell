@@ -156,7 +156,7 @@ const PlantList = (props) => {
                     //Render list card
                     return (
 
-                        <TouchableOpacity onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id, name: item.name, plant_type: item.plant_type, photo: item.photo } })}>
+                        <TouchableOpacity testID={`card${item.name}`} onPress={() => props.navigation.navigate("StackNavigator", { screen: "Plant", params: { plant_id: item._id, name: item.name, plant_type: item.plant_type, photo: item.photo } })}>
                             <Card>
 
                                 <View style={ContainerStyles.dualRow}>

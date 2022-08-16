@@ -68,7 +68,7 @@ describe("<NoteCard />", () => {
             default:
                 return Promise.reject(new Error('not found'))
         }
-    })
+    });
 
     it("has 2 children", async () => {
 

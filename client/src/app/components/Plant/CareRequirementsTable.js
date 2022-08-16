@@ -5,7 +5,7 @@ import { DataTable } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
 //Function to print each array entry on its own line and render the list
-function printArrayMultipleLines(array) {
+function printArrayMultipleLines(array, keyIdentifier) {
 
     let arrayString = "";
 
@@ -20,7 +20,7 @@ function printArrayMultipleLines(array) {
         //Render list
         return (
             <View style={styles.row}>
-                <Text>{arrayString}</Text>
+                <Text testID={`tableList${keyIdentifier}`}>{arrayString}</Text>
             </View>
         );
     } else {
@@ -30,7 +30,7 @@ function printArrayMultipleLines(array) {
 
 //Function to format schedules according to their length, as a string or as a range of numbers
 //This function also renders the schuedle with accompanying link to the create alarm screen
-function formatSchedules(props, scheduleTitle, array) {
+function formatSchedules(props, scheduleTitle, array, keyIdentifier) {
 
     let arrayString = "";
 
@@ -38,7 +38,7 @@ function formatSchedules(props, scheduleTitle, array) {
         //Schedules which are not arrays can be printed as is - e.g., "weekly", "after flowering"
         arrayString += array[0];
         return (
-            <DataTable.Cell>{arrayString}</DataTable.Cell>
+            <DataTable.Cell testID={`singleSchedule${keyIdentifier}`}>{arrayString}</DataTable.Cell>
         );
     }
 
@@ -91,10 +91,10 @@ function formatSchedules(props, scheduleTitle, array) {
     //Render schedule with accompanying create alarm screen link
     return (
         <View style={styles.row}>
-            <DataTable.Cell>
+            <DataTable.Cell testID={`rangedSchedule${keyIdentifier}`}>
                 {arrayString}
                 <TouchableOpacity style={styles.icon}>
-                    <Ionicons name="ios-alarm" size={hp("4%")} color="black" onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm", params: { alarmTitle: alarmTitle, alarmSchedule: alarmSchedule, alarmDuration: alarmDuration } })} />
+                    <Ionicons testID={`alarmLink${keyIdentifier}`} name="ios-alarm" size={hp("4%")} color="black" onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm", params: { alarmTitle: alarmTitle, alarmSchedule: alarmSchedule, alarmDuration: alarmDuration } })} />
                 </TouchableOpacity>
             </DataTable.Cell>
         </View>
@@ -142,7 +142,7 @@ function formatSpacing(array) {
 
     //Render spacing parameter
     return (
-        <DataTable.Cell>{arrayString}</DataTable.Cell>
+        <DataTable.Cell testID="spacing">{arrayString}</DataTable.Cell>
     );
 }
 
@@ -168,21 +168,21 @@ const CareRequirementsTable = (props) => {
                 <DataTable.Row>
                     <DataTable.Cell>Sunlight</DataTable.Cell>
                     {
-                        printArrayMultipleLines(props.sun_condition)
+                        printArrayMultipleLines(props.sun_condition, "+sun_condition")
                     }
                 </DataTable.Row>
 
                 <DataTable.Row>
                     <DataTable.Cell>Soil Type</DataTable.Cell>
                     {
-                        printArrayMultipleLines(props.soil_type)
+                        printArrayMultipleLines(props.soil_type, "+soil_type")
                     }
                 </DataTable.Row>
 
                 <DataTable.Row>
                     <DataTable.Cell>Soil pH</DataTable.Cell>
                     {
-                        printArrayMultipleLines(props.soil_ph)
+                        printArrayMultipleLines(props.soil_ph, "+soil_ph")
                     }
                 </DataTable.Row>
 
@@ -203,7 +203,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Watering</DataTable.Cell>
                             {
-                                formatSchedules(props, "Water the ", props.water_schedule)
+                                formatSchedules(props, "Water the ", props.water_schedule, "+water_schedule")
                             }
                         </DataTable.Row>
 
@@ -216,7 +216,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Pruning</DataTable.Cell>
                             {
-                                formatSchedules(props, "Prune the ", props.prune_schedule)
+                                formatSchedules(props, "Prune the ", props.prune_schedule, "+prune_schedule")
                             }
                         </DataTable.Row>
 
@@ -229,7 +229,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Feeding</DataTable.Cell>
                             {
-                                formatSchedules(props, "Feed the ", props.feed_schedule)
+                                formatSchedules(props, "Feed the ", props.feed_schedule, "+feed_schedule")
                             }
                         </DataTable.Row>
 
@@ -242,7 +242,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Indoors</DataTable.Cell>
                             {
-                                formatSchedules(props, "Plant the ", props.indoor_schedule)
+                                formatSchedules(props, "Plant the ", props.indoor_schedule, "+indoor_schedule")
                             }
                         </DataTable.Row>
 
@@ -255,7 +255,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Common Problems</DataTable.Cell>
                             {
-                                printArrayMultipleLines(props.plant_problem)
+                                printArrayMultipleLines(props.plant_problem, "+plant_problem")
                             }
                         </DataTable.Row>
 
@@ -268,7 +268,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Good Companion Plants</DataTable.Cell>
                             {
-                                printArrayMultipleLines(props.companion_plant)
+                                printArrayMultipleLines(props.companion_plant, "+companion_plant")
                             }
                         </DataTable.Row>
 
@@ -281,7 +281,7 @@ const CareRequirementsTable = (props) => {
                         <DataTable.Row>
                             <DataTable.Cell>Poor Companion Plants</DataTable.Cell>
                             {
-                                printArrayMultipleLines(props.incompatible_plant)
+                                printArrayMultipleLines(props.incompatible_plant, "+incompatible_plant")
                             }
                         </DataTable.Row>
 
