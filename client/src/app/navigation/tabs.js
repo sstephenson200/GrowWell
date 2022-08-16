@@ -55,6 +55,7 @@ const Tabs = (route) => {
     return (
 
         <Tab.Navigator
+            testID="tabBar"
             initialRouteName={initialRouteName}
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,

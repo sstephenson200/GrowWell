@@ -23,53 +23,63 @@ const StackNavigator = (props) => {
 
     return (
         <Stack.Navigator
+            testID="stackNavigator"
             screenOptions={{
                 headerShown: false
             }}
         >
             {loggedIn ? <>
                 <Stack.Screen
+                    testID="settingsScreen"
                     name="Settings"
                     component={SettingsScreen}
                 />
 
                 <Stack.Screen
+                    testID="plantScreen"
                     name="Plant"
                     component={PlantScreen}
                     getId={({ params }) => params.plant_id}
                 />
 
                 <Stack.Screen
+                    testID="createGardenScreen"
                     name="CreateGarden"
                     component={CreateGardenScreen}
                 />
 
                 <Stack.Screen
+                    testID="plotScreen"
                     name="Plot"
                     component={PlotScreen}
                 />
 
                 <Stack.Screen
+                    testID="noteScreen"
                     name="Note"
                     component={NoteScreen}
                 />
 
                 <Stack.Screen
+                    testID="createAlarmScreen"
                     name="CreateAlarm"
                     component={CreateAlarmScreen}
                 />
             </> : <>
                 <Stack.Screen
+                    testID="loginScreen"
                     name="Login"
                     component={LoginScreen}
                 />
 
                 <Stack.Screen
+                    testID="signUpScreen"
                     name="SignUp"
                     component={SignUpScreen}
                 />
 
                 <Stack.Screen
+                    testID="passwordResetScreen"
                     name="PasswordReset"
                     component={PasswordResetScreen}
                 />
