@@ -15,6 +15,7 @@
     "setupFiles": [
       "<rootDir>/test/JestSetup.js"
     ],
+    "collectCoverage": true,
     "testEnvironment": "jsdom"
   },
   "dependencies": {
