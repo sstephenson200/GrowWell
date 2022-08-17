@@ -193,7 +193,7 @@ const CreateAlarmScreen = (props) => {
 
                 {
                     errorMessage !== "" ?
-                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
+                        <Text testID="errorMessage" style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
@@ -203,6 +203,7 @@ const CreateAlarmScreen = (props) => {
 
                 <Text style={FontStyles.subtitle}>Title</Text>
                 <TextInput
+                    testID="titleInput"
                     style={InputStyles.textInput}
                     placeholder="Your Title"
                     value={title}
@@ -215,6 +216,7 @@ const CreateAlarmScreen = (props) => {
                 </View>
 
                 <Checkbox.Item
+                    testID="checkbox"
                     status={checked ? "checked" : "unchecked"}
                     onPress={() => {
                         setChecked(!checked);
@@ -231,6 +233,7 @@ const CreateAlarmScreen = (props) => {
                         <View style={ContainerStyles.dualRow}>
                             <Text style={FontStyles.subtitle}>Days Between Repeats</Text>
                             <TextInput
+                                testID="scheduleInput"
                                 style={InputStyles.textInput}
                                 placeholder="3"
                                 keyboardType="numeric"
@@ -240,6 +243,7 @@ const CreateAlarmScreen = (props) => {
 
                             <Text style={FontStyles.subtitle}>Number of Repeats</Text>
                             <TextInput
+                                testID="repeatInput"
                                 style={InputStyles.textInput}
                                 placeholder="5"
                                 keyboardType="numeric"
@@ -253,14 +257,14 @@ const CreateAlarmScreen = (props) => {
 
                 <View style={ButtonStyles.buttonContainer}>
 
-                    <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
+                    <TouchableOpacity testID="cancelButton" style={ButtonStyles.smallWarningButton} onPress={() => {
                         clearState();
                         props.navigation.navigate("Alarms");
                     }}>
                         <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={ButtonStyles.smallButton} onPress={async () => {
+                    <TouchableOpacity testID="saveButton" style={ButtonStyles.smallButton} onPress={async () => {
                         await createAlarm(props, title, date, schedule, numRepeats, null, selectedPlot);
                     }} >
                         <Text style={ButtonStyles.buttonText}>SAVE</Text>

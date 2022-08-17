@@ -137,11 +137,12 @@ const AlarmScreen = (props) => {
 
                 <Text style={FontStyles.pageTitle}>Your Alarms</Text>
 
-                <TouchableOpacity style={ButtonStyles.largeButton} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm" })}>
+                <TouchableOpacity testID="newAlarmLink" style={ButtonStyles.largeButton} onPress={() => props.navigation.navigate("StackNavigator", { screen: "CreateAlarm" })}>
                     <Text style={ButtonStyles.buttonText}>ADD NEW ALARM</Text>
                 </TouchableOpacity>
 
                 <Agenda
+                    testID="agenda"
                     pastScrollRange={1}
                     futureScrollRange={1}
                     showClosingKnob={true}
