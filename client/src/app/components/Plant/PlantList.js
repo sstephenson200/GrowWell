@@ -57,12 +57,7 @@ const PlantList = (props) => {
                 base64Image = fileReaderInstance.result;
                 plantData[i].photo = base64Image;
                 updatedPlantData.push(plantData[i]);
-            }
-        }
-
-        fileReaderInstance.onloadend = () => {
-            if (updatedPlantData.length === plantData.length) {
-                setPlants(plantData);
+                setPlants(updatedPlantData);
             }
         }
     }
