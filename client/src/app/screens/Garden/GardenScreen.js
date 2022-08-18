@@ -130,7 +130,7 @@ const GardenScreen = (props) => {
                 {
                     selectedGarden !== null ?
 
-                        <View style={[ContainerStyles.centered, { marginBottom: 10 }]}>
+                        <View testID="gardenGrid" style={[ContainerStyles.centered, { marginBottom: 10 }]}>
                             <ScrollView horizontal={true}>
                                 {
                                     props.route.params !== undefined && props.route.params.updatePlot !== undefined ?
@@ -147,7 +147,7 @@ const GardenScreen = (props) => {
                             </View>
                         </View>
 
-                        : <Text style={FontStyles.largeTextCenter}>Garden not selected</Text>
+                        : <Text testID="unselectedMessage" style={FontStyles.largeTextCenter}>Garden not selected</Text>
                 }
 
             </ScrollView >

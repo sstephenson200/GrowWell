@@ -55,7 +55,7 @@ const CreateGardenScreen = (props) => {
 
                 {
                     errorMessage !== "" ?
-                        <Text style={FontStyles.errorMessage}>{errorMessage}</Text>
+                        <Text testID="errorMessage" style={FontStyles.errorMessage}>{errorMessage}</Text>
                         : null
                 }
 
@@ -87,14 +87,14 @@ const CreateGardenScreen = (props) => {
 
                 <View style={ButtonStyles.buttonContainer}>
 
-                    <TouchableOpacity style={ButtonStyles.smallWarningButton} onPress={() => {
+                    <TouchableOpacity testID="cancelButton" style={ButtonStyles.smallWarningButton} onPress={() => {
                         clearState();
                         props.navigation.navigate("Garden");
                     }}>
                         <Text style={ButtonStyles.buttonText}>CANCEL</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={ButtonStyles.smallButton} onPress={async () => await createGarden(props, name, length, width)}>
+                    <TouchableOpacity testID="saveButton" style={ButtonStyles.smallButton} onPress={async () => await createGarden(props, name, length, width)}>
                         <Text style={ButtonStyles.buttonText}>CREATE</Text>
                     </TouchableOpacity>
 

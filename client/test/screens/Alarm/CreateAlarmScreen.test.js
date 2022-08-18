@@ -116,7 +116,7 @@ describe("<CreateAlarmScreen />", () => {
         expect(repeats).toBeTruthy();
     });
 
-    it("can render an error message in red if the create alarm request is unsuccessful", async () => {
+    it("can render an error message if the create alarm request is unsuccessful", async () => {
 
         let expectedResult = "Error message";
 
