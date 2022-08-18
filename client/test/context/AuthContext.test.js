@@ -9,7 +9,7 @@ jest.mock("axios");
 
 describe("<AuthContextProvider />", () => {
 
-    it('Shows Splash Screen before LoggedIn is initialised', async () => {
+    it("Shows Splash Screen before LoggedIn is initialised", async () => {
 
         const response = {
             status: 200,
@@ -30,7 +30,7 @@ describe("<AuthContextProvider />", () => {
         expect(actualResult).toEqual(expectedResult);
     });
 
-    it('Shows AuthContextProvider children when LoggedIn is initialised', async () => {
+    it("Shows AuthContextProvider children when LoggedIn is initialised", async () => {
 
         const response = {
             status: 200,

@@ -42,7 +42,7 @@ describe("<NoteCard />", () => {
 
     axios.post.mockImplementation((url) => {
         switch (url) {
-            case '/garden/getGardenByID':
+            case "/garden/getGardenByID":
                 return response = {
                     status: 200,
                     data: {
@@ -51,7 +51,7 @@ describe("<NoteCard />", () => {
                         }
                     }
                 }
-            case '/plant/getPlantByID':
+            case "/plant/getPlantByID":
                 return response = {
                     status: 200,
                     data: {
@@ -60,13 +60,13 @@ describe("<NoteCard />", () => {
                         }
                     }
                 }
-            case 'plant/getImageByID':
+            case "plant/getImageByID":
                 return blob = {
                     status: 200,
                     data: fileString
                 }
             default:
-                return Promise.reject(new Error('not found'))
+                return Promise.reject(new Error("not found"))
         }
     });
 

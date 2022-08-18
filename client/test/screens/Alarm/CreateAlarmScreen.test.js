@@ -65,7 +65,7 @@ describe("<CreateAlarmScreen />", () => {
                     }
                 }
             default:
-                return Promise.reject(new Error('not found'));
+                return Promise.reject(new Error("not found"));
         }
     });
 
@@ -206,7 +206,7 @@ describe("<CreateAlarmScreen />", () => {
                         }
                     }
                 default:
-                    return Promise.reject(new Error('not found'));
+                    return Promise.reject(new Error("not found"));
             }
         });
 

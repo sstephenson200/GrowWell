@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const ImageStyles = StyleSheet.create({
+    //Plant icons
     icon: {
         height: hp("5%"),
         width: hp("5%")
@@ -10,6 +11,7 @@ const ImageStyles = StyleSheet.create({
         height: hp("6%"),
         width: hp("6%")
     },
+    //App logo
     loginLogo: {
         height: hp("12%"),
         width: hp("12%"),

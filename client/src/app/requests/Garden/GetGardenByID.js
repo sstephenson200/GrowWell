@@ -6,7 +6,7 @@ async function GetGardenByID(garden_id, requiredData) {
     try {
         const response = await axios.post("/garden/getGardenByID", {
             "garden_id": garden_id
-        }, { responseType: 'json' });
+        }, { responseType: "json" });
 
         let status = response.status;
 
