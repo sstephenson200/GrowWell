@@ -4,6 +4,7 @@
     "icon": "./src/app/assets/images/logo.png",
     "version": "1.0.0",
     "slug": "GrowWell",
+    "orientation": "portrait",
     "ios": {
       "bundleIdentifier": "com.GrowWell",
       "buildNumber": "1.0.0"
