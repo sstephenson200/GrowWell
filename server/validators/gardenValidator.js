@@ -1,5 +1,7 @@
 const Garden = require("../models/gardenModel");
 
+const { CheckExistingGardenName } = require("../repositories/gardenRepository");
+
 //Check if both garden_id and plot_number are provided
 function checkGardenAndPlotsProvided(garden_id, plot_number) {
     if ((garden_id != null && plot_number == null) || (garden_id == null && plot_number != null)) {
@@ -10,7 +12,7 @@ function checkGardenAndPlotsProvided(garden_id, plot_number) {
 
 //Check if garden name already in use for given user
 async function checkExistingGardenName(name, user_id) {
-    const existingGarden = await Garden.findOne({ "name": name, "user._id": user_id });
+    let existingGarden = await CheckExistingGardenName(name, user_id);
     if (existingGarden) {
         return true;
     }

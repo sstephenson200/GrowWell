@@ -10,6 +10,8 @@ const Note = require("../models/noteModel");
 const Garden = require("../models/gardenModel");
 const Plant = require("../models/plantModel");
 
+const { DeleteNotesByGarden } = require("../repositories/noteRepository");
+
 // *** CREATE REQUESTS ***
 
 //Request to create a new note
@@ -226,18 +228,13 @@ const deleteNote = async (request, response) => {
 //Function to delete a note by garden_id
 async function deleteNotesByGarden(garden_id) {
 
-    const existingNote = await Note.findOne({ "garden_id": garden_id });
-    if (!existingNote) {
-        return false;
-    }
-
     try {
-        let notes = await Note.find({ "garden_id": garden_id });
-        await Note.deleteMany({ "garden_id": garden_id });
-        notes.forEach((note) => {
-            deleteImages(note.image);
-        });
-
+        let notes = await DeleteNotesByGarden(garden_id);
+        if (notes.length !== 0) {
+            notes.forEach((note) => {
+                deleteImages(note.image);
+            });
+        }
         return true;
 
     } catch (error) {

@@ -19,9 +19,7 @@ describe("Alarm Controller", () => {
             actualStatus = responseStatus;
             return this;
         },
-        send: function (data) {
-
-        }
+        send: function (data) { }
     }
 
     describe("Create Alarm Request", () => {

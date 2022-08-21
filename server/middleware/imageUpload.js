@@ -4,7 +4,7 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 
 //Create Storage Engine
 const storage = new GridFsStorage({
-  url: process.env.MDB_CONNECT,
+  url: process.env.MDB_CONNECT || "Test url",
   file: (request, file) => ({
     filename: `${file.originalname}_${Date.now()}`,
     bucketName: "images",

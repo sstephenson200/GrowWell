@@ -50,6 +50,14 @@ async function DeleteAlarmsByParent(parent) {
     return alarms;
 }
 
+async function DeleteAlarmsByGarden(garden_id) {
+    let user_id = "userID";
+    let alarm = new Alarm({
+        user_id, title: "Test1", due_date: "2022-09-02", notificatoin_id: "12345"
+    });
+    return alarm;
+}
+
 async function UpdateCompletionStatus(existingAlarm, completion_status) {
     return;
 }
@@ -68,6 +76,7 @@ module.exports = {
     GetAlarmByID,
     DeleteAlarm,
     DeleteAlarmsByParent,
+    DeleteAlarmsByGarden,
     UpdateCompletionStatus,
     UpdateActiveStatus,
     UpdateNotificationID

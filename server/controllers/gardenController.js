@@ -7,8 +7,8 @@ const alarmController = require("./alarmController");
 const noteController = require("./noteController");
 
 const Garden = require("../models/gardenModel");
-const User = require("../models/userModel");
-const Plant = require("../models/plantModel");
+
+const { CreateGarden, GetAllGardens, GetGardenByID, DeleteGarden, GetUser, UpdatePlotPlant, GetGarden, GetPlant, UpdatePlotHistory } = require("../repositories/gardenRepository");
 
 // *** CREATE REQUESTS ***
 
@@ -37,11 +37,7 @@ const createGarden = async (request, response) => {
     }
 
     try {
-        const newGarden = new Garden({
-            user_id, size: [length, width], name, plot: gardenPlots
-        });
-        await newGarden.save();
-
+        let newGarden = await CreateGarden(user_id, length, width, name, gardenPlots);
         return response.status(200).json({ message: "Garden created successfully." });
 
     } catch (error) {
@@ -56,9 +52,7 @@ const createGarden = async (request, response) => {
 const getAllGardens = async (request, response) => {
 
     let user_id = request.user;
-
-    const gardens = await Garden.find({ "user_id": user_id });
-
+    let gardens = await GetAllGardens(user_id);
     return response.status(200).json({ gardens: gardens });
 }
 
@@ -76,14 +70,12 @@ const getGardenByID = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
 
-    const existingGarden = await Garden.findOne({ _id: garden_id });
+    let existingGarden = await GetGardenByID(garden_id);
     if (!existingGarden) {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
 
-    const garden = await Garden.findOne({ _id: garden_id });
-
-    return response.status(200).json({ garden: garden });
+    return response.status(200).json({ garden: existingGarden });
 }
 
 // *** DELETE REQUESTS *** 
@@ -104,7 +96,7 @@ const deleteGarden = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
+    let existingUser = await GetUser(user_id);
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
@@ -112,7 +104,7 @@ const deleteGarden = async (request, response) => {
     try {
         const deletedNotes = await noteController.deleteNotesByGarden(garden_id);
         const deletedAlarms = await alarmController.deleteAlarmsByGarden(garden_id);
-        const deletedGarden = await Garden.deleteOne({ _id: garden_id });
+        let deletedGarden = await DeleteGarden(garden_id);
 
         return response.status(200).json({ message: "Garden deleted successfully.", alarms: deletedAlarms });
 
@@ -235,7 +227,7 @@ const updatePlotPlant = async (request, response) => {
             return response.status(200).json({ errorMessage: "Invalid plant ID." });
         }
 
-        const existingPlant = await Plant.findOne({ _id: plant_id });
+        let existingPlant = await GetPlant(plant_id);
         if (!existingPlant) {
             return response.status(200).json({ errorMessage: "Invalid plant ID." });
         }
@@ -245,7 +237,7 @@ const updatePlotPlant = async (request, response) => {
         }
     }
 
-    const existingGarden = await Garden.findOne({ _id: garden_id });
+    let existingGarden = await GetGarden(garden_id);
     if (!existingGarden) {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
@@ -261,12 +253,7 @@ const updatePlotPlant = async (request, response) => {
     }
 
     try {
-        if (plant_id == undefined) {
-            await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": null, "plot.$.date_planted": null } });
-        } else {
-            await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": plant_id, "plot.$.date_planted": date_planted } });
-        }
-
+        let garden = await UpdatePlotPlant(garden_id, plant_id, plot_number);
         return response.status(200).json({ message: "Plot plant updated successfully." });
 
     } catch (error) {
@@ -293,12 +280,12 @@ const updatePlotHistory = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
-    const existingPlant = await Plant.findOne({ _id: plant_id });
+    let existingPlant = await GetPlant(plant_id);
     if (!existingPlant) {
         return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
-    const existingGarden = await Garden.findOne({ _id: garden_id });
+    let existingGarden = await GetGarden(garden_id);
     if (!existingGarden) {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
@@ -317,8 +304,7 @@ const updatePlotHistory = async (request, response) => {
     plot_history.push({ "plant_id": plant_id, "date_planted": date_planted });
 
     try {
-        await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plot_history": plot_history } });
-
+        let garden = await UpdatePlotHistory(garden_id, plot_number, plot_history);
         return response.status(200).json({ message: "Plot history updated successfully." });
 
     } catch (error) {

@@ -6,7 +6,7 @@ const gardenValidator = require("../validators/gardenValidator");
 const Alarm = require("../models/alarmModel");
 const Garden = require("../models/gardenModel");
 
-const { CreateAlarm, GetAllAlarms, GetAlarmByID, DeleteAlarm, DeleteAlarmsByParent, UpdateCompletionStatus, UpdateActiveStatus, UpdateNotificationID } = require("../repositories/alarmRepository");
+const { CreateAlarm, GetAllAlarms, GetAlarmByID, DeleteAlarm, DeleteAlarmsByParent, DeleteAlarmsByGarden, UpdateCompletionStatus, UpdateActiveStatus, UpdateNotificationID } = require("../repositories/alarmRepository");
 
 // *** CREATE REQUESTS *** 
 
@@ -160,8 +160,7 @@ const deleteAlarmsByParent = async (request, response) => {
 //Function to delete an alarm by garden_id
 async function deleteAlarmsByGarden(garden_id) {
     try {
-        let deletedAlarms = await Alarm.find({ "garden_id": garden_id }).select("notification_id");
-        await Alarm.deleteMany({ "garden_id": garden_id });
+        let deletedAlarms = await DeleteAlarmsByGarden(garden_id);
         return deletedAlarms;
     } catch (error) {
         console.log(error);

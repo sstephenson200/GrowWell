@@ -31,6 +31,12 @@ async function DeleteAlarmsByParent(parent) {
     return removedAlarms;
 }
 
+async function DeleteAlarmsByGarden(garden_id) {
+    let deletedAlarms = await Alarm.find({ "garden_id": garden_id }).select("notification_id");
+    await Alarm.deleteMany({ "garden_id": garden_id });
+    return deletedAlarms;
+}
+
 async function UpdateCompletionStatus(existingAlarm, completion_status) {
     let alarm = await Alarm.updateOne(existingAlarm, { "completion_status": completion_status });
     return alarm;
@@ -52,6 +58,7 @@ module.exports = {
     GetAlarmByID,
     DeleteAlarm,
     DeleteAlarmsByParent,
+    DeleteAlarmsByGarden,
     UpdateCompletionStatus,
     UpdateActiveStatus,
     UpdateNotificationID
