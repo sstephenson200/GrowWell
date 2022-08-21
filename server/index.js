@@ -30,3 +30,4 @@ app.use("/alarm", require("./routers/alarmRouter"));
 app.use("/note", require("./routers/noteRouter"));
 app.use("/plant", require("./routers/plantRouter"));
 
+module.exports = app;

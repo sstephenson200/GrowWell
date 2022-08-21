@@ -6,6 +6,8 @@ const gardenValidator = require("../validators/gardenValidator");
 const Alarm = require("../models/alarmModel");
 const Garden = require("../models/gardenModel");
 
+const { CreateAlarm, GetAllAlarms, GetAlarmByID, DeleteAlarm, DeleteAlarmsByParent, UpdateCompletionStatus, UpdateActiveStatus, UpdateNotificationID } = require("../repositories/alarmRepository");
+
 // *** CREATE REQUESTS *** 
 
 //Request to create new alarm record
@@ -68,11 +70,7 @@ const createAlarm = async (request, response) => {
     }
 
     try {
-        const newAlarm = new Alarm({
-            user_id, title, due_date, garden_id, plot_number, isParent, parent, notification_id
-        });
-        const savedAlarm = await newAlarm.save();
-
+        let savedAlarm = await CreateAlarm(user_id, title, due_date, garden_id, plot_number, isParent, parent, notification_id);
         return response.status(200).json({ message: "Alarm created successfully.", alarm: savedAlarm });
 
     } catch (error) {
@@ -87,9 +85,7 @@ const createAlarm = async (request, response) => {
 const getAllAlarms = async (request, response) => {
 
     let user_id = request.user;
-
-    const alarms = await Alarm.find({ "user_id": user_id });
-
+    let alarms = await GetAllAlarms(user_id);
     return response.status(200).json({ alarms: alarms });
 }
 
@@ -107,7 +103,7 @@ const getAlarmByID = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid alarm ID." });
     }
 
-    const existingAlarm = await Alarm.findOne({ _id: alarm_id });
+    let existingAlarm = await GetAlarmByID(alarm_id);
     if (!existingAlarm) {
         return response.status(200).json({ errorMessage: "Invalid alarm ID." });
     }
@@ -132,8 +128,7 @@ const deleteAlarm = async (request, response) => {
     }
 
     try {
-        await Alarm.findOneAndDelete({ _id: alarm_id });
-
+        await DeleteAlarm(alarm_id);
         return response.status(200).json({ message: "Alarm deleted successfully." });
 
     } catch (error) {
@@ -153,10 +148,7 @@ const deleteAlarmsByParent = async (request, response) => {
     }
 
     try {
-        let removedAlarms = await Alarm.find({ "parent": parent });
-
-        await Alarm.deleteMany({ "parent": parent });
-
+        let removedAlarms = await DeleteAlarmsByParent(parent);
         return response.status(200).json({ message: "Alarms deleted successfully.", alarms: removedAlarms });
 
     } catch (error) {
@@ -342,8 +334,7 @@ const updateCompletionStatus = async (request, response) => {
     let completion_status = !existingAlarm.completion_status;
 
     try {
-        await Alarm.updateOne(existingAlarm, { "completion_status": completion_status });
-
+        let updatedAlarm = await UpdateCompletionStatus(existingAlarm, completion_status);
         return response.status(200).json({ message: "Alarm completion status updated successfully." });
 
     } catch (error) {
@@ -374,8 +365,7 @@ const updateActiveStatus = async (request, response) => {
     let active_status = !existingAlarm.active_status;
 
     try {
-        await Alarm.updateOne(existingAlarm, { "active_status": active_status });
-
+        let updatedAlarm = await UpdateActiveStatus(existingAlarm, active_status);
         return response.status(200).json({ message: "Alarm active status updated successfully." });
 
     } catch (error) {
@@ -404,8 +394,7 @@ const updateNotificationID = async (request, response) => {
     }
 
     try {
-        await Alarm.updateOne(existingAlarm, { "notification_id": notification_id });
-
+        let updatedAlarm = await UpdateNotificationID(existingAlarm, notification_id);
         return response.status(200).json({ message: "Alarm notification ID updated successfully." });
 
     } catch (error) {
