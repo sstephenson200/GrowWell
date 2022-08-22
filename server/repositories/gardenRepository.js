@@ -31,9 +31,9 @@ async function DeleteGarden(garden_id) {
     return deletedGarden;
 }
 
-async function GetUser(user_id) {
-    let existingUser = await User.findOne({ _id: user_id });
-    return existingUser;
+async function DeleteAllGardens(user_id) {
+    await Garden.deleteMany({ "user_id": user_id });
+    return;
 }
 
 async function UpdatePlotPlant(garden_id, plant_id, plot_number) {
@@ -67,7 +67,7 @@ module.exports = {
     GetAllGardens,
     GetGardenByID,
     DeleteGarden,
-    GetUser,
+    DeleteAllGardens,
     UpdatePlotPlant,
     GetGarden,
     GetPlant,

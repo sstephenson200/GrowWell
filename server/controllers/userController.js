@@ -13,6 +13,8 @@ const noteController = require("./noteController");
 
 const User = require("../models/userModel");
 
+const { CreateUser, GetUserByEmail, GetUser, DeleteUser, UpdateEmail, UpdatePassword } = require("../repositories/userRepository");
+
 // *** CREATE REQUESTS ***
 
 //Request to create a new user record
@@ -29,7 +31,7 @@ const createUser = async (request, response) => {
         return response.status(200).json({ errorMessage: "Entered passwords must match." });
     }
 
-    const existingUser = await User.findOne({ email });
+    let existingUser = await GetUserByEmail(email);
     if (existingUser) {
         return response.status(200).json({ errorMessage: "An account already exists for this email." });
     }
@@ -38,10 +40,7 @@ const createUser = async (request, response) => {
     const password_hash = await bcrypt.hash(password, salt);
 
     try {
-        const newUser = new User({
-            email, password_hash
-        });
-        const savedUser = await newUser.save();
+        let savedUser = await CreateUser(email, password_hash);
 
         //Auto login
         const token = jwt.sign({
@@ -70,7 +69,8 @@ const login = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const existingUser = await User.findOne({ email });
+    //const existingUser = await User.findOne({ email });
+    let existingUser = await GetUserByEmail(email);
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
@@ -119,8 +119,7 @@ const logout = async (request, response) => {
 const getUser = async (request, response) => {
 
     let user_id = request.user;
-
-    const user = await User.findOne({ _id: user_id });
+    let user = await GetUser(user_id);
     if (!user) {
         return response.status(200).json({ errorMessage: "Invalid user ID." });
     }
@@ -142,16 +141,16 @@ const deleteUser = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
+    let existingUser = await GetUser(user_id);
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
 
     try {
-        const deletedGardens = await gardenController.deleteAllGardens(user_id);
-        const deletedAlarms = await alarmController.deleteAllAlarms(user_id);
-        const deletedNotes = await noteController.deleteAllNotes(user_id);
-        const deletedUser = await User.deleteOne({ _id: user_id });
+        let deletedGardens = await gardenController.deleteAllGardens(user_id);
+        let deletedAlarms = await alarmController.deleteAllAlarms(user_id);
+        let deletedNotes = await noteController.deleteAllNotes(user_id);
+        let deletedUser = await DeleteUser(user_id);
 
         return response.status(200).json({ message: "User deleted successfully." });
 
@@ -175,7 +174,7 @@ const updateEmail = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
+    let existingUser = await GetUser(user_id);
     if (!existingUser || !await userValidator.checkPasswordCorrect(password, existingUser.password_hash)) {
         return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
@@ -184,14 +183,13 @@ const updateEmail = async (request, response) => {
         return response.status(200).json({ errorMessage: "No change detected." });
     }
 
-    const existingEmail = await User.findOne({ email });
+    let existingEmail = await GetUserByEmail(email);
     if (existingEmail) {
         return response.status(200).json({ errorMessage: "An account already exists for this email." });
     }
 
     try {
-        await User.updateOne(existingUser, { "email": email });
-
+        await UpdateEmail(existingUser, email)
         return response.status(200).json({ message: "Email updated successfully." });
 
     } catch (error) {
@@ -212,7 +210,7 @@ const updatePassword = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const existingUser = await User.findOne({ _id: user_id });
+    let existingUser = await GetUser(user_id);
     if (!existingUser || !await userValidator.checkPasswordCorrect(oldPassword, existingUser.password_hash)) {
         return response.status(200).json({ errorMessage: "Invalid credentials." });
     }
@@ -230,8 +228,7 @@ const updatePassword = async (request, response) => {
     const password_hash = await bcrypt.hash(newPassword, salt);
 
     try {
-        await User.updateOne(existingUser, { "password_hash": password_hash });
-
+        await UpdatePassword(existingUser, password_hash);
         return response.status(200).json({ message: "Password updated successfully." });
 
     } catch (error) {
@@ -250,7 +247,7 @@ const resetPassword = async (request, response) => {
         return response.status(200).json({ errorMessage: validationErrors.array()[0].msg });
     }
 
-    const existingUser = await User.findOne({ email });
+    let existingUser = await GetUserByEmail(email);
     if (!existingUser) {
         return response.status(200).json({ errorMessage: "No account exists for this email." });
     }
@@ -268,7 +265,7 @@ const resetPassword = async (request, response) => {
     const password_hash = await bcrypt.hash(password, salt);
 
     try {
-        await User.updateOne(existingUser, { "password_hash": password_hash });
+        await UpdatePassword(existingUser, password_hash);
 
         passwordMailer.mailer(email, password);
 

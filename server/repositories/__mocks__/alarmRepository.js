@@ -58,6 +58,10 @@ async function DeleteAlarmsByGarden(garden_id) {
     return alarm;
 }
 
+async function DeleteAllAlarms(user_id) {
+    return;
+}
+
 async function UpdateCompletionStatus(existingAlarm, completion_status) {
     return;
 }
@@ -77,6 +81,7 @@ module.exports = {
     DeleteAlarm,
     DeleteAlarmsByParent,
     DeleteAlarmsByGarden,
+    DeleteAllAlarms,
     UpdateCompletionStatus,
     UpdateActiveStatus,
     UpdateNotificationID

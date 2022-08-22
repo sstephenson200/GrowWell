@@ -8,6 +8,13 @@ async function DeleteNotesByGarden(garden_id) {
     return notes;
 }
 
+async function DeleteAllNotes(user_id) {
+    let notes = await Note.find({ "user_id": user_id });
+    await Note.deleteMany({ "user_id": user_id });
+    return notes;
+}
+
 module.exports = {
-    DeleteNotesByGarden
+    DeleteNotesByGarden,
+    DeleteAllNotes
 }

@@ -37,6 +37,11 @@ async function DeleteAlarmsByGarden(garden_id) {
     return deletedAlarms;
 }
 
+async function DeleteAllAlarms(user_id) {
+    await Alarm.deleteMany({ "user_id": user_id });
+    return;
+}
+
 async function UpdateCompletionStatus(existingAlarm, completion_status) {
     let alarm = await Alarm.updateOne(existingAlarm, { "completion_status": completion_status });
     return alarm;
@@ -59,6 +64,7 @@ module.exports = {
     DeleteAlarm,
     DeleteAlarmsByParent,
     DeleteAlarmsByGarden,
+    DeleteAllAlarms,
     UpdateCompletionStatus,
     UpdateActiveStatus,
     UpdateNotificationID

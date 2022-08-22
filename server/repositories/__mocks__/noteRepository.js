@@ -11,6 +11,15 @@ async function DeleteNotesByGarden(garden_id) {
     return notes;
 }
 
+async function DeleteAllNotes(user_id) {
+    let notes = [];
+    notes.push(new Note({
+        user_id, title: "Test1"
+    }));
+    return notes;
+}
+
 module.exports = {
-    DeleteNotesByGarden
+    DeleteNotesByGarden,
+    DeleteAllNotes
 }

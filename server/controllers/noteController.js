@@ -10,7 +10,7 @@ const Note = require("../models/noteModel");
 const Garden = require("../models/gardenModel");
 const Plant = require("../models/plantModel");
 
-const { DeleteNotesByGarden } = require("../repositories/noteRepository");
+const { DeleteNotesByGarden, DeleteAllNotes } = require("../repositories/noteRepository");
 
 // *** CREATE REQUESTS ***
 
@@ -247,11 +247,12 @@ async function deleteNotesByGarden(garden_id) {
 async function deleteAllNotes(user_id) {
 
     try {
-        let notes = await Note.find({ "user_id": user_id });
-        await Note.deleteMany({ "user_id": user_id });
-        notes.forEach((note) => {
-            deleteImages(note.image);
-        });
+        let notes = await DeleteAllNotes(user_id);
+        if (notes.length !== 0) {
+            notes.forEach((note) => {
+                deleteImages(note.image);
+            });
+        }
         return true;
 
     } catch (error) {

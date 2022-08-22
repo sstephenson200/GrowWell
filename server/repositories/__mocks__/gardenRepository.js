@@ -1,7 +1,4 @@
-const bcrypt = require("bcrypt");
-
 const Garden = require("../../models/gardenModel");
-const User = require("../../models/userModel");
 const Plant = require("../../models/plantModel");
 
 //Mock garden repository for use in unit testing
@@ -14,12 +11,13 @@ async function CreateGarden(user_id, length, width, name, gardenPlots) {
 }
 
 async function CheckExistingGardenName(name, user_id) {
-    if (name === "nonExistingGardenTest")
+    if (name === "nonExistingGardenTest") {
         return undefined;
-    else
+    } else {
         return new Garden({
             user_id, size: [3, 2], name: "Test1", plot: []
         });
+    }
 }
 
 async function GetAllGardens(user_id) {
@@ -48,14 +46,8 @@ async function DeleteGarden(garden_id) {
     return;
 }
 
-async function GetUser(user_id) {
-    const salt = await bcrypt.genSalt();
-    const password_hash = await bcrypt.hash("password", salt);
-
-    let existingUser = new User({
-        email: "email", "password_hash": password_hash
-    });
-    return existingUser;
+async function DeleteAllGardens(user_id) {
+    return;
 }
 
 async function UpdatePlotPlant(garden_id, plant_id, plot_number) {
@@ -95,7 +87,7 @@ module.exports = {
     GetAllGardens,
     GetGardenByID,
     DeleteGarden,
-    GetUser,
+    DeleteAllGardens,
     UpdatePlotPlant,
     GetGarden,
     GetPlant,

@@ -3,6 +3,7 @@ const { createGarden, getAllGardens, getGardenByID, deleteGarden, updatePlotPlan
 jest.mock("../../repositories/gardenRepository");
 jest.mock("../../repositories/noteRepository");
 jest.mock("../../repositories/alarmRepository");
+jest.mock("../../repositories/userRepository");
 
 describe("Garden Controller", () => {
 

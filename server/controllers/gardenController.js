@@ -8,7 +8,8 @@ const noteController = require("./noteController");
 
 const Garden = require("../models/gardenModel");
 
-const { CreateGarden, GetAllGardens, GetGardenByID, DeleteGarden, GetUser, UpdatePlotPlant, GetGarden, GetPlant, UpdatePlotHistory } = require("../repositories/gardenRepository");
+const { CreateGarden, GetAllGardens, GetGardenByID, DeleteGarden, UpdatePlotPlant, GetGarden, GetPlant, UpdatePlotHistory, DeleteAllGardens } = require("../repositories/gardenRepository");
+const { GetUser } = require("../repositories/userRepository");
 
 // *** CREATE REQUESTS ***
 
@@ -118,7 +119,7 @@ const deleteGarden = async (request, response) => {
 async function deleteAllGardens(user_id) {
 
     try {
-        await Garden.deleteMany({ "user_id": user_id });
+        await DeleteAllGardens(user_id);
         return true;
 
     } catch (error) {
