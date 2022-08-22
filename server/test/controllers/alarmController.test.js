@@ -283,7 +283,6 @@ describe("Alarm Controller", () => {
             let expectedAlarm2 = "Test2";
             let expectedAlarm3 = "Test3";
 
-
             let request = {
                 user: "62fffa28c2fc2e3c8cbaa5de"
             }

@@ -37,7 +37,7 @@ async function GetAllGardens(user_id) {
 async function GetGardenByID(garden_id) {
     let user_id = "userID";
     let garden = new Garden({
-        user_id, size: [3, 2], name: "SingleGarden", plot: []
+        user_id, size: [3, 2], name: "SingleGarden", plot: [{ plot_number: 0 }, { plot_number: 1 }, { plot_number: 2 }]
     });
     return garden;
 }

@@ -10,7 +10,8 @@ const Note = require("../models/noteModel");
 const Garden = require("../models/gardenModel");
 const Plant = require("../models/plantModel");
 
-const { DeleteNotesByGarden, DeleteAllNotes } = require("../repositories/noteRepository");
+const { DeleteNotesByGarden, DeleteAllNotes, GetNotes, GetNotesByPlot, GetNotesByPlant, GetNotesByMonth } = require("../repositories/noteRepository");
+const { GetGardenByID, GetPlant } = require("../repositories/gardenRepository");
 
 // *** CREATE REQUESTS ***
 
@@ -98,9 +99,7 @@ const createNote = async (request, response) => {
 const getNotes = async (request, response) => {
 
     let user_id = request.user;
-
-    const notes = await Note.find({ "user_id": user_id });
-
+    let notes = await GetNotes(user_id);
     return response.status(200).json({ notes: notes });
 }
 
@@ -120,7 +119,7 @@ const getNotesByPlot = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
 
-    const existingGarden = await Garden.findOne({ _id: garden_id });
+    let existingGarden = await GetGardenByID(garden_id);
     if (!existingGarden) {
         return response.status(200).json({ errorMessage: "Invalid garden ID." });
     }
@@ -131,7 +130,7 @@ const getNotesByPlot = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid plot number." });
     }
 
-    const notes = await Note.find({ "user_id": user_id, "garden_id": garden_id });
+    let notes = await GetNotesByPlot(user_id, garden_id);
     const filteredNotes = [];
 
     if (notes.length !== 0) {
@@ -161,13 +160,12 @@ const getNotesByPlant = async (request, response) => {
         return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
-    const existingPlant = await Plant.findOne({ _id: plant_id });
+    let existingPlant = await GetPlant(plant_id);
     if (!existingPlant) {
         return response.status(200).json({ errorMessage: "Invalid plant ID." });
     }
 
-    const notes = await Note.find({ "user_id": user_id, "plant_id": plant_id });
-
+    let notes = await GetNotesByPlant(user_id, plant_id);
     return response.status(200).json({ notes: notes });
 }
 
@@ -187,8 +185,7 @@ const getNotesByMonth = async (request, response) => {
     const startOfMonth = moment(date).startOf("month").format("YYYY-MM-DD");
     const endOfMonth = moment(date).endOf("month").format("YYYY-MM-DD");
 
-    const notes = await Note.find({ "user_id": user_id, "date": { $gte: moment(startOfMonth).toDate(), $lte: moment(endOfMonth).toDate() } });
-
+    let notes = await GetNotesByMonth(user_id, startOfMonth, endOfMonth);
     return response.status(200).json({ notes: notes });
 }
 
