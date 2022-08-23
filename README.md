@@ -114,6 +114,42 @@ Server-side code is hosted on a live Heroku instance. This can be debugged by ru
 
 ####	Code Structure
 
+Project code is divided into client and server folders, covering front-end and back-end, respectively.
+
+#####	Client
+
+The client handles content which is rendered on the app. Where possible, components and screens have been divided into Alarm, Garden, Plant, Note and User folders. The main technology used in this section is React Native. Code is divided as follows:
+
+* 	.vscode – Contains launch.json file for use in debug configuration.
+* 	src/app/assets – Shared fonts and images.
+*   src/app/components – Shared elements, i.e. dropdown menus, cards, etc.
+*   src/app/context – Authentication.
+*   src/app/navigation – Navigation, through use of a Stack Navigator and Tab Navigator.
+*   src/app/notifications – Push notification set-up for use in alarm reminders.
+*   src/app/requests – Shared endpoints.
+*   src/app/screens – Main app screens, including pre-defined components and requests.
+*   src/app/styles – Shared styles.
+*   Test – Client integration tests.
+*   App.js – Initial app load.
+*   app.json – Environment variables, add-ons, etc.
+
+#####	Server
+
+The server defines requests to the database, with endpoints being focused on Alarm, Garden, Plant, Note and User. Specific endpoints are further defined in the API section, below. The main technology used in this section is Express. Code is divided as follows:
+
+* Models – Mongoose schema definitions.
+* Router – Route definitions with validation.
+* Controllers – Endpoint definitions, including business logic and further validation.
+* Repositories – Mongoose queries and accompanying mocked data for testing.  
+*	Mailer – Node mailer set-up for use in password reset function.
+*	Middleware – Authentication, Image Upload.
+*	Validators – Repeated validation/business logic methods.
+*	Test – Controller unit tests.
+*	Index.js – Server entry point, handling database connection.
+
+To add a new request, create a new method in the relevant controller and link to the router file. 
+Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing.  
+
 ####	Expo Go
 
 To continue development, you will need to download Expo Go onto an Android device.
