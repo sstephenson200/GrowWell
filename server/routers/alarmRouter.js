@@ -35,7 +35,7 @@ router.post("/createAlarm", [
 router.post("/getAllAlarms", auth, alarmController.getAllAlarms);
 
 //Request to get an alarm for a given alarm_id
-router.get("/getAlarmByID", [
+router.post("/getAlarmByID", [
     check("alarm_id")
         .not().isEmpty().withMessage("Alarm ID required."),
 ], auth, alarmController.getAlarmByID);
