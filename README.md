@@ -110,6 +110,44 @@ To install the application on an Android device, please complete the following s
 <!-- USAGE -->
 ## Usage
 
+Grow Well: Garden Manager is a mobile application used to enhance the gardening experience. Some of the core features include:
+
+<h4 align="center">Browse plant species and filter by name, plant type and season. View more detailed care data to learn how to grow each plant!</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186003280-3f8d8b83-f8c3-4c98-ac36-d81efd59ca53.png">
+</p>
+
+<h4 align="center">Create notes on the plants you’re growing and keep track of the tasks you’ve completed. See quick summaries of your created notes on your calendar and view them to see your added photos and further details.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523286-d361b93d-de03-41be-b656-5faa9ad1e8ed.png">
+</p>
+
+<h4 align="center">View your notes by plant and by garden plot.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523380-0493ecb7-92e3-44ea-9f20-7c6408772a1d.png">
+</p>
+
+<h4 align="center">Never forget to water your plants again! Create task reminders which link to your device’s notification system. Make single or recurring alarms, turn them on and off as suits, and mark them as complete to keep track.</h4>
+
+<p align="center">
+<img width="300" height="500" src="https://user-images.githubusercontent.com/22751349/186523452-5f0e4d60-f37d-45f1-8417-41d3b7b6fb92.png">
+</p>
+
+<h4 align="center">See what you’re growing in each plot and keep track of what you’ve grown there previously.</h4>
+
+<p align="center">
+<img width="300" height="500" src="https://user-images.githubusercontent.com/22751349/186523522-9e506b0f-7c0d-42f4-90dd-8a1eaea6f684.png">
+</p>
+
+<h4 align="center">Log in to your account and manage your user settings at any time.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523566-b0fff34e-c439-4e6d-8a79-dce512a02f2d.png">
+</p>
+
 <!-- CONTRIBUTE -->
 ## Contribute
 
