@@ -36,7 +36,7 @@ async function DeleteAllGardens(user_id) {
     return;
 }
 
-async function UpdatePlotPlant(garden_id, plant_id, plot_number) {
+async function UpdatePlotPlant(garden_id, plant_id, plot_number, date_planted) {
     let garden;
     if (plant_id == undefined) {
         garden = await Garden.updateOne({ _id: garden_id, "plot.plot_number": plot_number }, { $set: { "plot.$.plant_id": null, "plot.$.date_planted": null } });

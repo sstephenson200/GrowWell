@@ -254,7 +254,7 @@ const updatePlotPlant = async (request, response) => {
     }
 
     try {
-        let garden = await UpdatePlotPlant(garden_id, plant_id, plot_number);
+        let garden = await UpdatePlotPlant(garden_id, plant_id, plot_number, date_planted);
         return response.status(200).json({ message: "Plot plant updated successfully." });
 
     } catch (error) {
