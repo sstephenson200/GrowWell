@@ -18,9 +18,13 @@
       </ul>
     </li>
     <li>
-      <a href="#getStarted">Get Started</a>
+      <a href="#get-started">Get Started</a>
       <ul>
         <li><a href="#requirements">Requirements</a></li>
+          <ul>
+            <li><a href="#enable-usb-file-transfer">Enable USB File Transfer</a></li>
+            <li><a href="#enable-third-party-apps">Enable Third Party Apps</a></li>
+          </ul>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -28,27 +32,26 @@
     <li>
       <a href="#contribute">Contribute</a>
       <ul>
-        <li><a href="#Code Structure">Code Structure</a></li>
-        <li><a href="#Expo Go">Expo Go</a></li>
-        <li><a href="#Generate APK">Generate APK</a></li>
+        <li><a href="#code-structure">Code Structure</a></li>
+          <ul>
+            <li><a href="#client">Client</a></li>
+            <li><a href="#server">Server</a></li>
+          </ul>
+        <li><a href="#expo-go">Expo Go</a></li>
+          <ul>
+            <li><a href="#run-the-app">Run the App</a></li>
+            <li><a href="#run-the-app-in-debug-mode">Run the App in Debug Mode</a></li>
+            <li><a href="#common-issues">Common Issues</a></li>
+          </ul>
+        <li><a href="#generate-apk">Generate APK</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#apis">APIs</a>
-      <ul>
-        <li><a href="#alarm">Alarm</a></li>
-        <li><a href="#garden">Garden</a></li>
-        <li><a href="#plant">Plant</a></li>
-        <li><a href="#note">Note</a></li>
-        <li><a href="#user">User</a></li>
-      </ul>
-    </li>
+    <li><a href="#apis">APIs</a></li>
   </ol>
 </details>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
 
 Grow Well: Garden Manager is a mobile application designed to enhance the gardening experience. It provides preliminary information on various plant species for beginner gardeners, and assists more experienced users with the management of more complex projects through the use of note and alarm creation. 
 
@@ -99,7 +102,7 @@ As the APK is not currently available through standard app stores, the device mu
 
 To install the application on an Android device, please complete the following steps.
 
-1.	Download the Android Package Kit onto your Android device: https://drive.google.com/file/d/1H3hSdimAGesHEdrbqfFj6Aw3uIdj7ohL/view?usp=sharing.
+1.	Download the Android Package Kit onto your Android device: [LINK].
 2.	Open <strong>Downloads</strong>.
 3.	Tap the Grow Well APK file.
 4.	Tap <strong>Install</strong>. 
@@ -205,12 +208,4 @@ To continue, you will need to sign up for an Expo account: https://expo.dev. You
 <!-- APIs -->
 ## APIs
 
-####	Alarm
-
-####	Garden
-
-####	Plant
-
-####	Note
-
-####	User
+API documentation, including a full list of all available endpoints, is provided here: https://documenter.getpostman.com/view/19379045/VUquKExX.
