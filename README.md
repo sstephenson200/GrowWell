@@ -133,13 +133,13 @@ Grow Well: Garden Manager is a mobile application used to enhance the gardening 
 <h4 align="center">Never forget to water your plants again! Create task reminders which link to your device’s notification system. Make single or recurring alarms, turn them on and off as suits, and mark them as complete to keep track.</h4>
 
 <p align="center">
-<img width="300" height="500" src="https://user-images.githubusercontent.com/22751349/186523452-5f0e4d60-f37d-45f1-8417-41d3b7b6fb92.png">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186624993-a698c82f-5cc9-4d4f-878b-9db6272a3606.png">
 </p>
 
 <h4 align="center">See what you’re growing in each plot and keep track of what you’ve grown there previously.</h4>
 
 <p align="center">
-<img width="300" height="500" src="https://user-images.githubusercontent.com/22751349/186523522-9e506b0f-7c0d-42f4-90dd-8a1eaea6f684.png">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186625251-ec247307-2eef-4563-be6f-4ccd42d22dcc.png">
 </p>
 
 <h4 align="center">Log in to your account and manage your user settings at any time.</h4>
