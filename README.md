@@ -77,7 +77,7 @@ Currently, this application is only available for Android devices. However, an A
 
 ### Requirements
 
-The following steps may be required to allow successful download of the Android Package Kit.
+The following steps may be required to allow successful download of the Android Package Kit (APK).
 
 #### Enable USB File Transfer
 
@@ -112,6 +112,12 @@ To install the application on an Android device, please complete the following s
 
 Grow Well: Garden Manager is a mobile application used to enhance the gardening experience. Some of the core features include:
 
+<h4 align="center">Log in to your account and manage your user settings at any time.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523566-b0fff34e-c439-4e6d-8a79-dce512a02f2d.png">
+</p>
+
 <h4 align="center">Browse plant species and filter by name, plant type and season. View more detailed care data to learn how to grow each plant!</h4>
 
 <p align="center">
@@ -142,16 +148,10 @@ Grow Well: Garden Manager is a mobile application used to enhance the gardening 
 <img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186625251-ec247307-2eef-4563-be6f-4ccd42d22dcc.png">
 </p>
 
-<h4 align="center">Log in to your account and manage your user settings at any time.</h4>
-
-<p align="center">
-<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523566-b0fff34e-c439-4e6d-8a79-dce512a02f2d.png">
-</p>
-
 <!-- CONTRIBUTE -->
 ## Contribute
 
-Server-side code is hosted on a live Heroku instance. This can be debugged by running locally. The client-side code must be run through Expo Go or by installing an APK on the device.
+Server-side code is hosted on a live Heroku instance. This can be debugged by running locally with the command <strong>npm run start</strong>. The server code utilises nodemon to automatically restart the server when a change is detected. The client-side code must be run through Expo Go or by installing an APK on the device.
 
 ####	Code Structure
 
@@ -174,6 +174,8 @@ The client handles content which is rendered on the app. Where possible, compone
 *   App.js – Initial app load.
 *   app.json – Environment variables, add-ons, etc.
 
+Tests are placed in the test folder mirror the hierarchy of the client folder. For example, tests for alarm components should be placed in test/components/Alarm, with testable code being found in src/app/components/Alarm. 
+
 #####	Server
 
 The server defines requests to the database, with endpoints being focused on Alarm, Garden, Plant, Note and User. Specific endpoints are further defined in the API section, below. The main technology used in this section is Express. Code is divided as follows:
@@ -189,7 +191,8 @@ The server defines requests to the database, with endpoints being focused on Ala
 *	Index.js – Server entry point, handling database connection.
 
 To add a new request, create a new method in the relevant controller and link to the router file. 
-Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing.  
+
+Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing. Tests are placed in the test folder mirror the hierarchy of the server folder. For example, tests for controllers should be placed in test/controllers, with testable code being found in the controllers folder. 
 
 ####	Expo Go
 
@@ -197,7 +200,7 @@ To continue development, you will need to download Expo Go onto an Android devic
 
 #####	Run the App
 
-The app can be run in two modes: <strong>expo start</strong> or <strong>expo start --no-dev –minify</strong>. <strong>expo start --no-dev --minify</strong> is a better representation of production mode. This should be used to check for errors before generating an APK. In the event of invisible errors, this mode will prevent the application from fully loading.  
+The app can be run in two modes: <strong>expo start</strong> or <strong>expo start --no-dev –minify</strong>. <strong>expo start --no-dev --minify</strong> mimics production mode. This should be used to check for errors before generating an APK. In the event of invisible errors, this mode will prevent the application from fully loading.  
 
 1.	Open the client folder in an IDE.
 2.	Execute <strong>expo start</strong> or <strong>expo start --no-dev –minify</strong>.
