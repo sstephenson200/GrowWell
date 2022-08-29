@@ -164,35 +164,35 @@ The client handles content which is rendered on the app. Where possible, compone
 * 	.vscode – Contains launch.json file for use in debug configuration.
 * 	src/app/assets – Shared fonts and images.
 *   src/app/components – Shared elements, i.e. dropdown menus, cards, etc.
-*   src/app/context – Authentication.
-*   src/app/navigation – Navigation, through use of a Stack Navigator and Tab Navigator.
-*   src/app/notifications – Push notification set-up for use in alarm reminders.
-*   src/app/requests – Shared endpoints.
+*   src/app/context – Client-side authentication.
+*   src/app/navigation – Navigation, through use of a Stack and Tab Navigator.
+*   src/app/notifications – Push notification set-up, link to device OS, and scheduling for use in alarm task reminders.
+*   src/app/requests – Shared endpoints and result manipulation.
 *   src/app/screens – Main app screens, including pre-defined components and requests.
 *   src/app/styles – Shared styles.
 *   Test – Client integration tests.
-*   App.js – Initial app load.
-*   app.json – Environment variables, add-ons, etc.
+*   App.js – Core application structure.
+*   app.json – Environment variables, plugins, etc.
 
-Tests are placed in the test folder mirror the hierarchy of the client folder. For example, tests for alarm components should be placed in test/components/Alarm, with testable code being found in src/app/components/Alarm. 
+Tests are placed in the test folder which mirrors the hierarchy of the client folder. For example, tests for alarm components should be placed in test/components/Alarm, with testable code being found in src/app/components/Alarm. 
 
 #####	Server
 
 The server defines requests to the database, with endpoints being focused on Alarm, Garden, Plant, Note and User. Specific endpoints are further defined in the API section, below. The main technology used in this section is Express. Code is divided as follows:
 
-* Models – Mongoose schema definitions.
-* Router – Route definitions with validation.
-* Controllers – Endpoint definitions, including business logic and further validation.
-* Repositories – Mongoose queries and accompanying mocked data for testing.  
-*	Mailer – Node mailer set-up for use in password reset function.
-*	Middleware – Authentication, Image Upload.
-*	Validators – Repeated validation/business logic methods.
-*	Test – Controller unit tests.
-*	Index.js – Server entry point, handling database connection.
+* models – Mongoose schema definitions.
+* routers – Database route definitions with validation.
+* controllers – Endpoint definitions, with accompanying validation and business logic.
+* repositories – Mongoose queries for use in production and accompanying mocked data for use in testing.  
+*	mailer – Nodemailer set-up for use in password reset function.
+*	middleware – Server-side authentication and image upload processing.
+*	validators – Repeated validation and business logic methods.
+*	test – Server-side unit tests.
+*	index.js – Server entry point, handling the database connection.
 
 To add a new request, create a new method in the relevant controller and link to the router file. 
 
-Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing. Tests are placed in the test folder mirror the hierarchy of the server folder. For example, tests for controllers should be placed in test/controllers, with testable code being found in the controllers folder. 
+Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing. Tests are placed in the test folder which mirrors the hierarchy of the server folder. For example, tests for controllers should be placed in test/controllers, with testable code being found in the controllers folder. 
 
 ####	Expo Go
 
