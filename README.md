@@ -1,7 +1,7 @@
 <!-- HEADING -->
 <br />
 <div align="center">
-  <a href="https://github.com/sstephenson200/GrowWelle">
+  <a href="https://github.com/sstephenson200/GrowWell">
     <img src="client/src/app/assets/images/logo.png" alt="Logo" width="120" height="120">
   </a>
   <h1 align="center">Grow Well: Garden Manager</h1>
@@ -18,9 +18,13 @@
       </ul>
     </li>
     <li>
-      <a href="#getStarted">Get Started</a>
+      <a href="#get-started">Get Started</a>
       <ul>
         <li><a href="#requirements">Requirements</a></li>
+          <ul>
+            <li><a href="#enable-usb-file-transfer">Enable USB File Transfer</a></li>
+            <li><a href="#enable-third-party-apps">Enable Third Party Apps</a></li>
+          </ul>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -28,27 +32,26 @@
     <li>
       <a href="#contribute">Contribute</a>
       <ul>
-        <li><a href="#Code Structure">Code Structure</a></li>
-        <li><a href="#Expo Go">Expo Go</a></li>
-        <li><a href="#Generate APK">Generate APK</a></li>
+        <li><a href="#code-structure">Code Structure</a></li>
+          <ul>
+            <li><a href="#client">Client</a></li>
+            <li><a href="#server">Server</a></li>
+          </ul>
+        <li><a href="#expo-go">Expo Go</a></li>
+          <ul>
+            <li><a href="#run-the-app">Run the App</a></li>
+            <li><a href="#run-the-app-in-debug-mode">Run the App in Debug Mode</a></li>
+            <li><a href="#common-issues">Common Issues</a></li>
+          </ul>
+        <li><a href="#generate-apk">Generate APK</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#apis">APIs</a>
-      <ul>
-        <li><a href="#alarm">Alarm</a></li>
-        <li><a href="#garden">Garden</a></li>
-        <li><a href="#plant">Plant</a></li>
-        <li><a href="#note">Note</a></li>
-        <li><a href="#user">User</a></li>
-      </ul>
-    </li>
+    <li><a href="#apis">APIs</a></li>
   </ol>
 </details>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
 
 Grow Well: Garden Manager is a mobile application designed to enhance the gardening experience. It provides preliminary information on various plant species for beginner gardeners, and assists more experienced users with the management of more complex projects through the use of note and alarm creation. 
 
@@ -74,7 +77,7 @@ Currently, this application is only available for Android devices. However, an A
 
 ### Requirements
 
-The following steps may be required to allow successful download of the Android Package Kit.
+The following steps may be required to allow successful download of the Android Package Kit (APK).
 
 #### Enable USB File Transfer
 
@@ -99,7 +102,7 @@ As the APK is not currently available through standard app stores, the device mu
 
 To install the application on an Android device, please complete the following steps.
 
-1.	Download the Android Package Kit onto your Android device: https://drive.google.com/file/d/1H3hSdimAGesHEdrbqfFj6Aw3uIdj7ohL/view?usp=sharing.
+1.	Download the Android Package Kit onto your Android device: https://drive.google.com/file/d/1-L8KXHLlr2tiM5Kjw5X6xtaV8zPwVvrs/view?usp=sharing.
 2.	Open <strong>Downloads</strong>.
 3.	Tap the Grow Well APK file.
 4.	Tap <strong>Install</strong>. 
@@ -107,10 +110,48 @@ To install the application on an Android device, please complete the following s
 <!-- USAGE -->
 ## Usage
 
+Grow Well: Garden Manager is a mobile application used to enhance the gardening experience. Some of the core features include:
+
+<h4 align="center">Log in to your account and manage your user settings at any time.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523566-b0fff34e-c439-4e6d-8a79-dce512a02f2d.png">
+</p>
+
+<h4 align="center">Browse plant species and filter by name, plant type and season. View more detailed care data to learn how to grow each plant!</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186003280-3f8d8b83-f8c3-4c98-ac36-d81efd59ca53.png">
+</p>
+
+<h4 align="center">Create notes on the plants you’re growing and keep track of the tasks you’ve completed. See quick summaries of your created notes on your calendar and view them to see your added photos and further details.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523286-d361b93d-de03-41be-b656-5faa9ad1e8ed.png">
+</p>
+
+<h4 align="center">View your notes by plant and by garden plot.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186523380-0493ecb7-92e3-44ea-9f20-7c6408772a1d.png">
+</p>
+
+<h4 align="center">Never forget to water your plants again! Create task reminders which link to your device’s notification system. Make single or recurring alarms, turn them on and off as suits, and mark them as complete to keep track.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186624993-a698c82f-5cc9-4d4f-878b-9db6272a3606.png">
+</p>
+
+<h4 align="center">See what you’re growing in each plot and keep track of what you’ve grown there previously.</h4>
+
+<p align="center">
+<img width="500" height="500" src="https://user-images.githubusercontent.com/22751349/186625251-ec247307-2eef-4563-be6f-4ccd42d22dcc.png">
+</p>
+
 <!-- CONTRIBUTE -->
 ## Contribute
 
-Server-side code is hosted on a live Heroku instance. This can be debugged by running locally. The client-side code must be run through Expo Go or by installing an APK on the device.
+Server-side code is hosted on a live Heroku instance. This can be debugged by running locally with the command <strong>npm run start</strong>. The server code utilises nodemon to automatically restart the server when a change is detected. The client-side code must be run through Expo Go or by installing an APK on the device.
 
 ####	Code Structure
 
@@ -123,32 +164,35 @@ The client handles content which is rendered on the app. Where possible, compone
 * 	.vscode – Contains launch.json file for use in debug configuration.
 * 	src/app/assets – Shared fonts and images.
 *   src/app/components – Shared elements, i.e. dropdown menus, cards, etc.
-*   src/app/context – Authentication.
-*   src/app/navigation – Navigation, through use of a Stack Navigator and Tab Navigator.
-*   src/app/notifications – Push notification set-up for use in alarm reminders.
-*   src/app/requests – Shared endpoints.
+*   src/app/context – Client-side authentication.
+*   src/app/navigation – Navigation, through use of a Stack and Tab Navigator.
+*   src/app/notifications – Push notification set-up, link to device OS, and scheduling for use in alarm task reminders.
+*   src/app/requests – Shared endpoints and result manipulation.
 *   src/app/screens – Main app screens, including pre-defined components and requests.
 *   src/app/styles – Shared styles.
 *   Test – Client integration tests.
-*   App.js – Initial app load.
-*   app.json – Environment variables, add-ons, etc.
+*   App.js – Core application structure.
+*   app.json – Environment variables, plugins, etc.
+
+Tests are placed in the test folder which mirrors the hierarchy of the client folder. For example, tests for alarm components should be placed in test/components/Alarm, with testable code being found in src/app/components/Alarm. 
 
 #####	Server
 
 The server defines requests to the database, with endpoints being focused on Alarm, Garden, Plant, Note and User. Specific endpoints are further defined in the API section, below. The main technology used in this section is Express. Code is divided as follows:
 
-* Models – Mongoose schema definitions.
-* Router – Route definitions with validation.
-* Controllers – Endpoint definitions, including business logic and further validation.
-* Repositories – Mongoose queries and accompanying mocked data for testing.  
-*	Mailer – Node mailer set-up for use in password reset function.
-*	Middleware – Authentication, Image Upload.
-*	Validators – Repeated validation/business logic methods.
-*	Test – Controller unit tests.
-*	Index.js – Server entry point, handling database connection.
+* models – Mongoose schema definitions.
+* routers – Database route definitions with validation.
+* controllers – Endpoint definitions, with accompanying validation and business logic.
+* repositories – Mongoose queries for use in production and accompanying mocked data for use in testing.  
+*	mailer – Nodemailer set-up for use in password reset function.
+*	middleware – Server-side authentication and image upload processing.
+*	validators – Repeated validation and business logic methods.
+*	test – Server-side unit tests.
+*	index.js – Server entry point, handling the database connection.
 
 To add a new request, create a new method in the relevant controller and link to the router file. 
-Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing.  
+
+Testing is not exhaustive at this stage and more methods may need to be added to the repository and accompanying mock repository files to expand testing. Tests are placed in the test folder which mirrors the hierarchy of the server folder. For example, tests for controllers should be placed in test/controllers, with testable code being found in the controllers folder. 
 
 ####	Expo Go
 
@@ -156,7 +200,7 @@ To continue development, you will need to download Expo Go onto an Android devic
 
 #####	Run the App
 
-The app can be run in two modes: <strong>expo start</strong> or <strong>expo start --no-dev –minify</strong>. <strong>expo start --no-dev --minify</strong> is a better representation of production mode. This should be used to check for errors before generating an APK. In the event of invisible errors, this mode will prevent the application from fully loading.  
+The app can be run in two modes: <strong>expo start</strong> or <strong>expo start --no-dev –minify</strong>. <strong>expo start --no-dev --minify</strong> mimics production mode. This should be used to check for errors before generating an APK. In the event of invisible errors, this mode will prevent the application from fully loading.  
 
 1.	Open the client folder in an IDE.
 2.	Execute <strong>expo start</strong> or <strong>expo start --no-dev –minify</strong>.
@@ -205,12 +249,4 @@ To continue, you will need to sign up for an Expo account: https://expo.dev. You
 <!-- APIs -->
 ## APIs
 
-####	Alarm
-
-####	Garden
-
-####	Plant
-
-####	Note
-
-####	User
+API documentation, including a full list of all available endpoints, is provided here: https://documenter.getpostman.com/view/19379045/VUquKExX.
