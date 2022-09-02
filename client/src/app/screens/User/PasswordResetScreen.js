@@ -36,22 +36,12 @@ const PasswordReset = (props) => {
                     setErrorMessage(response.data.errorMessage);
                 } else {
                     clearState();
-                    logout(props);
+                    //logout(props);
+                    props.navigation.navigate("StackNavigator", { screen: "Login" });
                 }
             }
         } catch (error) {
             console.log(error);
-        }
-    }
-
-    //Function to log user out of account and invalidate JWT
-    async function logout(props) {
-        let error = (await Logout());
-        if (error !== undefined) {
-            setErrorMessage(error);
-        } else {
-            checkLoggedIn();
-            props.navigation.navigate("StackNavigator", { screen: "Login" });
         }
     }
 
