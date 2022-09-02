@@ -35,9 +35,7 @@ const Dropdown = (props) => {
 
     //Function to update items when a dataset is provided by implementing screen
     function updateItems(data) {
-        if (data.length !== 0) {
-            setItems(data);
-        }
+        setItems(data);
     }
 
     return (
