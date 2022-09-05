@@ -102,7 +102,7 @@ As the APK is not currently available through standard app stores, the device mu
 
 To install the application on an Android device, please complete the following steps.
 
-1.	Download the Android Package Kit onto your Android device: https://drive.google.com/file/d/1-L8KXHLlr2tiM5Kjw5X6xtaV8zPwVvrs/view?usp=sharing.
+1.	Download the Android Package Kit onto your Android device: https://drive.google.com/file/d/1vN6bu-oYhNX62iB0l7JSDOkBgIXXLYsq/view?usp=sharing.
 2.	Open <strong>Downloads</strong>.
 3.	Tap the Grow Well APK file.
 4.	Tap <strong>Install</strong>. 
