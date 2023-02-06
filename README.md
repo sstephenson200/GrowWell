@@ -5,6 +5,7 @@
     <img src="client/src/app/assets/images/logo.png" alt="Logo" width="120" height="120">
   </a>
   <h1 align="center">Grow Well: Garden Manager</h1>
+  <h3>Please note, this project is currently not active due to Heroku's free tier being ended.</h3>
 </div>
 
 <!-- CONTENTS -->
